@@ -16,7 +16,7 @@
               <el-input placeholder="请输入密码" prefix-icon="el-icon-key" v-model="loginForm.password" show-password />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" style="width: 100%" @click="login('loginForm')">登录</el-button>
+              <el-button type="primary" style="width: 100%" :loading="loginLoading" @click="login('loginForm')">登录</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -36,7 +36,7 @@
               <el-input placeholder="请输入密码" prefix-icon="el-icon-key" v-model="registerForm.password" show-password />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" style="width: 100%" @click="register('registerForm')">注册</el-button>
+              <el-button type="primary" style="width: 100%" :loading="registerLoading" @click="register('registerForm')">注册</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -93,12 +93,17 @@
 
 <script>
 import store from '../../store'
-import { login } from '../../api/user'
+import { login, register } from '../../api/user'
 import { setToken } from '../../utils/auth'
+import { Message } from 'element-ui'
 
 export default {
   data () {
     return {
+      // 是否正在处理登录
+      loginLoading: false,
+      // 是否正在处理注册
+      registerLoading: false,
       // 当前激活的tab（login/register）
       activeName: this.$route.query.mode,
       // 登录提交表单
@@ -143,7 +148,6 @@ export default {
   created () {
     // 隐藏导航条
     store.commit('setNavBarHidden', true)
-    localStorage.setItem('token', '1111')
   },
 
   destroyed () {
@@ -159,13 +163,35 @@ export default {
       // 表单验证
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          login(formName).then((res) => {
-            // 存储token
-            setToken(res.data.token)
-            // 跳转到首页
-            this.$router.push({
-              path: '/'
-            })
+          this.loginLoading = true
+          login(this.loginForm).then((res) => {
+            // ———— 成功回调 ————
+            const data = res.data
+            switch (data.code) {
+              case 20000: // 登录成功
+                // 存储token
+                setToken(data.token)
+                store.commit('setIsloggedIn', true)
+                // 跳转到首页
+                this.$router.push({
+                  path: '/'
+                })
+                break
+              case 20001: // 账号密码错误
+                Message({
+                  message: '账号或密码错误',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+                break
+            }
+          }).catch((err) => {
+            // ———— 错误处理 ————
+            console.log(err)
+          }).finally(() => {
+            // ———— 最终执行 ————
+            // 结束按钮加载中的状态
+            this.loginLoading = false
           })
         }
       })
@@ -176,7 +202,40 @@ export default {
      */
     register (formName) {
       // 表单验证
-      this.$refs[formName].validate()
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.registerLoading = true
+          register(this.registerForm).then((res) => {
+            // ———— 成功回调 ————
+            const data = res.data
+            switch (data.code) {
+              case 20000: // 注册成功
+                Message({
+                  message: '注册成功',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+                // 跳转到登录页
+                this.activeName = 'login'
+                break
+              case 20001: // 其他错误
+                Message({
+                  message: '账号或密码错误',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+                break
+            }
+          }).catch((err) => {
+            // ———— 错误处理 ————
+            console.log(err)
+          }).finally(() => {
+            // ———— 最终执行 ————
+            // 结束按钮加载中的状态
+            this.registerLoading = false
+          })
+        }
+      })
     }
 
   }

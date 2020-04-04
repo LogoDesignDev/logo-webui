@@ -1,11 +1,11 @@
 import request from '../utils/request'
 
 export function login (params) {
-  return request.post('', params)
+  return request.post('/login', params)
 }
 
-export function logout (params) {
-  return request.post('', params)
+export function register (params) {
+  return request.post('/register', params)
 }
 
 export function getUserInfo (params) {

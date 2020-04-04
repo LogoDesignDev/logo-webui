@@ -28,7 +28,7 @@
           <span>{{ navUserInfo.username }}</span>
         </template>
         <el-menu-item index="2-1">个人中心</el-menu-item>
-        <el-menu-item index="2-2">退出登录</el-menu-item>
+        <el-menu-item index="2-2" @click="logout">退出登录</el-menu-item>
       </el-submenu>
     </el-menu>
     <router-view />
@@ -111,6 +111,7 @@
 <script>
 import store from '../../store'
 import { getUserInfo } from '../../api/user'
+import { removeToken } from '../../utils/auth'
 
 export default {
   data () {
@@ -155,7 +156,7 @@ export default {
      * 是否已登录
      */
     isloggedIn: function () {
-      return store.getters.isloggedIn
+      return store.state.isloggedIn
     }
   },
 
@@ -203,6 +204,14 @@ export default {
         this.navUserInfo.username = data.username
         this.navUserInfo.userPicUrl = data.userPicUrl
       })
+    },
+
+    /**
+     * 退出登录
+     */
+    logout () {
+      removeToken()
+      store.commit('setIsloggedIn', false)
     }
   }
 }

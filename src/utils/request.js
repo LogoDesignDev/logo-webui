@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import store from '../store'
 import { getToken } from './auth'
 import { postmanAPIKey, baseURL } from './default'
 
@@ -22,9 +21,7 @@ const service = axios.create({
  */
 service.interceptors.request.use(
   (config) => {
-    if (store.getters.token) {
-      config.headers.token = getToken() // 让每个请求携带自定义token
-    }
+    config.headers.token = getToken() // 让每个请求携带自定义token
     return config
   },
   (error) => {
@@ -41,26 +38,15 @@ service.interceptors.response.use(
   (response) => {
     const data = response.data
 
-    // code为非20000是抛错
-    if (data.code !== 20000) {
+    // token相关
+    if (data.code === 50008) {
       Message({
-        message: data.message,
+        message: '您未登录，请登录后再进行操作',
         type: 'error',
         duration: 5 * 1000
       })
-
-      // token相关
-      if (data.code === 50008) {
-        Message({
-          message: '您未登录，请登录后再进行操作',
-          type: 'error',
-          duration: 5 * 1000
-        })
-      }
-      return Promise.reject(Error('error'))
-    } else {
-      return response
     }
+    return response
   },
   (error) => {
     console.log('err' + error) // for debug
