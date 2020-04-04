@@ -35,8 +35,6 @@ class LogodesignApplicationTests {
         //System.out.println(userTemplate.loginByEmail(map));
         System.out.println(userTemplate.tokenAvailable("756de9ca72a4416f878951aa91e5ba1b"));
 
-
-
     }
 
 

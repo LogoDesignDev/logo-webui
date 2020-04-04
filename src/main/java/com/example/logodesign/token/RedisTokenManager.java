@@ -35,11 +35,9 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public boolean checkToken(String token) {
-
-        if(redisTemplate.opsForValue().get(token) != null){
+        if(token != null && !("").equals(token) && redisTemplate.opsForValue().get(token) != null){
             return true;
         }
-
         return false;
     }
 
