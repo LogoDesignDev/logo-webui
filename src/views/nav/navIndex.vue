@@ -15,21 +15,21 @@
       </el-menu-item>
 
       <!-- 未登录 -->
-      <div class="rightContainer">
+      <div v-if="!isloggedIn" class="rightContainer">
         <el-button class="iconBtn" icon="el-icon-search" />
         <el-divider direction="vertical" />
         <button class="textBtn" @click="toLogin">登录</button>
         <button class="textBtn" @click="toRegister">注册</button>
       </div>
       <!-- 已登录 -->
-      <!-- <el-submenu class="rightContainer" show-timeout="0" index="2">
+      <el-submenu v-if="isloggedIn" class="rightContainer" show-timeout="0" index="2">
         <template slot="title">
-          <img class="userPic-mini" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585913379050&di=15a41f4f8021602de11e155aada67180&imgtype=0&src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fitbbs%2F2003%2F05%2Fc4%2F195593837_1583372967744_1024x1024it.jpg">
-          <span>用户名</span>
+          <img class="userPic-mini" :src="navUserInfo.userPicUrl">
+          <span>{{ navUserInfo.username }}</span>
         </template>
         <el-menu-item index="2-1">个人中心</el-menu-item>
         <el-menu-item index="2-2">退出登录</el-menu-item>
-      </el-submenu> -->
+      </el-submenu>
     </el-menu>
     <router-view />
   </div>
@@ -110,12 +110,21 @@
 
 <script>
 import store from '../../store'
+import { getUserInfo } from '../../api/user'
 
 export default {
   data () {
     return {
-
+      // 导航栏的用户信息
+      navUserInfo: {
+        username: '',
+        userPicUrl: ''
+      }
     }
+  },
+
+  created () {
+    this.updateNavUserInfo()
   },
 
   computed: {
@@ -140,6 +149,13 @@ export default {
      */
     navBarHidden: function () {
       return store.state.navBarHidden
+    },
+
+    /**
+     * 是否已登录
+     */
+    isloggedIn: function () {
+      return store.getters.isloggedIn
     }
   },
 
@@ -174,6 +190,18 @@ export default {
         query: {
           mode: 'register'
         }
+      })
+    },
+
+    /**
+     * 更新导航栏的用户信息
+     */
+    updateNavUserInfo () {
+      getUserInfo({}).then((res) => {
+        const data = res.data
+
+        this.navUserInfo.username = data.username
+        this.navUserInfo.userPicUrl = data.userPicUrl
       })
     }
   }
