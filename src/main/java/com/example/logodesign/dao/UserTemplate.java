@@ -57,7 +57,6 @@ public class UserTemplate {
             //设置token, 存在redis数据库，返回token
             return redisTokenManager.createToken(user.getUserId());
         }
-
     }
 
 
