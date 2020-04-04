@@ -2,14 +2,16 @@ package com.example.logodesign.controller;
 
 import com.example.logodesign.dao.UserTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServlet;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +100,34 @@ public class UserController {
         HashMap<String, Object> res = new HashMap<>();
         res.put("code", 1);
         userTemplate.registUser(map);
+        return res;
+    }
+
+    @PostMapping("/uploadHeader")
+    public Map<String, Object> uploadHeader(@RequestParam Map<String, Object> map){
+        // 需要 userName, 图片以及图片的后缀名
+        final String dirHeaders = "./headers/"; // 暂定
+        HashMap<String, Object> res = new HashMap<>();
+        String userName = (String)map.get("username");
+        if (userName == null){
+            res.put("code", 0); return res;
+        }
+        // 截取后缀名
+        String extensionName = "";
+        try {
+            extensionName = ((String) map.get("headersName")).split(".", 1)[1];
+        }catch (Exception e){
+            res.put("code", 0); return res;
+        }
+        // 保存图片到 diHeaders / userName /下，命名为 img
+        Graphics2D img = (Graphics2D)map.get("header");
+        File f = new File(dirHeaders +"/"+ userName + "." + extensionName);
+        try{
+            ImageIO.write((RenderedImage) img, extensionName, f);
+        }catch (Exception e){
+            res.put("code", 0); return res;
+        }
+        res.put("code", 1);
         return res;
     }
 
