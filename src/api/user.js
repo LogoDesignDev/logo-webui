@@ -11,3 +11,11 @@ export function register (params) {
 export function getUserInfo (params) {
   return request.get('/getUserInfo', params)
 }
+
+export function getUserPic (params) {
+  return request.get('/getUserPic', params)
+}
+
+export function uploadUserPic (params) {
+  return request.post('/uploadUserPic', params)
+}

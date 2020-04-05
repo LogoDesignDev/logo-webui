@@ -1,3 +1,8 @@
+<style lang="less" scoped>
+  @import "../../styles/fontStyle.css";
+  @import "../../styles/userPicStyle.css";
+</style>
+
 <template>
   <div>
     <el-menu v-if="!navBarHidden" :default-active="$route.path" class="nav" mode="horizontal">
@@ -14,9 +19,11 @@
         {{item.meta.title}}
       </el-menu-item>
 
+      <el-button class="iconBtn">
+        <i class="el-icon-search" />
+      </el-button>
       <!-- 未登录 -->
       <div v-if="!isloggedIn" class="rightContainer">
-        <el-button class="iconBtn" icon="el-icon-search" />
         <el-divider direction="vertical" />
         <button class="textBtn" @click="toLogin">登录</button>
         <button class="textBtn" @click="toRegister">注册</button>
@@ -25,10 +32,10 @@
       <el-submenu v-if="isloggedIn" class="rightContainer" show-timeout="0" index="2">
         <template slot="title">
           <img class="userPic-mini" :src="navUserInfo.userPicUrl">
-          <span>{{ navUserInfo.username }}</span>
+          <!-- <span>{{ navUserInfo.username }}</span> -->
         </template>
-        <el-menu-item index="2-1">个人中心</el-menu-item>
-        <el-menu-item index="2-2" @click="logout">退出登录</el-menu-item>
+        <el-menu-item index="2-1" @click="toAccount">账户管理</el-menu-item>
+        <el-menu-item @click="logout">退出登录</el-menu-item>
       </el-submenu>
     </el-menu>
     <router-view />
@@ -56,6 +63,7 @@
 
 .rightContainer {
   font-size: 14px;
+  width: 100px;
   color: #909399;
   display: flex;
   align-items: center;
@@ -70,6 +78,8 @@
   background: none;
   border: none;
   cursor: pointer;
+  right: 135px;
+  position: absolute;
 }
 
 .iconBtn:hover {
@@ -99,19 +109,12 @@
   background: none;
   border: none;
 }
-
-.userPic-mini {
-  margin-right: 5px;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-}
 </style>
 
 <script>
-import store from '../../store'
-import { getUserInfo } from '../../api/user'
-import { removeToken } from '../../utils/auth'
+import store from 'store'
+import { getUserInfo } from 'api/user'
+import { removeToken } from 'utils/auth'
 
 export default {
   data () {
@@ -191,6 +194,15 @@ export default {
         query: {
           mode: 'register'
         }
+      })
+    },
+
+    /**
+     * 转到账号管理页
+     */
+    toAccount () {
+      this.$router.push({
+        path: '/account'
       })
     },
 

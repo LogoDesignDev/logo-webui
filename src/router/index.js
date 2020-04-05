@@ -25,9 +25,15 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     hidden: true,
     component: () => import('../views/login/loginIndex.vue')
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    hidden: true,
+    component: () => import('../views/account/accountIndex.vue')
   }
 ]
 

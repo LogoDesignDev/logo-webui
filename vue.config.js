@@ -1,3 +1,6 @@
+const path = require('path')
+const resolve = dir => path.join(__dirname, dir)
+
 module.exports = {
   devServer: {
     open: true,
@@ -15,5 +18,13 @@ module.exports = {
         }
       }
     }
+  },
+
+  chainWebpack: config => {
+    config.resolve.alias
+      .set('@', resolve('src'))
+      .set('api', resolve('src/api'))
+      .set('store', resolve('src/store'))
+      .set('utils', resolve('src/utils'))
   }
 }

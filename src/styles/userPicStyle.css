@@ -1,0 +1,14 @@
+.userPic-normal {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  border: 1px solid #E4E7ED;
+}
+
+.userPic-mini {
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid #E4E7ED;
+}
