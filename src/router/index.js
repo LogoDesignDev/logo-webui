@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     hidden: false,
     meta: {
       title: '首页'
@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     hidden: false,
     meta: {
       title: '其他'
@@ -25,15 +25,27 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     hidden: true,
     component: () => import('../views/login/loginIndex.vue')
   },
   {
     path: '/account',
-    name: 'Account',
+    redirect: '/account/base',
+    name: 'account',
     hidden: true,
-    component: () => import('../views/account/accountIndex.vue')
+    component: () => import('../views/account/accountIndex.vue'),
+    children: [
+      {
+        path: 'base',
+        name: 'base',
+        component: () => import('../views/account/base/baseIndex.vue')
+      },
+      {
+        path: 'security',
+        name: 'security',
+        component: () => import('../views/account/security/securityIndex.vue')
+      }]
   }
 ]
 

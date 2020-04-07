@@ -1,9 +1,9 @@
 <template>
-  <div style="width: 100%">
-    <div style="padding: 10px 20px;">
-      <span class="title-1">基本信息</span>
-      <el-divider />
-    </div>
+  <!-- 最外层的div的宽度一定不能超过92% -->
+  <!-- 否则会挡住tab的滑动条造成不美观 -->
+  <div class="childContainer">
+    <span class="title-1">基本信息</span>
+    <el-divider />
 
     <div
       v-loading="loading.userInfo"
@@ -107,7 +107,7 @@
 
 <script>
 import picEditor from './picEditor'
-import { getUserPic, getUserInfo } from '../../../api/user'
+import { getUserPic, getUserInfo } from 'api/user'
 
 export default {
   components: {

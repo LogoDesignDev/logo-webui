@@ -1,20 +1,12 @@
 <template>
   <div class="container">
     <!-- 主区域 -->
-    <div id="mainArea">
-      <el-tabs id="mainTab" tab-position="left" v-model="activeName" @tab-click="loadActivePage">
-        <!-- 基本信息编辑Tab -->
-        <el-tab-pane label="基本信息" name="base">
-          <base-page  v-if="active.base" />
-        </el-tab-pane>
-
-        <!-- 账户设置功能Tab -->
-        <el-tab-pane label="账户设置" name="account">
-          <div v-if="active.account">
-            配置管理
-          </div>
-        </el-tab-pane>
+    <div id="mainContainer">
+      <el-tabs id="mainTab" tab-position="left" v-model="$route.name" @tab-click="loadActivePage">
+        <el-tab-pane label="基本信息" name="base" />
+        <el-tab-pane label="账户安全" name="security" />
       </el-tabs>
+      <router-view />
     </div>
   </div>
 </template>
@@ -26,9 +18,15 @@
   justify-content: center;
 }
 
-#mainArea {
+.childContainer {
+  margin-top: 18px;
+  width: 90%;
+}
+
+#mainContainer {
   margin-top: 10px;
   width: 1000px;
+  display: flex;
 }
 
 #mainTab {
@@ -37,36 +35,16 @@
 </style>
 
 <script>
-import basePage from './base/baseIndex.vue'
-
 export default {
-  components: {
-    'base-page': basePage
-  },
-
-  data () {
-    return {
-      activeName: 'base',
-      active: {
-        base: true,
-        account: false
-      }
-    }
-  },
-
   methods: {
     /**
      * 加载当前激活的页面
      */
     loadActivePage (tab) {
-      for (const key in this.active) {
-        if (key === tab.name) {
-          this.active[key] = true
-        } else {
-          this.active[key] = false
-        }
-      }
+      this.$router.push({
+        path: '/account/' + tab.name
+      })
     }
   }
 }
-</script>/>
+</script>
