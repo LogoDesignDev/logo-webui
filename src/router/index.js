@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
+import personalRoutes from '@/router/personal'
+import accountRoutes from '@/router/account'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -28,29 +31,16 @@ const routes = [
     name: 'login',
     hidden: true,
     component: () => import('../views/login/loginIndex.vue')
-  },
-  {
-    path: '/account',
-    redirect: '/account/base',
-    name: 'account',
-    hidden: true,
-    component: () => import('../views/account/accountIndex.vue'),
-    children: [
-      {
-        path: 'base',
-        name: 'base',
-        component: () => import('../views/account/base/baseIndex.vue')
-      },
-      {
-        path: 'security',
-        name: 'security',
-        component: () => import('../views/account/security/securityIndex.vue')
-      }]
   }
 ]
 
 const router = new VueRouter({
-  routes
+  mode: 'history',
+  routes: [
+    ...routes,
+    ...personalRoutes,
+    ...accountRoutes
+  ]
 })
 
 export default router
