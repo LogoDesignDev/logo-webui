@@ -19,3 +19,7 @@ export function getUserPic (params) {
 export function uploadUserPic (params) {
   return request.post('/uploadUserPic', params)
 }
+
+export function getDetailInfo (params) {
+  return request.post('/getDetailInfo', params)
+}
