@@ -27,6 +27,21 @@ const routes = [
     component: () => import('../views/About.vue')
   },
   {
+    path: '/mylogo',
+    name: 'MyLogo',
+    hidden: false,
+    meta: {
+      title: 'LOGO管理'
+    },
+    component: () => import('../views/mylogo/MyLogo.vue')
+  },
+  {
+    path: '/detail/:id',
+    name: 'Detail',
+    hidden: true,
+    component: () => import('../views/mylogo/Detail.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     hidden: true,

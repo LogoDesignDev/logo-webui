@@ -29,5 +29,8 @@ export function changeEmail (params) {
 }
 
 export function changePhone (params) {
-  return request.post('/changePassword', params)
+  return request.post('/changePassword', params) 
+}
+export function getDetailInfo (params) {
+  return request.post('/getDetailInfo', params)
 }
