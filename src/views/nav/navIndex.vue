@@ -1,8 +1,3 @@
-<style lang="less" scoped>
-  @import "../../styles/fontStyle.css";
-  @import "../../styles/userPicStyle.css";
-</style>
-
 <template>
   <div>
     <el-menu v-if="!navBarHidden" :default-active="$route.path" class="nav" mode="horizontal">
@@ -29,16 +24,21 @@
         <button class="textBtn" @click="toRegister">注册</button>
       </div>
       <!-- 已登录 -->
-      <el-submenu v-if="isloggedIn" class="rightContainer" show-timeout="0" index="2">
+      <el-submenu v-if="isloggedIn" class="rightContainer" :show-timeout="0" index="2">
         <template slot="title">
-          <img class="userPic-mini" :src="navUserInfo.userPicUrl">
-          <!-- <span>{{ navUserInfo.username }}</span> -->
+          <img class="userPic-mini" :src="userInfo.userPicUrl">
         </template>
         <el-menu-item index="2-1" @click="toAccount">账户管理</el-menu-item>
         <el-menu-item @click="logout">退出登录</el-menu-item>
       </el-submenu>
     </el-menu>
+
     <router-view />
+
+    <!-- 备案号 -->
+    <div class="footer" v-if="!navBarHidden">
+      <a class="tips" href="www.beian.miit.gov.cn">粤ICP备19158305号</a>
+    </div>
   </div>
 </template>
 
@@ -49,6 +49,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.footer {
+  margin-top: 20px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(245, 245, 245);
 }
 
 .leftContainer {
@@ -113,22 +122,16 @@
 
 <script>
 import store from 'store'
-import { getUserInfo } from 'api/user'
 import { removeToken } from 'utils/auth'
 
 export default {
   data () {
     return {
-      // 导航栏的用户信息
-      navUserInfo: {
-        username: '',
-        userPicUrl: ''
-      }
     }
   },
 
   created () {
-    this.updateNavUserInfo()
+    store.dispatch('updateUserInfo')
   },
 
   computed: {
@@ -160,6 +163,10 @@ export default {
      */
     isloggedIn: function () {
       return store.state.isloggedIn
+    },
+
+    userInfo: function () {
+      return store.state.userInfo
     }
   },
 
@@ -203,18 +210,6 @@ export default {
     toAccount () {
       this.$router.push({
         path: '/account'
-      })
-    },
-
-    /**
-     * 更新导航栏的用户信息
-     */
-    updateNavUserInfo () {
-      getUserInfo({}).then((res) => {
-        const data = res.data
-
-        this.navUserInfo.username = data.username
-        this.navUserInfo.userPicUrl = data.userPicUrl
       })
     },
 

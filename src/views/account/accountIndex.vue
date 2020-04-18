@@ -2,7 +2,7 @@
   <div class="container">
     <!-- 主区域 -->
     <div id="mainContainer">
-      <el-tabs id="mainTab" tab-position="left" v-model="$route.name" @tab-click="loadActivePage">
+      <el-tabs id="mainTab" tab-position="left" v-model="activeName" @tab-click="loadActivePage">
         <el-tab-pane label="基本信息" name="base" />
         <el-tab-pane label="账户安全" name="security" />
       </el-tabs>
@@ -13,7 +13,6 @@
 
 <style lang="less" scoped>
 .container {
-  width: 100;
   display: flex;
   justify-content: center;
 }
@@ -36,6 +35,12 @@
 
 <script>
 export default {
+  data () {
+    return {
+      activeName: this.$route.name
+    }
+  },
+
   methods: {
     /**
      * 加载当前激活的页面
