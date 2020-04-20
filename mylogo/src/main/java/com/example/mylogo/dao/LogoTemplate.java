@@ -38,28 +38,8 @@ public class LogoTemplate {
     /*
     创建Logo，要基于机器学习, 返回给前端base64，
      */
-    public String createLogo(Map<String, Object> map){
-        /*
-        String token = (String) map.get("token");
-        if(!redisTokenManager.checkToken(token)){ //token失效或者过期
-            return "null";
-        }*/
-
-        String url = "";
-        /*
-        这里机器学习生成logo
-        返回一张图片
-        这张图片存在服务器的地址里
-        返回这张图片的url给前端
-         */
-
-        /* Yang:
-        url stype:
-        `/getRecommendedFont?payload=${JSON.stringify(payload)}&amountNear=${amount}&text_str=${text_str}`;
-        palyload:
-            类型:HashMap<String, Object>
-            字段：除type外， 其余为0 ~ 1的浮点数
-                "type": "sans-serif = // 固定
+    /* Yang:
+        需要用户传入的参数（0-1之间的浮点数）:
                 "era": 0.7,
                 "maturity": 0.4,
                 "weight": 0.5,
@@ -70,9 +50,22 @@ public class LogoTemplate {
             1. 获将参数填充 req_url
             2. 发起http请求获得response
             3. 将response(svg代码)转化为png图片
+            4. 返回png文件的base64作为url
+
+        注意:
+            输入text的字符要少于9个英文\数字字符，超出部分显示不了.
+
+        目前将图片保存在 logo-weibui/tmp.png中， 同时返回其base64值
          */
+    public String createLogo(Map<String, Object> map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){ //token失效或者过期
+            return "null";
+        }
+
+        String url = "";
+
         final String port = "1234";
-        // String type = "all"; // default
         Double era = (Double)map.getOrDefault("era",  0.7);
         Double maturity = (Double)map.getOrDefault("maturity", 0.4);
         Double weight = (Double)map.getOrDefault("weigh", 0.5);
@@ -80,7 +73,7 @@ public class LogoTemplate {
         Double definition = (Double)map.getOrDefault("definition",  0.7);
         Double concept = (Double)map.getOrDefault("concept", 0.6);
         Integer amount = (int)map.getOrDefault("amount", 1);
-        String text = (String)map.getOrDefault("text", "default");
+        String text = (String)map.getOrDefault("text", "default_world!");
         String req_url = "http://localhost:" + port + "/getOneFont?payload={%22type%22:%22all%22,%22era%22:%22" + era
                 + "%22,%22maturity%22:%22" + maturity
                 + "%22,%22weight%22:%22" + weight
@@ -89,7 +82,7 @@ public class LogoTemplate {
                 + "%22,%22concept%22:%22" + concept
                 + "%22}&amountNear=" + amount + "&text_str=" + text;
 
-        // 获取svg代码
+        // 发起http请求，获取svg代码
         System.out.println(req_url);
         String svgCode = null;
         try{
@@ -111,7 +104,6 @@ public class LogoTemplate {
                     }
                     svgCode = svgCode.replaceAll("<g>", "<g transform=\"matrix(1,0,0,1,0,150)\">"); // 坐标变换
                     System.out.println(svgCode);
-
                 }
             }
             cont.disconnect();
@@ -142,7 +134,7 @@ public class LogoTemplate {
         }catch (TranscoderException e){
             e.printStackTrace();
         }
-        System.out.println("url = , len = "+ url.length() + url);
+        System.out.println("base64:url = " + url);
         return url;
     }
 

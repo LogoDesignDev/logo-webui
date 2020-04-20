@@ -13,8 +13,8 @@ class LogoTemplateTest {
         // 先启动 logo Builder
         HashMap<String, Object> m = new HashMap<>();
         LogoTemplate tmp = new LogoTemplate();
-        // 先注释掉 redis相关代码
-        tmp.createLogo(m);
+        // 测试前先注释掉 redis相关代码
+        // tmp.createLogo(m);
 
     }
 }
