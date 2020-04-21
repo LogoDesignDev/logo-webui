@@ -12,3 +12,12 @@
   border-radius: 15px;
   border: 1px solid #E4E7ED;
 }
+
+.userPic-middle {
+  margin-right: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  border: 1px solid #E4E7ED;
+}
+

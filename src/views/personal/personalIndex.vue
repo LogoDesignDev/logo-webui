@@ -43,6 +43,7 @@
   margin-top: 10px;
   height: 250px;
   background: #409EFF;
+  background-image: url("../../assets/personal_bg.png");
   position: absolute;
 }
 
