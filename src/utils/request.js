@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import { getToken } from './auth'
-import { postmanAPIKey, baseURL } from './default'
+import { baseURL } from './default'
 
 /**
  * 创建axios实例
@@ -11,8 +11,7 @@ const service = axios.create({
   timeout: 5000,
   withCredentials: true,
   headers: {
-    'content-type': 'application/json',
-    'x-api-key': postmanAPIKey
+    'content-type': 'application/json'
   }
 })
 

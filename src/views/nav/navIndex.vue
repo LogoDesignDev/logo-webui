@@ -14,9 +14,6 @@
         {{item.meta.title}}
       </el-menu-item>
 
-      <el-button class="iconBtn">
-        <i class="el-icon-search" />
-      </el-button>
       <!-- 未登录 -->
       <div v-if="!isloggedIn" class="rightContainer">
         <el-divider direction="vertical" />
@@ -24,13 +21,9 @@
         <button class="textBtn" @click="toRegister">注册</button>
       </div>
       <!-- 已登录 -->
-      <el-submenu v-if="isloggedIn" class="rightContainer" :show-timeout="0" index="2">
-        <template slot="title">
-          <img class="userPic-mini" :src="userInfo.userPicUrl">
-        </template>
-        <el-menu-item index="2-1" @click="toAccount">账户管理</el-menu-item>
-        <el-menu-item @click="logout">退出登录</el-menu-item>
-      </el-submenu>
+      <div v-else class="rightContainer">
+        <personal-card />
+      </div>
     </el-menu>
 
     <router-view />
@@ -66,7 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  left: 50px;
+  left: 150px;
   position: absolute;
 }
 
@@ -77,31 +70,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 50px;
+  right: 150px;
   position: absolute;
-}
-
-.iconBtn {
-  font-size: 20px;
-  color: #909399;
-  background: none;
-  border: none;
-  cursor: pointer;
-  right: 135px;
-  position: absolute;
-}
-
-.iconBtn:hover {
-  font-size: 20px;
-  color: #409EFF !important;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.iconBtn:focus {
-  background: none;
-  color: #909399;
 }
 
 .textBtn {
@@ -118,13 +88,18 @@
   background: none;
   border: none;
 }
+
 </style>
 
 <script>
 import store from 'store'
-import { removeToken } from 'utils/auth'
+import personalCard from './personalCard/personalCardIndex'
 
 export default {
+  components: {
+    'personal-card': personalCard
+  },
+
   data () {
     return {
     }
@@ -202,23 +177,6 @@ export default {
           mode: 'register'
         }
       })
-    },
-
-    /**
-     * 转到账号管理页
-     */
-    toAccount () {
-      this.$router.push({
-        path: '/account'
-      })
-    },
-
-    /**
-     * 退出登录
-     */
-    logout () {
-      removeToken()
-      store.commit('setIsloggedIn', false)
     }
   }
 }

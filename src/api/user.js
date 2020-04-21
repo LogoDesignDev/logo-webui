@@ -1,7 +1,7 @@
 import request from 'utils/request'
 
 export function login (params) {
-  return request.post('/login', params)
+  return request.post('/user/login', params)
 }
 
 export function register (params) {
@@ -9,11 +9,11 @@ export function register (params) {
 }
 
 export function getUserInfo (params) {
-  return request.get('/getUserInfo', params)
+  return request.get('/user/getUserInfo', params)
 }
 
 export function getUserPic (params) {
-  return request.get('/getUserPic', params)
+  return request.get('/user/getUserPic', params)
 }
 
 export function uploadUserPic (params) {

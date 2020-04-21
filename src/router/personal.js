@@ -3,7 +3,7 @@ export default [
     path: '/personal',
     redirect: '/personal/followAndFans',
     name: 'personal',
-    hidden: false,
+    hidden: true,
     meta: {
       title: '个人中心'
     },
