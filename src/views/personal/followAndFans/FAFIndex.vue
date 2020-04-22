@@ -51,7 +51,7 @@ export default {
 
   data () {
     return {
-      mode: 'follow'
+      mode: this.$route.query.mode || 'follow'
     }
   },
 

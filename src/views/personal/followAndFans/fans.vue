@@ -13,7 +13,7 @@
         <!-- 头像 -->
         <el-table-column width="90">
           <template slot-scope="scope">
-            <el-image class="userPic-middle" :src="scope.row.userPicUrl" />
+            <img class="userPic-middle" :src="scope.row.userPicUrl" />
           </template>
         </el-table-column>
         <!-- 用户名 -->

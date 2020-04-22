@@ -7,7 +7,7 @@
     <div id="main">
       <!-- 头部 -->
       <div id="header">
-        <el-image class="userPic-normal" :src="userInfo.userPicUrl" />
+        <img class="userPic-normal" :src="userInfo.userPicUrl" />
         <div id="middle">
           <span> {{userInfo.username}}</span>
           <!-- tab -->

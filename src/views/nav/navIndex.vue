@@ -35,6 +35,12 @@
   </div>
 </template>
 
+<style>
+.focus {
+  outline: 0 !important;
+}
+</style>
+
 <style lang="less" scoped>
 .nav {
   height: 60px;
