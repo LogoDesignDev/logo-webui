@@ -34,12 +34,13 @@
 }
 
 .card {
+  margin: 10px 0;
   width: 320px;
   height: 200px;
   border-radius: 5px;
   background: linear-gradient(rgb(217, 236, 255), rgb(236, 245, 255));
   display: flex;
-  transition: all 0.5s;
+  transition: all 0.3s;
 }
 
 .card:hover {
