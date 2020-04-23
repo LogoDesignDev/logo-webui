@@ -1,3 +1,10 @@
+.icon {
+  width: 1em; height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
 @font-face {font-family: "iconfont";
   src: url('//at.alicdn.com/t/font_1742224_9to8zeibsft.eot?t=1586339576172'); /* IE9 */
   src: url('//at.alicdn.com/t/font_1742224_9to8zeibsft.eot?t=1586339576172#iefix') format('embedded-opentype'), /* IE6-IE8 */

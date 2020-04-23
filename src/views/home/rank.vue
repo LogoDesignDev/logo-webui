@@ -4,13 +4,13 @@
     <div id="main">
       <show-card-1
         src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
-        name="综合榜" tips="综合各项人气指标" to="/a" />
+        icon="icon-rank" name="综合榜" tips="综合各项人气指标" to="/a" />
       <show-card-1
         src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
-        name="点赞榜" tips="根据点赞数排行" to="/a" />
+        icon="icon-like" name="点赞榜" tips="根据点赞数排行" to="/a" />
       <show-card-1
         src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-        name="收藏榜" tips="根据收藏数排行" to="/a" />
+        icon="icon-collect" name="收藏榜" tips="根据收藏数排行" to="/a" />
     </div>
   </div>
 </template>

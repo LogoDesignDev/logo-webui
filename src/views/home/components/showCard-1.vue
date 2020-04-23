@@ -1,7 +1,8 @@
 <template>
   <div class="card" @click="toPath">
-    <img :src="src">
+    <img class="viewImg" :src="src">
     <div>
+      <iconfont class="iconFont" :name="icon" />
       <div class="title">{{ name }}</div>
       <div class="line" />
       <div class="tips">{{ tips }}</div>
@@ -10,10 +11,8 @@
 </template>
 
 <style lang="less" scoped>
-.icon {
-  color: rgb(245, 245, 245);
-  font-size: 200px;
-  position: relative;
+.iconFont {
+  font-size: 50px;
 }
 
 .title {
@@ -48,15 +47,16 @@
   cursor: pointer;
 }
 
-img {
+.viewImg {
   margin: 10px 0 0 10px;
   width: 150px;
   height: 180px;
   border-radius: 5px;
+  object-fit: cover;
 }
 
 .card>div {
-  width: 100%;
+  width: 150px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ img {
 
 <script>
 export default {
-  props: ['src', 'name', 'tips', 'to'],
+  props: ['src', 'icon', 'name', 'tips', 'to'],
 
   methods: {
     toPath () {

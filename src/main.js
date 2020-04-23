@@ -9,7 +9,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './styles/reset.css'
 import './styles/fontStyle.css'
 import './styles/userPicStyle.css'
-import './styles/iconfont.css'
+
+// iconfont
+import './assets/iconfont/iconfont.css'
+import './assets/iconfont/iconfont.js'
+import iconfont from './components/iconfont'
+Vue.component('iconfont', iconfont)
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
