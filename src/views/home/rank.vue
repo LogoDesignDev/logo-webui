@@ -24,7 +24,7 @@
 </style>
 
 <script>
-import viewTitle from './components/viewTitle'
+import viewTitle from './components/viewTitle-1'
 import showCard from './components/showCard-1'
 
 export default {

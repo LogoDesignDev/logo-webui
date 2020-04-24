@@ -7,7 +7,9 @@
       <!-- 榜单 -->
       <rank /><br><br>
       <!-- 推荐 -->
-      <recommend />
+      <recommend /><br><br>
+      <!-- 设计师 -->
+      <designer />
     </div>
   </div>
 </template>
@@ -32,12 +34,14 @@
 <script>
 import rank from './rank'
 import recommend from './recommend'
+import designer from './designer'
 
 export default {
   name: 'Home',
   components: {
     rank: rank,
-    recommend: recommend
+    recommend: recommend,
+    designer: designer
   }
 }
 </script>
