@@ -12,17 +12,18 @@
         </el-select>
       </el-form-item>
       <el-form-item label="作者名称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.author" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="modalClose">取 消</el-button>
-      <el-button type="primary" @click="modalClose">确 定</el-button>
+      <el-button type="primary" @click="AddGallery">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'MyLogoAdd',
   props: {
@@ -35,18 +36,27 @@ export default {
     return {
       form: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        author: '',
+        region: ''
       },
       formLabelWidth: '120px'
     };
   },
   methods: {
+    AddGallery () {
+      axios.get('api/code.json', {
+        params: {
+          name: this.form.name,
+          author: this.form.author,
+          region: this.form.region
+        }
+      }).then(this.handleAddGallerySucc)
+    },
+    handleAddGallerySucc (res) {
+      res = res.data
+      const code = res.code
+      this.$emit('Add-succ', code)
+    },
     modalClose () {
       this.$emit('Add-cancel')
     }
