@@ -1,9 +1,21 @@
 package com.example.mylogo.controller;
 
 import com.example.mylogo.dao.UserTemplate;
+import com.example.mylogo.dao.LikesTemplate;
 import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
+import com.example.mylogo.extra.RedisKeyUtils;
+import com.example.mylogo.extra.LikedStatusEnum;
+import com.example.mylogo.extra.UserLike;
+import com.example.mylogo.extra.LikedCountDTO;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,15 +25,21 @@ import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
+@Slf4j
 @RestController
-public class UserController {
+public class UserController implements LikesTemplate{
 
     @Autowired
     UserTemplate userTemplate;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     /*
     进入开始页面
@@ -213,5 +231,72 @@ public class UserController {
         return res;
     }
 
+    @Override
+    public void saveLiked2Redis(String likedUserId, String likedPostId) {
+        String key = RedisKeyUtils.getLikedKey(likedUserId, likedPostId);
+        redisTemplate.opsForHash().put(RedisKeyUtils.MAP_KEY_USER_LIKED, key, LikedStatusEnum.LIKE.getCode());
+    }
+
+    @Override
+    public void unlikeFromRedis(String likedUserId, String likedPostId) {
+        String key = RedisKeyUtils.getLikedKey(likedUserId, likedPostId);
+        redisTemplate.opsForHash().put(RedisKeyUtils.MAP_KEY_USER_LIKED, key, LikedStatusEnum.UNLIKE.getCode());
+    }
+
+    @Override
+    public void deleteLikedFromRedis(String likedUserId, String likedPostId) {
+        String key = RedisKeyUtils.getLikedKey(likedUserId, likedPostId);
+        redisTemplate.opsForHash().delete(RedisKeyUtils.MAP_KEY_USER_LIKED, key);
+    }
+
+    @Override
+    public void incrementLikedCount(String likedUserId) {
+        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_KEY_USER_LIKED_COUNT, likedUserId, 1);
+    }
+
+    @Override
+    public void decrementLikedCount(String likedUserId) {
+        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_KEY_USER_LIKED_COUNT, likedUserId, -1);
+    }
+
+    @Override
+    public List<UserLike> getLikedDataFromRedis() {
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(RedisKeyUtils.MAP_KEY_USER_LIKED, ScanOptions.NONE);
+        List<UserLike> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object, Object> entry = cursor.next();
+            String key = (String) entry.getKey();
+            //分离出 likedUserId，likedPostId
+            String[] split = key.split("::");
+            String likedUserId = split[0];
+            String likedPostId = split[1];
+            Integer value = (Integer) entry.getValue();
+
+            //组装成 UserLike 对象
+            UserLike userLike = new UserLike(likedUserId, likedPostId, value);
+            list.add(userLike);
+
+            //存到 list 后从 Redis 中删除
+            redisTemplate.opsForHash().delete(RedisKeyUtils.MAP_KEY_USER_LIKED, key);
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<LikedCountDTO> getLikedCountFromRedis() {
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(RedisKeyUtils.MAP_KEY_USER_LIKED_COUNT, ScanOptions.NONE);
+        List<LikedCountDTO> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object, Object> map = cursor.next();
+            //将点赞数量存储在 LikedCountDT
+            String key = (String)map.getKey();
+            LikedCountDTO dto = new LikedCountDTO(key, (Integer) map.getValue());
+            list.add(dto);
+            //从Redis中删除这条记录
+            redisTemplate.opsForHash().delete(RedisKeyUtils.MAP_KEY_USER_LIKED_COUNT, key);
+        }
+        return list;
+    }
 
 }
