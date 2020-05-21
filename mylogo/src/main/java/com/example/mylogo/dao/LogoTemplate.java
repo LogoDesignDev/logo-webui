@@ -1,6 +1,7 @@
 package com.example.mylogo.dao;
 
 import com.example.mylogo.entity.Logo;
+import com.example.mylogo.entity.LogoMeta;
 import com.example.mylogo.entity.User;
 import com.example.mylogo.token.RedisTokenManager;
 import com.fasterxml.jackson.core.util.BufferRecycler;
@@ -249,4 +250,26 @@ public class LogoTemplate {
         return mongoTemplate.find(query, Logo.class);
     }
 
+    /*
+    TODO: 2020-05-21
+    获取一个Logo
+     */
+    public Logo getPublishedLogo(Map<String, Object> map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return null;
+        }
+        ObjectId logoId = redisTokenManager.getUserId(token);
+        Query query = Query.query(Criteria.where("logoId").is(logoId));
+        return mongoTemplate.findOne(query, Logo.class);
+    }
+
+    /*
+    TODO: 2020-05-21
+    获取一个Logo
+     */
+    public void saveLogoMeta(LogoMeta meta) throws Exception{
+
+
+    }
 }

@@ -16,5 +16,6 @@ class LogoTemplateTest {
         // 测试前先注释掉 redis相关代码
         // tmp.createLogo(m);
 
+        assertEquals(1, 1+0);
     }
 }
