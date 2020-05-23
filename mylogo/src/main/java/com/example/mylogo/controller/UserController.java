@@ -59,36 +59,16 @@ public class UserController implements LikesTemplate{
     }
 
     /*
-    通过邮件登录
+    通过用户名登录
     登录通过，返回token  并且code=200
     登录失败，返回token=""  并且code=500
      */
-    @PostMapping("/loginByEmail")
+    @PostMapping("/user/login")
     public Map<String, Object> getTokenByEmail(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
-        String token = userTemplate.loginByEmail(map);
+        String token = userTemplate.login(map);
         if(token == null){
             res.put("code", 500);
-            res.put("token", "");
-        }else{
-            res.put("code", 200);
-            res.put("token", token);
-        }
-        return res;
-    }
-
-    /*
-    通过电话号码登录
-   登录通过，返回token  并且code=2003
-   登录失败，返回token=""  并且code=5003
-    */
-    @PostMapping("/loginByPhone")
-    public Map<String, Object> getTokenByPhone(@RequestBody Map<String, Object> map){
-        HashMap<String, Object> res = new HashMap<>();
-        String token = userTemplate.loginByPhone(map);
-        if(token == null){
-            res.put("code", 500);
-            res.put("token", "");
         }else{
             res.put("code", 200);
             res.put("token", token);
@@ -115,9 +95,10 @@ public class UserController implements LikesTemplate{
     考虑邮箱和电话号码是否重复
     电话号码重复返回 code=5001
     邮箱重复返回 code=5002
+    用户名重复返回 code=5003
     成功返回code=200
      */
-    @PostMapping("/registerUser")
+    @PostMapping("/user/register")
     public Map<String, Object> registerUser(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
         int status = userTemplate.registUser(map);
@@ -126,6 +107,9 @@ public class UserController implements LikesTemplate{
         }
         else if(status == 2){
             res.put("code", 5002); //邮箱重复
+        }
+        else if(status == 3){
+            res.put("code", 5003); //用户名重复
         }
         else{
             res.put("code", 200); //成功返回

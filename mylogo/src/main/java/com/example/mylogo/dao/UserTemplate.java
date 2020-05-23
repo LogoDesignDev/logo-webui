@@ -30,55 +30,38 @@ public class UserTemplate {
     RedisTokenManager redisTokenManager;
 
 
-
-    //头像  是个问题
-    //注册
+    //注册用户
     public int registUser(Map<String, Object> map){
+        String username = (String) map.get("username");
         String phone = (String) map.get("phone");
         String email = (String) map.get("email");
         Query queryPhone = Query.query(Criteria.where("phone").is(phone));
         Query queryEmail = Query.query(Criteria.where("email").is(email));
+        Query queryUsername = Query.query(Criteria.where("username").is(username));
         if(mongoTemplate.findOne(queryPhone, User.class) != null){
             return 1;
         }
         if(mongoTemplate.findOne(queryEmail, User.class) != null){
             return 2;
         }
+        if(mongoTemplate.findOne(queryUsername, User.class) != null){
+            return 3;
+        }
         User user = new User();
         user.setUsername((String)map.get("username"));
         user.setPassword((String)map.get("password"));
         user.setEmail(email);
-        user.setLogoList(new ArrayList<ObjectId>());
         user.setPhone(phone);
         mongoTemplate.save(user,"user");
         return 0;
     }
 
 
-    //电话登录
-    public String loginByPhone(Map<String, Object> map){
-        String phone = (String)(map.get("phone"));
+    //用户名登录
+    public String login(Map<String, Object> map){
+        String username = (String)(map.get("username"));
         String password = (String)(map.get("password"));
-        Query query = Query.query(Criteria.where("phone").is(phone));
-
-        User user = mongoTemplate.findOne(query, User.class);
-        if(user == null || !password.equals(user.getPassword())){
-            return null;
-        }else{
-            //设置token, 存在redis数据库，返回token
-            return redisTokenManager.createToken(user.getUserId());
-        }
-    }
-
-
-
-    /*
-    邮箱登录
-     */
-    public String loginByEmail(Map<String, Object> map){
-        String email = (String)map.get("email");
-        String password = (String)map.get("password");
-        Query query = Query.query(Criteria.where("email").is(email));
+        Query query = Query.query(Criteria.where("username").is(username));
 
         User user = mongoTemplate.findOne(query, User.class);
         if(user == null || !password.equals(user.getPassword())){
