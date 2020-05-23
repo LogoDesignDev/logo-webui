@@ -153,7 +153,7 @@ public class LogoTemplate {
         String base64 = (String) map.get("base64");
         if (base64 != null && !"".equals(base64)) {
             ObjectId id = redisTokenManager.getUserId(token);
-            String path = "/usr/share/nginx/html/image/"; //路径， 需要改变  /icon头像
+            String path = "/usr/share/nginx/html/image/"; //路径
             String logoName = (String) map.get("logoName");
 
             // TODO: 改JPG为PNG

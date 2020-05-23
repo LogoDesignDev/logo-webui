@@ -19,10 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class UserTemplate {
@@ -56,13 +53,6 @@ public class UserTemplate {
         mongoTemplate.save(user,"user");
         return 0;
     }
-
-    //修改用户信息
-    public void modifyUser(){
-
-    }
-
-
 
 
     //电话登录
@@ -187,7 +177,60 @@ public class UserTemplate {
     }
 
 
+    public boolean modifyPassword(Map<String, Object>map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return false; //无效或者过期
+        }
+        ObjectId userId = redisTokenManager.getUserId(token);
+        Query query = Query.query(Criteria.where("userId").is(userId));
 
+        User user = mongoTemplate.findOne(query, User.class);
+        assert user != null;
+        String newPassword = (String) map.get("newPassword");
+        user.setPassword(newPassword);
+
+        mongoTemplate.save(user);
+        return true;
+
+    }
+
+
+
+    public boolean modifyEmail(Map<String, Object>map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return false; //无效或者过期
+        }
+        ObjectId userId = redisTokenManager.getUserId(token);
+        Query query = Query.query(Criteria.where("userId").is(userId));
+
+        User user = mongoTemplate.findOne(query, User.class);
+        assert user != null;
+        String newEmail = (String) map.get("newEmail");
+        user.setEmail(newEmail);
+
+        mongoTemplate.save(user);
+        return true;
+
+    }
+
+    public boolean modifyPhone(Map<String, Object>map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return false; //无效或者过期
+        }
+        ObjectId userId = redisTokenManager.getUserId(token);
+        Query query = Query.query(Criteria.where("userId").is(userId));
+
+        User user = mongoTemplate.findOne(query, User.class);
+        assert user != null;
+        String newPhone = (String) map.get("newPhone");
+        user.setPhone(newPhone);
+
+        mongoTemplate.save(user);
+        return true;
+    }
 
 
 }
