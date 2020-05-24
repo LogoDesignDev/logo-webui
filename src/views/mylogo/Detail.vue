@@ -1,25 +1,26 @@
 <template>
   <div>
     <el-page-header class="header" @back="goBack"></el-page-header>
-      <div class="container">
-        <el-image
-        class="img"
-        v-for="(item, index) in imgList"
-        :key="index" style="width: 250px; height: 250px; margin-top: 20px; "
-        :src="item.imgUrl"
-        :preview-src-list="srcList">
-        </el-image>
-      </div>
+    <vue-viewer multiple
+      :thumb="imgList"
+      list-ul-class="image-list"
+      :full="imgList"
+      >
+      <!--在列表中加入右上角删除按钮-->
+      <template slot-scope="target">
+        <span class="icon-remove" @click.stop="onRemove(target.index)" style="">&times;</span>
+      </template>
+    </vue-viewer>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 export default {
+  name: 'app',
   data () {
     return {
-      imgList: [],
-      srcList: []
+      imgList: []
     }
   },
   methods: {
@@ -39,8 +40,10 @@ export default {
       if (res.ret && res.data) {
         const data = res.data
         this.imgList = data.items
-        this.srcList = data.items
       }
+    },
+    onRemove (index) {
+      alert(index);
     }
   },
   mounted () {
@@ -57,10 +60,38 @@ export default {
   }
 
   .header {
-    margin-left: 10px;
+    margin-left: 20px;
     margin-top: 10px;
+    color: darkgray;
   }
-  .img {
-    margin-left: 30px;
+
+  .image-list{
+    padding: 0;
+    display: inline;
+  }
+  .image-list li {
+    margin-left: 20px;
+    margin-top: 20px;
+    list-style: none;
+    position: relative;
+    display: inline-block;
+  }
+  .image-list img {
+    box-shadow: 0 0 5px #333;
+    width: 200px;
+    height: 180px;
+    margin-left: 100px;
+  }
+  .icon-remove{
+    width: 20px; height:20px;
+    text-align: center; line-height: 20px;
+    background:#f33;
+    position:absolute; top:-10px; right:-10px;
+    border-radius: 10px;
+    cursor: pointer;
+    color:#fff;
+  }
+  a {
+    color: #42b983;
   }
 </style>

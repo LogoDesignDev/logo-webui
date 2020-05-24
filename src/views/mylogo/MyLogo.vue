@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class = "container-header">
-      <el-button @click="add" class="new" type="primary" icon="el-icon-plus"> 新建图库</el-button>
-      <MyLogo-Add :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd"></MyLogo-Add>
+      <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
+      <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
     </div>
     <div class = "container">
       <el-row>
-        <el-col :span="5" v-for="(item, index) in iconList" :key="index" class="col">
+        <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
             <el-card :body-style="{ padding: '0px'}" class="card">
               <img :src="item.imgUrl" class="image">
-              <el-tag class="name" type="success" effect="plain">汉堡包</el-tag>
+              <el-tag class="name" type="success" effect="plain">{{ item.desc }}</el-tag>
               <div style="padding: 14px;">
                 <time class="time">Date: {{ currentDate }}</time>
                 <div class="bottom clearfix">
                   <el-button @click="getDetail(item.id)" type="success" size="medium" class="button-detail" icon="el-icon-view"> 详情</el-button>
                   <el-button @click="edit" class="button-edit" icon="el-icon-edit-outline" size="medium"> 编辑</el-button>
-                  <MyLogo-Edit :dialogFormVisible="dialogFormVisible" v-if="dialogFormVisible" @dialog-cancel="closeManage"></MyLogo-Edit>
+                  <MyLogo-Edit :id="item.id" :dialogFormVisible="dialogFormVisible" v-if="dialogFormVisible" @dialog-cancel="closeManage" @update-succ="succUpdate" @delete-succ="succDelete"></MyLogo-Edit>
                 </div>
               </div>
             </el-card>
@@ -62,11 +62,35 @@ export default {
     edit () {
       this.dialogFormVisible = true
     },
+    succUpdate (code) {
+      if (code === 200) {
+        alert('修改成功')
+      } else {
+        alert('修改失败')
+      }
+      this.dialogFormVisible = false
+    },
+    succDelete (code) {
+      if (code === 200) {
+        alert('删除成功')
+      } else {
+        alert('删除失败')
+      }
+      this.dialogFormVisible = false
+    },
     closeManage () {
       this.dialogFormVisible = false
     },
     add () {
       this.AddFormVisible = true
+    },
+    succAdd (code) {
+      if (code === 200) {
+        alert('添加成功')
+      } else {
+        alert('添加失败')
+      }
+      this.AddFormVisible = false
     },
     closeAdd () {
       this.AddFormVisible = false
@@ -86,7 +110,8 @@ export default {
 <style>
   .container {
     margin-top: 20px;
-    margin-left: 50px;
+    margin-left: 200px;
+    margin-right: 100px;
   }
 
   .container-header {
@@ -94,11 +119,11 @@ export default {
     overflow: hidden;
   }
 
-  .new {
+  .add {
     float: right;
     margin-top: 20px;
     padding-right: 30px;
-    margin-right: 30px;
+    margin-right: 50px;
   }
 
   .card {
