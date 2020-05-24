@@ -20,10 +20,8 @@
   }
 
   .card {
-    left: -90px;
-    top: 50px;
+    margin-left: -120px;
     position: absolute;
-    // display: none;
   }
 </style>
 

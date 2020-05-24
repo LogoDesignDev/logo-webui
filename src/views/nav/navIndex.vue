@@ -1,10 +1,7 @@
 <template>
   <div>
+    <!-- 导航栏 -->
     <el-menu v-if="!navBarHidden" :default-active="$route.path" class="nav" mode="horizontal">
-      <div class="leftContainer">
-        <h3>网站LOGO</h3>
-      </div>
-
       <!-- 居中显示标签（hidden为true则不显示） -->
       <el-menu-item
         v-for="item in removeHiddenRoutes"
@@ -13,18 +10,40 @@
         @click="toPath(item.path)">
         {{item.meta.title}}
       </el-menu-item>
-
-      <!-- 未登录 -->
-      <div v-if="!isloggedIn" class="rightContainer">
-        <el-divider direction="vertical" />
-        <button class="textBtn" @click="toLogin">登录</button>
-        <button class="textBtn" @click="toRegister">注册</button>
-      </div>
-      <!-- 已登录 -->
-      <div v-else class="rightContainer">
-        <personal-card />
-      </div>
     </el-menu>
+    <div class="nav-other">
+      <!-- 导航栏左侧 -->
+      <div class="leftContainer">
+        <h3>网站LOGO</h3>
+      </div>
+
+      <!-- 导航栏右侧 -->
+      <div v-if="!navBarHidden" class="rightContainer">
+        <!-- 搜索按钮 -->
+        <button
+          class="el-icon-search iconButton"
+          @mouseenter="showSearchCard"
+          @mouseleave="hideSearchCard" />
+        <!-- 个人信息 -->
+        <el-divider direction="vertical" />
+        <!-- 未登录 -->
+        <div v-if="!isloggedIn">
+          <span class="textBtn" @click="toLogin">登录</span>
+          <span class="textBtn" @click="toRegister">注册</span>
+        </div>
+        <!-- 已登录 -->
+        <div v-else>
+          <personal-card />
+        </div>
+      </div>
+    </div>
+
+    <!-- 搜索框 -->
+    <div @mouseenter="showSearchCard" @mouseleave="hideSearchCard">
+      <transition name="el-zoom-in-top">
+        <search-card v-show="visible.searchCardVisible" />
+      </transition>
+    </div>
 
     <router-view />
 
@@ -35,12 +54,6 @@
   </div>
 </template>
 
-<style>
-.focus {
-  outline: 0 !important;
-}
-</style>
-
 <style lang="less" scoped>
 .nav {
   height: 60px;
@@ -48,6 +61,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.nav-other {
+  z-index: 99;
+  pointer-events: none;
+  width: 1000px;
+  height: 60px;
+  top: 0px;
+  left: 50%;
+  margin-left: -500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
 }
 
 .footer {
@@ -60,27 +88,26 @@
 }
 
 .leftContainer {
+  pointer-events: all;
   font-size: 14px;
   color: #909399;
   display: flex;
   align-items: center;
   justify-content: center;
-  left: 150px;
-  position: absolute;
 }
 
 .rightContainer {
+  pointer-events: all;
   font-size: 14px;
-  width: 100px;
+  height: 60px;
   color: #909399;
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 150px;
-  position: absolute;
 }
 
 .textBtn {
+  margin: 0 5px;
   font-size: 14px;
   color: #909399;
   background: none;
@@ -89,10 +116,27 @@
 }
 
 .textBtn:hover {
-  font-size: 14px;
   color: #303133;
-  background: none;
+}
+
+.iconButton {
+  margin: 0 5px;
+  height: 60px;
+  width: 50px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: #909399;
   border: none;
+  border-top: 3px transparent solid;
+  border-bottom: 3px transparent solid;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.iconButton:hover {
+  border-top: 3px #409EFF solid;
+  color: #409EFF;
 }
 
 </style>
@@ -100,14 +144,20 @@
 <script>
 import store from 'store'
 import personalCard from './personalCard/personalCardIndex'
+import searchCard from './searchCard/searchCardIndex'
 
 export default {
   components: {
-    'personal-card': personalCard
+    'personal-card': personalCard,
+    'search-card': searchCard
   },
 
   data () {
     return {
+      visible: {
+        searchCardVisible: false
+      },
+      searchCardTimer: null // 用于悬浮显示card
     }
   },
 
@@ -183,6 +233,29 @@ export default {
           mode: 'register'
         }
       })
+    },
+
+    /**
+     * 显示“搜索”选项卡
+     */
+    showSearchCard () {
+      this.visible.searchCardVisible = true
+      if (this.searchCardTimer) {
+        clearTimeout(this.searchCardTimer)
+        this.searchCardTimer = null
+      }
+    },
+
+    /**
+     * 隐藏“搜索”选项卡
+     * 但要做一个延时
+     */
+    hideSearchCard () {
+      const _this = this
+
+      this.searchCardTimer = setTimeout(function () {
+        _this.visible.searchCardVisible = false
+      }, 100)
     }
   }
 }
