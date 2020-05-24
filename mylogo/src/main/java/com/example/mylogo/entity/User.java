@@ -13,13 +13,16 @@ public class User {
     private String password;
     private String email;
     private String phone;
+    private String url; //用户的icon头像在服务器的路径
     private List<ObjectId> logoList;
     private List<ObjectId> markedLogoList;
+    private List<ObjectId> starLogoList;
 
     public User() {
         userId = new ObjectId();
         logoList = new ArrayList<>();
         markedLogoList = new ArrayList<>();
+        starLogoList = new ArrayList<>();
     }
 
 
@@ -95,4 +98,27 @@ public class User {
         markedLogoList.add(objectId);
     }
 
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public List<ObjectId> getStarLogoList() {
+        return starLogoList;
+    }
+
+    public void setStarLogoList(List<ObjectId> starLogoList) {
+        this.starLogoList = starLogoList;
+    }
+
+    public void addStarLogo(ObjectId objectId){
+        starLogoList.add(objectId);
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

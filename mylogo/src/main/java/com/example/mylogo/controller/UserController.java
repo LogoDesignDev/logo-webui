@@ -162,17 +162,24 @@ public class UserController implements LikesTemplate{
         return res;
     }
 
-
     /*
-    修改用户的用户名
+    修改用户的密码
      */
-    @PostMapping("/modifyUserName")
-    public Map<String, Object> modifyUserName(@RequestBody Map<String, Object> map){
+    @PostMapping("/modifyPassword")
+    public Map<String, Object> modifyUserPassword(@RequestBody Map<String, Object>map){
         HashMap<String, Object> res = new HashMap<>();
 
+        boolean result = userTemplate.modifyPassword(map);
+        if(!result){
+            res.put("code", 500); //token过期
+        }else{
+            res.put("code", 200);
+        }
 
         return res;
     }
+
+
 
     /*
     修改用户的电话
@@ -181,6 +188,12 @@ public class UserController implements LikesTemplate{
     public Map<String, Object> modifyUserPhone(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
+        boolean result = userTemplate.modifyPhone(map);
+        if(!result){
+            res.put("code", 500); //token过期
+        }else{
+            res.put("code", 200);
+        }
 
         return res;
     }
@@ -192,6 +205,12 @@ public class UserController implements LikesTemplate{
     public Map<String, Object> modifyUserEmail(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
+        boolean result = userTemplate.modifyPhone(map);
+        if(!result){
+            res.put("code", 500); //token过期
+        }else{
+            res.put("code", 200);
+        }
 
         return res;
     }
