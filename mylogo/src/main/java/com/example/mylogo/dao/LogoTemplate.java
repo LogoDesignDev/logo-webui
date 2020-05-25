@@ -150,14 +150,13 @@ public class LogoTemplate {
             return 1;
         }
 
-
         String base64 = (String) map.get("base64");
         if (base64 != null && !"".equals(base64)) {
             ObjectId id = redisTokenManager.getUserId(token);
             String path = "/usr/share/nginx/html/image/"; //路径
             String logoName = (String) map.get("logoName");
 
-            // TODO: 改JPG为PNG
+
             String imgName = id.toString() + logoName + ".png";
             Base64.Decoder decoder = Base64.getDecoder();
             byte[] b = decoder.decode(base64);
@@ -266,10 +265,10 @@ public class LogoTemplate {
 
     /*
     TODO: 2020-05-21
-    获取一个Logo
+    保存meta到 redis.
      */
     public void saveLogoMeta(LogoMeta meta) throws Exception{
 
-
     }
+
 }
