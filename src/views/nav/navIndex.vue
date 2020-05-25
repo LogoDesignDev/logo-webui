@@ -48,9 +48,9 @@
     <router-view />
 
     <!-- 备案号 -->
-    <div class="footer" v-if="!navBarHidden">
+    <footer class="footer" v-if="!navBarHidden">
       <a class="tips" href="www.beian.miit.gov.cn">粤ICP备19158305号</a>
-    </div>
+    </footer>
   </div>
 </template>
 

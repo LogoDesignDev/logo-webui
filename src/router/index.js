@@ -36,10 +36,16 @@ const routes = [
     component: () => import('../views/mylogo/MyLogo.vue')
   },
   {
-    path: '/detail/:id',
+    path: '/mylogo/detail/:id',
     name: 'Detail',
     hidden: true,
     component: () => import('../views/mylogo/Detail.vue')
+  },
+  {
+    path: '/mylogo/detail/:galleryid/:logoid',
+    name: 'LogoDetail',
+    hidden: true,
+    component: () => import('../views/mylogo/LogoDetail.vue')
   },
   {
     path: '/login',

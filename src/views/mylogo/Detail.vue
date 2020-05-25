@@ -1,16 +1,30 @@
 <template>
   <div>
-    <el-page-header class="header" @back="goBack"></el-page-header>
-    <vue-viewer multiple
-      :thumb="imgList"
-      list-ul-class="image-list"
-      :full="imgList"
-      >
-      <!--在列表中加入右上角删除按钮-->
-      <template slot-scope="target">
-        <span class="icon-remove" @click.stop="onRemove(target.index)" style="">&times;</span>
-      </template>
-    </vue-viewer>
+    <div class="header">
+      <img src="../../assets/home_bg.png" class="header-img">
+      <el-button type="primary" icon="el-icon-plus" circle class="button-plus"></el-button>
+      <el-button type="warning" icon="el-icon-star-off" circle class="button-collect"></el-button>
+      <el-button type="danger" icon="el-icon-delete" circle class="button-d"></el-button>
+      <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
+    </div>
+    <div class = "container">
+      <el-row>
+        <el-col :span="4" v-for="(item, index) in imgList" :key="index" class="col">
+            <div @click="goDetail(item.id)" :imgUrl="item.imgUrl">
+              <el-card :body-style="{ padding: '0px'}" class="card">
+                <img :src="item.imgUrl" class="image">
+                <div id="hoverView">
+                  <div id="infoView">
+                    <div id="hoverTitle">{{item.id}}</div>
+                    <div id="line" />
+                    <div id="hoverTips">详情点击</div>
+                  </div>
+                </div>
+              </el-card>
+            </div>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -30,7 +44,7 @@ export default {
     getDetailInfo () {
       axios.get('/api/logo.json', {
         params: {
-          id: this.$route.params.id
+          galleryid: this.$route.params.id
         }
       }).then(this.handleGetDetailSucc)
       console.log(this.$route.params.id)
@@ -42,8 +56,10 @@ export default {
         this.imgList = data.items
       }
     },
-    onRemove (index) {
-      alert(index);
+    goDetail (id) {
+      this.$router.push({
+        path: `/mylogo/detail/galleryid=${this.$route.params.id}/logoid=${id}`
+      })
     }
   },
   mounted () {
@@ -52,46 +68,147 @@ export default {
 }
 </script>
 
-<style>
-  .container {
-    margin-top: 20px;
-    margin-left: 50px;
-    margin-right: 50px;
+<style lang="less" scoped>
+  #hoverView {
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    border-radius: 5px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
   }
 
+  .card:hover #hoverView {
+    bottom: 0;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  #infoView {
+    padding: 0 10px;
+    color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+  }
+
+  .card:hover #infoView {
+    color: white;
+    width: 150px;
+    height: 100px;
+    border: 1px solid white;
+  }
+
+  #title {
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #hoverTitle {
+    width: 110px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+  }
+
+  #hoverTips {
+    width: 130px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  #line {
+    margin: 10px 0;
+    width: 150px;
+    height: 1px;
+    transform: scaleY(0.5);
+    background: white;
+  }
   .header {
-    margin-left: 20px;
-    margin-top: 10px;
-    color: darkgray;
+    position: relative;
   }
 
-  .image-list{
-    padding: 0;
-    display: inline;
+  .header-img {
+    width: 100%;
   }
-  .image-list li {
-    margin-left: 20px;
-    margin-top: 20px;
-    list-style: none;
+  .button-plus {
+    position: absolute;
+    z-index: 2;
+    right: 400px;
+    font-size: 30px;
+    bottom: -20px;
+  }
+  .button-collect {
+    position: absolute;
+    z-index: 2;
+    right: 300px;
+    font-size: 30px;
+    bottom: -20px;
+  }
+  .button-d {
+    position: absolute;
+    z-index: 2;
+    right: 200px;
+    bottom: -20px;
+    font-size: 30px;
+  }
+  .button-back {
+    position: absolute;
+    z-index: 2;
+    left: 20px;
+    top: 20px;
+    font-size: 30px;
+  }
+
+  .container {
+    margin-top: 50px;
+    margin-left: 200px;
+    margin-right: 100px;
+  }
+
+  .container-header {
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .card {
     position: relative;
-    display: inline-block;
-  }
-  .image-list img {
-    box-shadow: 0 0 5px #333;
-    width: 200px;
-    height: 180px;
-    margin-left: 100px;
-  }
-  .icon-remove{
-    width: 20px; height:20px;
-    text-align: center; line-height: 20px;
-    background:#f33;
-    position:absolute; top:-10px; right:-10px;
-    border-radius: 10px;
+    height: 350px;
+    margin-bottom: 20px;
     cursor: pointer;
-    color:#fff;
   }
-  a {
-    color: #42b983;
+
+  .col {
+    margin-left: 30px;
+    margin-top: 0px;
+    width: 250px;
+  }
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+
+  .clearfix:after {
+      clear: both
   }
 </style>

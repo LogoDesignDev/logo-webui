@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img src="../../assets/home_bg.png" class="header-img">
     <div class = "container-header">
       <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
       <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
@@ -9,11 +10,11 @@
         <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
             <el-card :body-style="{ padding: '0px'}" class="card">
               <img :src="item.imgUrl" class="image">
-              <el-tag class="name" type="success" effect="plain">{{ item.desc }}</el-tag>
+              <el-tag class="name" type="primary" effect="plain">{{ item.desc }}</el-tag>
               <div style="padding: 14px;">
                 <time class="time">Date: {{ currentDate }}</time>
                 <div class="bottom clearfix">
-                  <el-button @click="getDetail(item.id)" type="success" size="medium" class="button-detail" icon="el-icon-view"> 详情</el-button>
+                  <el-button @click="getDetail(item.id)" type="primary" size="medium" class="button-detail" icon="el-icon-view"> 详情</el-button>
                   <el-button @click="edit" class="button-edit" icon="el-icon-edit-outline" size="medium"> 编辑</el-button>
                   <MyLogo-Edit :id="item.id" :dialogFormVisible="dialogFormVisible" v-if="dialogFormVisible" @dialog-cancel="closeManage" @update-succ="succUpdate" @delete-succ="succDelete"></MyLogo-Edit>
                 </div>
@@ -97,7 +98,7 @@ export default {
     },
     getDetail (id) {
       this.$router.push({
-        path: `/detail/${id}`
+        path: `/mylogo/detail/${id}`
       })
     }
   },
@@ -107,7 +108,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+  .header-img {
+    width: 100%
+  }
+
   .container {
     margin-top: 20px;
     margin-left: 200px;
@@ -181,6 +186,7 @@ export default {
 
   .image {
     width: 100%;
+    height: 250px;
     display: block;
   }
 
