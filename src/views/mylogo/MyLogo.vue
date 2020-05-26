@@ -5,7 +5,7 @@
       <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
       <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
     </div>
-    <div class = "container">
+    <div class = "container" v-loading="loading" :data="iconList">
       <el-row>
         <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
             <el-card :body-style="{ padding: '0px'}" class="card">
@@ -41,7 +41,8 @@ export default {
       dialogFormVisible: false,
       AddFormVisible: false,
       currentDate: (new Date()).toLocaleDateString(),
-      iconList: []
+      iconList: [],
+      loading: false
     }
   },
   computed: {
@@ -52,6 +53,12 @@ export default {
   methods: {
     getLogoInfo () {
       axios.get('/api/logo.json').then(this.handleGetLogoInfoSucc)
+    },
+    setLoading () {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 600)
     },
     handleGetLogoInfoSucc (res) {
       res = res.data
@@ -104,6 +111,7 @@ export default {
   },
   mounted () {
     this.getLogoInfo()
+    this.setLoading()
   }
 }
 </script>
