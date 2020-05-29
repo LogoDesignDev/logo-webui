@@ -16,8 +16,8 @@ import java.util.Comparator;
 
 public class Recommendation {
 
-    static Integer MAX_LOGO = 20;
-    static Integer MAX_USER = 10;
+    static Integer MAX_LOGO = 8;
+    static Integer MAX_USER = 9;
     /*
     TODO
     根据参数推荐相似的作品。
@@ -101,6 +101,27 @@ public class Recommendation {
     public static ArrayList<LogoMeta> CollaborativeFiltering(LogoMeta base, List<LogoMeta> allMeta){
         ArrayList<LogoMeta> res = new ArrayList<>();
         // unimplemented.
+        return res;
+    }
+
+    // 对应API: 获取推荐作品
+    public static List<ObjectId> HomePageRecomLogo(List<LogoMeta> allMeta){
+        ArrayList<ObjectId> res = new ArrayList<>();
+        for (int i = 0; i < MAX_USER; i++){
+            res.add(allMeta.get(i).logoId);
+        }
+        return res;
+    }
+
+    // 对应API: 获取设计师推荐
+    public static List<ObjectId> HomePageRecomUser(List<ObjectId> allUsers){
+        ArrayList<ObjectId> res = new ArrayList<>();
+        int n = allUsers.size();
+        // simple recommandation for testing.
+        for(int i = 0;  i < n && i < Recommendation.MAX_USER; i++){
+            res.add(allUsers.get(i));
+        }
+
         return res;
     }
 }
