@@ -36,7 +36,7 @@ public class LogoController {
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
         if(allPublishedLogo == null){
-            res.put("code", 533); //表示token不存在或失效
+            res.put("code", 501); //表示token不存在或失效
         }else{
             res.put("code", 200);
             res.put("allPublishedLogo", allPublishedLogo);
@@ -61,7 +61,7 @@ public class LogoController {
             result.add(hm);
         }
         if(allPublishedLogo == null || allPublishedLogo.size() == 0){
-            res.put("code", 534); //表示token不存在或失效
+            res.put("code", 501); //表示token不存在或失效
         }else{
             res.put("code", 200); // 安装文档
             // 每个logo需要 url, title, desc三个字段
@@ -96,7 +96,7 @@ public class LogoController {
             result.add(hm);
         }
         if(allUser == null || allUser.size() == 0){
-            res.put("code", 535); //表示token不存在或失效
+            res.put("code", 501); //表示token不存在或失效
         }else{
             res.put("code", 200); // 安装文档
             res.put("desinger", result);
@@ -114,7 +114,7 @@ public class LogoController {
         int n = allLogo.size();
 
         if(allLogo == null || allLogo.size() == 0){
-            res.put("code", 536); //表示没有logo
+            res.put("code", 501); //表示没有logo
         }else{
             result.add(allLogo.get(0).getUrl());
             if (n >= 2){
