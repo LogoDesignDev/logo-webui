@@ -90,7 +90,7 @@ public class LogoController {
             hm.put("uid", allUser.get(i).getUserId());
             hm.put("userPicUrl", allUser.get(i).getUrl());
             hm.put("username", allUser.get(i).getUsername());
-            hm.put("like", allUser.get(i).getBeLiked()); // 获赞数量
+            hm.put("like", allUser.get(i).getBeLikedCount()); // 获赞数量
             hm.put("collect", allUser.get(i).getMarkedLogoList().size()); // 收藏0
             hm.put("prod", allUser.get(i).getLogoList().size());
             result.add(hm);
