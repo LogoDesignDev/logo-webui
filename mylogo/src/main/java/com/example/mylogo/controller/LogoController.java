@@ -76,7 +76,7 @@ public class LogoController {
         HashMap<String, Object> res = new HashMap<>();
 
         // TODO
-        List<User> allUser = userTemplate.getAllUser();
+        List<User> allUser = userTemplate.getAllUser(map);
         List<Map<String, Object>> result = new ArrayList<>();
         int n = allUser.size();
         for (int i = 0; i < n && i < 9; i++){
@@ -90,7 +90,7 @@ public class LogoController {
             hm.put("uid", allUser.get(i).getUserId());
             hm.put("userPicUrl", allUser.get(i).getUrl());
             hm.put("username", allUser.get(i).getUsername());
-            hm.put("like", allUser.get(i).getLiked()); // 获赞数量
+            hm.put("like", allUser.get(i).getBeLiked()); // 获赞数量
             hm.put("collect", allUser.get(i).getMarkedLogoList().size()); // 收藏0
             hm.put("prod", allUser.get(i).getLogoList().size());
             result.add(hm);
@@ -109,7 +109,7 @@ public class LogoController {
         HashMap<String, Object> res = new HashMap<>();
 
         // TODO
-        List<Logo> allLogo = logoTemplate.getAllLogo();
+        List<Logo> allLogo = logoTemplate.getAllPublishedLogo(map);
         ArrayList<String> result = new ArrayList<>();
         int n = allLogo.size();
 
