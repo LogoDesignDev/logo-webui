@@ -84,7 +84,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
   .input {
     width: 300px;
   }
