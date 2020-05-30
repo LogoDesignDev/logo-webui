@@ -183,7 +183,8 @@ public class UserController implements LikesTemplate{
     }
 
     /*
-    修改用户的邮箱     */
+    修改用户的邮箱
+    */
     @PostMapping("/modifyUserEmail")
     public Map<String, Object> modifyUserEmail(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
@@ -219,7 +220,7 @@ public class UserController implements LikesTemplate{
     /*
     获取用户信息
      */
-    @GetMapping("/getUser")
+    @GetMapping("/user/getUserInfo")
     public Map<String, Object> getUser(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
@@ -232,6 +233,8 @@ public class UserController implements LikesTemplate{
         }
         return res;
     }
+
+
 
     @Override
     public void saveLiked2Redis(String likedUserId, String likedPostId) {
