@@ -17,13 +17,20 @@ public class User {
     private List<ObjectId> logoList;
     private List<ObjectId> markedLogoList;
     private List<ObjectId> starLogoList;
-    private
+    private Integer beLiked;
+    private Integer beMaked;
+    private List<ObjectId> focusList;
+    private List<ObjectId> fansList;
 
     public User() {
         userId = new ObjectId();
         logoList = new ArrayList<>();
         markedLogoList = new ArrayList<>();
         starLogoList = new ArrayList<>();
+        beLiked = 0;
+        beMaked = 0;
+        focusList = new ArrayList<>();
+        fansList = new ArrayList<>();
     }
 
 
@@ -121,5 +128,37 @@ public class User {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Integer getBeLiked() {
+        return beLiked;
+    }
+
+    public void setBeLiked(Integer beLiked) {
+        this.beLiked = beLiked;
+    }
+
+    public Integer getBeMaked() {
+        return beMaked;
+    }
+
+    public void setBeMaked(Integer beMaked) {
+        this.beMaked = beMaked;
+    }
+
+    public List<ObjectId> getFocusList() {
+        return focusList;
+    }
+
+    public void setFocusList(List<ObjectId> focusList) {
+        this.focusList = focusList;
+    }
+
+    public List<ObjectId> getFansList() {
+        return fansList;
+    }
+
+    public void setFansList(List<ObjectId> fansList) {
+        this.fansList = fansList;
     }
 }
