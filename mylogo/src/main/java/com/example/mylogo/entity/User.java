@@ -17,6 +17,7 @@ public class User {
     private List<ObjectId> logoList;
     private List<ObjectId> markedLogoList;
     private List<ObjectId> starLogoList;
+    private
 
     public User() {
         userId = new ObjectId();

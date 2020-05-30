@@ -135,8 +135,7 @@ public class UserTemplate {
             return 0; //成功存图片
         } else {
             return 2; //文件为空
-        }
-    }
+        }    }
 
     /*
     获取某个用户的所有logo
@@ -213,6 +212,17 @@ public class UserTemplate {
 
         mongoTemplate.save(user);
         return true;
+    }
+
+    /*
+    获取所有的用户
+     */
+    public List<User> getAllUser(Map<String, Object>map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return null;
+        }
+        return mongoTemplate.findAll(User.class);
     }
 
 

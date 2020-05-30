@@ -14,6 +14,5 @@ public class UserService {
     }
 
     public void updateInfo(UserInfo userInfo){
-
     }
 }

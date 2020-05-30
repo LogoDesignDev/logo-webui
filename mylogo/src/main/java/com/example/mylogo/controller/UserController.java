@@ -80,7 +80,7 @@ public class UserController implements LikesTemplate{
     /*
     登出功能，删除token 默认返回code=200
      */
-    @PostMapping("/logout")
+    @PostMapping("/user/logout")
     public Map<String, Object> delToken(@RequestBody Map<String, Object> map){
         String token = (String)(map.get("token"));
         userTemplate.logout(token);
@@ -93,9 +93,9 @@ public class UserController implements LikesTemplate{
     /*
     注册用户
     考虑邮箱和电话号码是否重复
-    电话号码重复返回 code=5001
-    邮箱重复返回 code=5002
-    用户名重复返回 code=5003
+    电话号码重复返回 code=501
+    邮箱重复返回 code=502
+    用户名重复返回 code=503
     成功返回code=200
      */
     @PostMapping("/user/register")
@@ -103,13 +103,13 @@ public class UserController implements LikesTemplate{
         HashMap<String, Object> res = new HashMap<>();
         int status = userTemplate.registUser(map);
         if(status == 1){
-            res.put("code", 5001); //电话号码重复
+            res.put("code", 501); //电话号码重复
         }
         else if(status == 2){
-            res.put("code", 5002); //邮箱重复
+            res.put("code", 502); //邮箱重复
         }
         else if(status == 3){
-            res.put("code", 5003); //用户名重复
+            res.put("code", 503); //用户名重复
         }
         else{
             res.put("code", 200); //成功返回
@@ -124,23 +124,23 @@ public class UserController implements LikesTemplate{
     文件为空 返回code=5002
     服务器出现异常 返回code=5003
      */
-    @PostMapping("/updateIcon")
+    @PostMapping("/user/updateIcon")
     public Map<String, Object> uploadHeader(@RequestBody Map<String, Object> map){
 
         HashMap<String, Object> res = new HashMap<>();
         try {
             int status = userTemplate.uploadIcon(map);
             if(status == 1){
-                res.put("code", 5001); //token出现问题
+                res.put("code", 501); //token出现问题
             }
             else if(status == 2){
-                res.put("code", 5002); //文件为空
+                res.put("code", 502); //文件为空
             }
             else if(status == 0){
                 res.put("code", 200); //上传成功
             }
         } catch (IOException e) {
-            res.put("code", 5003); //服务器出现差错
+            res.put("code", 503); //服务器出现差错
             e.printStackTrace();
         }
         return res;
@@ -183,8 +183,7 @@ public class UserController implements LikesTemplate{
     }
 
     /*
-    修改用户的邮箱
-     */
+    修改用户的邮箱     */
     @PostMapping("/modifyUserEmail")
     public Map<String, Object> modifyUserEmail(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();

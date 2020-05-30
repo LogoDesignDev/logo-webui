@@ -249,6 +249,8 @@ public class LogoTemplate {
         return mongoTemplate.find(query, Logo.class);
     }
 
+
+
     /*
     TODO: 2020-05-21
     获取一个Logo
