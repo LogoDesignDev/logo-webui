@@ -17,8 +17,8 @@ public class User {
     private List<ObjectId> logoList;
     private List<ObjectId> markedLogoList;
     private List<ObjectId> starLogoList;
-    private Integer beLiked;
-    private Integer beMaked;
+    private Integer beLikedCount;
+    private Integer beMarkedCount;
     private List<ObjectId> focusList;
     private List<ObjectId> fansList;
 
@@ -27,8 +27,8 @@ public class User {
         logoList = new ArrayList<>();
         markedLogoList = new ArrayList<>();
         starLogoList = new ArrayList<>();
-        beLiked = 0;
-        beMaked = 0;
+        beLikedCount = 0;
+        beMarkedCount = 0;
         focusList = new ArrayList<>();
         fansList = new ArrayList<>();
     }
@@ -38,7 +38,6 @@ public class User {
     public ObjectId getUserId() {
         return userId;
     }
-
 
     public String getUsername() {
         return username;
@@ -130,20 +129,20 @@ public class User {
         this.url = url;
     }
 
-    public Integer getBeLiked() {
-        return beLiked;
+    public Integer getBeLikedCount() {
+        return beLikedCount;
     }
 
-    public void setBeLiked(Integer beLiked) {
-        this.beLiked = beLiked;
+    public void setBeLikedCount(Integer beLikedCount) {
+        this.beLikedCount = beLikedCount;
     }
 
-    public Integer getBeMaked() {
-        return beMaked;
+    public Integer getBeMarkedCount() {
+        return beMarkedCount;
     }
 
-    public void setBeMaked(Integer beMaked) {
-        this.beMaked = beMaked;
+    public void setBeMarkedCount(Integer beMarkedCount) {
+        this.beMarkedCount = beMarkedCount;
     }
 
     public List<ObjectId> getFocusList() {
