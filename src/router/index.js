@@ -4,6 +4,7 @@ import Home from '../views/home/homeIndex.vue'
 
 import personalRoutes from '@/router/personal'
 import accountRoutes from '@/router/account'
+import searchRoutes from '@/router/search'
 
 Vue.use(VueRouter)
 
@@ -54,7 +55,8 @@ const router = new VueRouter({
   routes: [
     ...routes,
     ...personalRoutes,
-    ...accountRoutes
+    ...accountRoutes,
+    ...searchRoutes
   ]
 })
 

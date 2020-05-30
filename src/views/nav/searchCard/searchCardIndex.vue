@@ -1,34 +1,42 @@
 <template>
-  <el-card class="container" shadow="never">
-    <!-- 搜索模式 -->
-    <div id="search-mode">
-      <input
-        id="1" class="search-mode-radio" v-model="search.mode"
-        type="radio" value="prod" />
-      <label class="search-mode-text" for="1">作品</label>
-      <input
-        id="2" class="search-mode-radio" v-model="search.mode"
-        type="radio" value="user" />
-      <label class="search-mode-text" for="2">设计师</label>
+  <div class="container">
+    <!-- 左 -->
+    <div id="left">
+      <a class="tips" href="http://www.w3school.com.cn">查看更多推荐作品 ></a>
+      <img id="viewImg" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" />
     </div>
-    <!-- 搜索框 -->
-    <div id="search-input">
-      <el-input placeholder="请输入您要查找的内容" v-model="search.text">
-        <el-button id="search-btn" slot="append">搜索</el-button>
-      </el-input>
-    </div>
-    <!-- 搜索历史 -->
-    <div id="search-history">
-      <span v-if="history.length === 0" class="tips" style="">暂无历史搜索记录</span>
-      <button v-else id="del-all-btn" class="el-icon-delete" @click="delAllHistory">
-        清空搜索历史
-      </button>
-      <div id="history-container">
-        <history-item v-for='(item, index) in history' :key="index"
-        :text="item" :index="index" @buttonClicked="delHistory" />
+    <!-- 右 -->
+    <div id="right">
+      <!-- 搜索模式 -->
+      <div id="search-mode">
+        <input
+          id="1" class="search-mode-radio" v-model="search.mode"
+          type="radio" value="prod" />
+        <label class="search-mode-text" for="1">作品</label>
+        <input
+          id="2" class="search-mode-radio" v-model="search.mode"
+          type="radio" value="user" />
+        <label class="search-mode-text" for="2">设计师</label>
+      </div>
+      <!-- 搜索框 -->
+      <div id="search-input">
+        <el-input placeholder="请输入您要查找的内容" v-model="search.text">
+          <el-button id="search-btn" slot="append" @click="toSearch">搜索</el-button>
+        </el-input>
+      </div>
+      <!-- 搜索历史 -->
+      <div id="search-history">
+        <span v-if="history.length === 0" class="tips" style="">暂无历史搜索记录</span>
+        <button v-else id="del-all-btn" class="el-icon-delete" @click="delAllHistory">
+          清空搜索历史
+        </button>
+        <div id="history-container">
+          <history-item v-for='(item, index) in history' :key="index"
+          :text="item" :index="index" @buttonClicked="delHistory" />
+        </div>
       </div>
     </div>
-  </el-card>
+  </div>
 </template>
 
 <style scoped>
@@ -36,18 +44,34 @@
   z-index: 99;
   top: 60px;
   left: 0;
+  padding-top: 20px;
   width: 100%;
+  height: 300px;
   border-radius: 0;
-  border-left: none;
-  border-right: none;
+  border-top: 1px #E4E7ED solid;
+  border-bottom: 1px #E4E7ED solid;
+  background: white;
   display: flex;
   justify-content: center;
   position: absolute;
 }
 
+#left {
+  margin-top: 17px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+#viewImg {
+  margin-top: 15px;
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+}
+
 #search-mode {
   margin-left: 20px;
-  margin-top: -15px;
   width: 90px;
   height: 50px;
   display: flex;
@@ -176,6 +200,15 @@ export default {
           temp = temp + str[i]
         }
       }
+    },
+
+    /**
+     * 前往搜索页
+     */
+    toSearch () {
+      this.$router.push({
+        path: '/search'
+      })
     }
   }
 }
