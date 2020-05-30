@@ -6,6 +6,7 @@ import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,8 @@ import java.util.Map;
 
 @RestController
 public class LogoController {
+
+
 
     @Autowired
     LogoTemplate logoTemplate;
@@ -33,6 +36,11 @@ public class LogoController {
     @GetMapping("/getAllPublishedLogo")
     public Map<String, Object> getAllPublishedLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
+        String token = (String)map.get("token");
+        if (token == null || userTemplate.tokenAvailable(token)){
+            res.put("code", 500);
+            return res;
+        }
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
         if(allPublishedLogo == null){
@@ -49,6 +57,11 @@ public class LogoController {
     @GetMapping("/home/getRecommend")
     public Map<String, Object> getHomePageLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
+        String token = (String)map.get("token");
+        if (token == null || userTemplate.tokenAvailable(token)){
+            res.put("code", 500);
+            return res;
+        }
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
         List<Map<String, Object>> result = new ArrayList<>();
@@ -74,6 +87,11 @@ public class LogoController {
     @GetMapping("/home/getDesigner")
     public Map<String, Object> getHomePageUser(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
+        String token = (String)map.get("token");
+        if (token == null || userTemplate.tokenAvailable(token)){
+            res.put("code", 500);
+            return res;
+        }
 
         // TODO
         List<User> allUser = userTemplate.getAllUser(map);
@@ -107,6 +125,11 @@ public class LogoController {
     @GetMapping("/home/getFirstUrl")
     public Map<String, Object> getFirstUrl(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
+        String token = (String)map.get("token");
+        if (token == null || userTemplate.tokenAvailable(token)){
+            res.put("code", 500);
+            return res;
+        }
 
         // TODO
         List<Logo> allLogo = logoTemplate.getAllPublishedLogo(map);
