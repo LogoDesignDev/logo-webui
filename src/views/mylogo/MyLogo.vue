@@ -1,33 +1,40 @@
 <template>
   <div>
     <img src="../../assets/home_bg.png" class="header-img">
-    <div class = "container-header">
-      <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
-      <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
-    </div>
-    <div class = "container" v-loading="loading" :data="iconList">
-      <el-row>
-        <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
-            <el-card :body-style="{ padding: '0px'}" class="card">
-              <img :src="item.imgUrl" class="image">
-              <el-tag class="name" type="primary" effect="plain">{{ item.desc }}</el-tag>
-              <div style="padding: 14px;">
-                <time class="time">Date: {{ currentDate }}</time>
-                <div class="bottom clearfix">
-                  <el-button @click="getDetail(item.id)" type="primary" size="medium" class="button-detail" icon="el-icon-view"> 详情</el-button>
-                  <el-button @click="edit" class="button-edit" icon="el-icon-edit-outline" size="medium"> 编辑</el-button>
-                  <MyLogo-Edit :id="item.id" :dialogFormVisible="dialogFormVisible" v-if="dialogFormVisible" @dialog-cancel="closeManage" @update-succ="succUpdate" @delete-succ="succDelete"></MyLogo-Edit>
+    <div v-if="isloggedIn">
+      <div class = "container-header">
+        <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
+        <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
+      </div>
+      <div class = "container" v-loading="loading" :data="iconList">
+        <el-row>
+          <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
+              <el-card :body-style="{ padding: '0px'}" class="card">
+                <img :src="item.imgUrl" class="image">
+                <el-tag class="name" type="primary" effect="plain">{{ item.desc }}</el-tag>
+                <div style="padding: 14px;">
+                  <time class="time">Date: {{ currentDate }}</time>
+                  <div class="bottom clearfix">
+                    <el-button @click="getDetail(item.id)" type="primary" size="medium" class="button-detail" icon="el-icon-view"> 详情</el-button>
+                    <el-button @click="edit" class="button-edit" icon="el-icon-edit-outline" size="medium"> 编辑</el-button>
+                    <MyLogo-Edit :id="item.id" :dialogFormVisible="dialogFormVisible" v-if="dialogFormVisible" @dialog-cancel="closeManage" @update-succ="succUpdate" @delete-succ="succDelete"></MyLogo-Edit>
+                  </div>
                 </div>
-              </div>
-            </el-card>
-        </el-col>
-      </el-row>
+              </el-card>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+    <div class="notFoundView" v-else>
+      <i class="iconfont icon-not-found"/>
+      <el-button type="primary" @click="toLogin">点击登录</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import store from 'store'
 import MyLogoEdit from './components/Edit'
 import MyLogoAdd from './components/Add'
 export default {
@@ -47,7 +54,7 @@ export default {
   },
   computed: {
     isloggedIn: function () {
-      return true
+      return store.state.isloggedIn
     }
   },
   methods: {
@@ -106,6 +113,14 @@ export default {
     getDetail (id) {
       this.$router.push({
         path: `/mylogo/detail/${id}`
+      })
+    },
+    toLogin () {
+      this.$router.push({
+        path: '/login',
+        query: {
+          mode: 'login'
+        }
       })
     }
   },
@@ -196,6 +211,18 @@ export default {
     width: 100%;
     height: 250px;
     display: block;
+  }
+  .notFoundView {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .notFoundView i {
+    font-size: 150px;
+    color: #E9E9EB;
   }
 
   .clearfix:before,

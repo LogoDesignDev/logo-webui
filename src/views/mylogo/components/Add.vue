@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios'
+import { getToken } from 'utils/auth'
 export default {
   name: 'MyLogoAdd',
   props: {
@@ -44,13 +45,17 @@ export default {
   },
   methods: {
     AddGallery () {
-      axios.get('api/code.json', {
-        params: {
-          name: this.form.name,
-          author: this.form.author,
-          region: this.form.region
-        }
-      }).then(this.handleAddGallerySucc)
+      const postdata = {
+        name: this.form.name,
+        region: this.form.region,
+        token: getToken()
+      }
+      axios.post('api/mylogo/addgallery', postdata,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(this.handleAddGallerySucc)
     },
     handleAddGallerySucc (res) {
       res = res.data
