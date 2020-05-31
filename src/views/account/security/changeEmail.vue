@@ -20,6 +20,7 @@
 </style>
 
 <script>
+import { getToken } from 'utils/auth'
 import { changeEmail } from 'api/user'
 
 export default {
@@ -60,15 +61,22 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true
+          this.form.token = getToken()
           changeEmail(this.form).then((res) => {
             // ———— 成功回调 ————
             const data = res.data
             switch (data.code) {
-              case 20000: // 修改成功
+              case 200: // 修改成功
                 this.$emit('changeSuccess')
                 this.$message({
                   message: '邮箱修改成功',
                   type: 'success'
+                })
+                break
+              case 501: // 修改失败
+                this.$message({
+                  message: '邮箱修改失败',
+                  type: 'error'
                 })
                 break
             }

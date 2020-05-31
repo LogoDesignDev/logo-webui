@@ -20,7 +20,6 @@
 
 <script>
 import { register } from 'api/user'
-import { Message } from 'element-ui'
 
 export default {
   data () {
@@ -65,22 +64,32 @@ export default {
             // ———— 成功回调 ————
             const data = res.data
             switch (data.code) {
-              case 20000: // 注册成功
-                Message({
+              case 200: // 注册成功
+                this.$message({
                   message: '注册成功',
-                  type: 'success',
-                  duration: 5 * 1000
+                  type: 'success'
                 })
                 // 跳转到登录页
                 this.$emit('changeTab', 'login')
                 // 清空表单
                 this.$refs.registerForm.resetFields()
                 break
-              case 20001: // 其他错误
-                Message({
-                  message: '账号或密码错误',
-                  type: 'error',
-                  duration: 5 * 1000
+              case 501:
+                this.$message({
+                  message: '该手机号码已被注册',
+                  type: 'error'
+                })
+                break
+              case 502:
+                this.$message({
+                  message: '该邮箱已被注册',
+                  type: 'error'
+                })
+                break
+              case 503:
+                this.$message({
+                  message: '该用户名已被注册',
+                  type: 'error'
                 })
                 break
             }

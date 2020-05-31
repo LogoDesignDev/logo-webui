@@ -25,6 +25,7 @@
 </style>
 
 <script>
+import { getToken } from 'utils/auth'
 import { changePassword } from 'api/user'
 
 export default {
@@ -71,21 +72,28 @@ export default {
         if (valid) {
           const params = {
             oldPwd: this.form.oldPwd,
-            newPwd: this.form.newPwd
+            newPwd: this.form.newPwd,
+            token: getToken()
           }
           this.loading = true
           changePassword(params).then((res) => {
             // ———— 成功回调 ————
             const data = res.data
             switch (data.code) {
-              case 20000: // 修改成功
+              case 200: // 修改成功
                 this.$emit('changeSuccess')
                 this.$message({
                   message: '密码修改成功',
                   type: 'success'
                 })
                 break
-              case 20001: // 旧密码错误
+              case 501: // 旧密码错误
+                this.$message({
+                  message: '密码修改失败',
+                  type: 'error'
+                })
+                break
+              case 502: // 旧密码错误
                 this.$message({
                   message: '原密码错误',
                   type: 'error'

@@ -13,7 +13,7 @@
     </el-menu>
     <div class="nav-other">
       <!-- 导航栏左侧 -->
-      <div class="leftContainer">
+      <div v-if="!navBarHidden" class="leftContainer">
         <h3>网站LOGO</h3>
       </div>
 

@@ -52,7 +52,7 @@
           :rules="baseRules"
           :model="baseForm">
           <el-form-item prop="username" label="用户名">
-            <el-input v-model="baseForm.username" />
+            <el-input v-model="baseForm.username" :disabled="true" />
           </el-form-item>
           <el-form-item prop="phone" label="手机号">
             <el-input v-model="baseForm.phone" :disabled="true" />
@@ -60,9 +60,9 @@
           <el-form-item prop="email" label="联系邮箱">
             <el-input v-model="baseForm.email" :disabled="true" />
           </el-form-item>
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button type="primary" :loading="loading.save" @click="login('loginForm')">保存</el-button>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
     </div>
@@ -106,8 +106,11 @@
 </style>
 
 <script>
+import store from 'store'
 import picEditor from './picEditor'
-import { getUserPic, getUserInfo } from 'api/user'
+import { getToken } from 'utils/auth'
+import { getUserInfo } from 'api/user'
+import { serverPrx } from 'utils/default'
 
 export default {
   components: {
@@ -150,7 +153,6 @@ export default {
 
   created () {
     this.updateUserInfo()
-    this.updateUserPic()
   },
 
   methods: {
@@ -173,24 +175,6 @@ export default {
     },
 
     /**
-     * 拉取用户头像
-     */
-    updateUserPic () {
-      getUserPic({}).then((res) => {
-        // ————成功回调
-        const data = res.data
-        switch (data.code) {
-          case 20000:
-            this.userPicUrl = data.userPicUrl
-            break
-        }
-      }).catch((err) => {
-        // ————失败回调
-        console.log(err)
-      })
-    },
-
-    /**
      * 拉取用户基本信息
      */
     updateUserInfo () {
@@ -198,19 +182,31 @@ export default {
       this.loading.userInfo = true
       // 这个字段还用于判断div是否显示,所以拉取时先置空
       this.baseForm.username = ''
-      getUserInfo({}).then((res) => {
+
+      const params = {
+        token: getToken()
+      }
+      getUserInfo(params).then((res) => {
         // ————成功回调
         const data = res.data
         switch (data.code) {
-          case 20000:
+          case 200:
             this.baseForm.username = data.username
             this.baseForm.email = data.email
             this.baseForm.phone = data.phone
+            // 因为后端保存的头像图片的文件名是不会有变化的
+            // 所以上传成功后再次拉取的url没有变化
+            // 自然不会触发双向绑定，img也不会更新
+            // 因此采取在url后加一个随机数的方式触发更新
+            this.userPicUrl = serverPrx + data.userPicUrl + '?' + Math.random()
             break
         }
       }).catch((err) => {
         // ————失败回调
-        console.log(err)
+        this.$message({
+          message: '用户信息拉取失败：' + err.message,
+          type: 'error'
+        })
       }).finally(() => {
         this.loading.userInfo = false
       })
@@ -220,7 +216,8 @@ export default {
      * 处理头像上传成功
      */
     handleUploadSuccess () {
-      this.updateUserPic()
+      this.updateUserInfo()
+      store.dispatch('updateUserInfo')
       this.visible.uploadPicDialog = false
     }
   }

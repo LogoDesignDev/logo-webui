@@ -109,6 +109,7 @@
 </style>
 
 <script>
+import { getToken } from 'utils/auth'
 import { uploadUserPic } from 'api/user'
 
 export default {
@@ -370,6 +371,7 @@ export default {
       const url = canvasSquare.toDataURL('image/jpeg')
 
       const params = {
+        token: getToken(),
         // 格式: image/jpeg
         type: url.slice(url.indexOf(':') + 1, url.indexOf(';')),
         base64: url.slice(url.indexOf(',') + 1)
@@ -380,14 +382,20 @@ export default {
         // ———— 成功回调 ————
         const data = res.data
         switch (data.code) {
-          case 20000: // 上传成功
+          case 200: // 上传成功
             this.$emit('uploadSuccess')
             this.$message({
               message: '上传成功',
               type: 'success'
             })
             break
-          case 20001:
+          case 501:
+            this.$message({
+              message: '图片无效',
+              type: 'error'
+            })
+            break
+          case 502:
             this.$message({
               message: '上传失败',
               type: 'error'

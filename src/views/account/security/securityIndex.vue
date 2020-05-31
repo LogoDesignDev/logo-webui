@@ -59,6 +59,7 @@ import contentCard from './components/contentCard'
 import changePassword from './changePassword'
 import changeEmail from './changeEmail'
 import changePhone from './changePhone'
+import { getToken } from 'utils/auth'
 import { getUserInfo } from 'api/user'
 
 export default {
@@ -112,11 +113,15 @@ export default {
       this.loading.userInfo = true
       // 这个字段还用于判断div是否显示,所以拉取时先置空
       this.username = ''
-      getUserInfo({}).then((res) => {
+
+      const params = {
+        token: getToken()
+      }
+      getUserInfo(params).then((res) => {
         // ————成功回调
         const data = res.data
         switch (data.code) {
-          case 20000:
+          case 200:
             this.userInfo.email = data.email
             this.userInfo.phone = data.phone
             this.state.changeEmail = 'success'

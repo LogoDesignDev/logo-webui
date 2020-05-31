@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginForm" :rules="loginRules" :model="loginForm">
-    <el-form-item prop="account">
-      <el-input placeholder="手机号/邮箱" prefix-icon="el-icon-user" v-model="loginForm.account" />
+    <el-form-item prop="username">
+      <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="loginForm.username" />
     </el-form-item>
     <el-form-item prop="password">
       <el-input placeholder="请输入密码" prefix-icon="el-icon-key" v-model="loginForm.password" show-password />
@@ -28,13 +28,13 @@ export default {
       loginLoading: false,
       // 登录提交表单
       loginForm: {
-        account: '',
+        username: '',
         password: ''
       },
       // 登录提交表单验证规则
       loginRules: {
-        account: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
@@ -56,16 +56,17 @@ export default {
             // ———— 成功回调 ————
             const data = res.data
             switch (data.code) {
-              case 20000: // 登录成功
+              case 200: // 登录成功
                 // 存储token
                 setToken(data.token)
                 store.commit('setIsloggedIn', true)
+                store.dispatch('updateUserInfo')
                 // 跳转到首页
                 this.$router.push({
                   path: '/'
                 })
                 break
-              case 20001: // 账号密码错误
+              case 501: // 账号密码错误
                 this.$message({
                   message: '账号或密码错误',
                   type: 'error'
