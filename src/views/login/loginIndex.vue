@@ -16,7 +16,10 @@
         </el-tab-pane>
       </el-tabs>
       <!-- 联系我们 -->
-      <div id="bottomContainer">如登录、注册遇到问题，请联系我们</div>
+      <div id="bottomContainer">
+        <span >如登录、注册遇到问题，请</span>
+        <span class="textBtn">&nbsp;联系我们</span>
+      </div>
     </el-card>
   </div>
 </template>
@@ -35,7 +38,7 @@
 
 #main {
   width: 400px;
-  height: 500px;
+  height: 550px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -54,15 +57,25 @@
 #bottomContainer{
   font-size: 14px;
   color: #909399;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
 #formContainer {
-  height: 370px;
+  height: 420px;
   width: 350px;
 }
+
+.textBtn {
+  font-size: 14px;
+  color: #606266;
+}
+
+.textBtn:hover {
+  font-size: 14px;
+  color: #303133;
+  cursor: pointer;
+}
+
 </style>
 
 <script>

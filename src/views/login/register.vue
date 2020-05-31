@@ -1,22 +1,51 @@
 <template>
-  <el-form ref="registerForm" :rules="registerRules" :model="registerForm">
-    <el-form-item prop="username">
-      <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="registerForm.username" />
-    </el-form-item>
-    <el-form-item prop="phone">
-      <el-input placeholder="手机号码" prefix-icon="el-icon-phone-outline" v-model="registerForm.phone" />
-    </el-form-item>
-    <el-form-item prop="email">
-      <el-input placeholder="邮箱" prefix-icon="el-icon-message" v-model="registerForm.email" />
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input placeholder="请输入密码" prefix-icon="el-icon-key" v-model="registerForm.password" show-password />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" style="width: 100%" :loading="registerLoading" @click="register('registerForm')">注册</el-button>
-    </el-form-item>
-  </el-form>
+  <div>
+    <el-form ref="registerForm" :rules="registerRules" :model="registerForm">
+      <el-form-item prop="username">
+        <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="registerForm.username" />
+      </el-form-item>
+      <el-form-item prop="phone">
+        <el-input placeholder="手机号码" prefix-icon="el-icon-phone-outline" v-model="registerForm.phone" />
+      </el-form-item>
+      <el-form-item prop="email">
+        <el-input placeholder="邮箱" prefix-icon="el-icon-message" v-model="registerForm.email" />
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input placeholder="请输入密码" prefix-icon="el-icon-key" v-model="registerForm.password" show-password />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" style="width: 100%" :loading="registerLoading" @click="register('registerForm')">注册</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- 下面功能是没有用的啊哈哈哈 -->
+    <div class="useless-1">
+      <span>点击“注册”按钮，即代表您同意</span>
+      <span class="textBtn">《用户协议》</span>
+    </div>
+  </div>
 </template>
+
+<style lang="less" scoped>
+.useless-1 {
+  margin-top: -15px;;
+  font-size: 14px;
+  color: #909399;
+  text-align: center;
+}
+
+.textBtn {
+  font-size: 14px;
+  color: #409EFF;
+}
+
+.textBtn:hover {
+  font-size: 14px;
+  color: rgb(147, 197, 255);
+  cursor: pointer;
+}
+
+</style>
 
 <script>
 import { register } from 'api/user'
