@@ -3,7 +3,7 @@
     <div class="header">
       <img src="../../assets/home_bg.png" class="header-img">
       <el-button @click="addlogo" type="primary" icon="el-icon-plus" circle class="button-plus"></el-button>
-      <Add-Logo :AddLogoVisible="AddLogoVisible" v-if="AddLogoVisible" @Add-cancel="closeAdd"></Add-Logo>
+      <Add-Logo :galleryid="galleryid" :AddLogoVisible="AddLogoVisible" v-if="AddLogoVisible" @Add-cancel="closeAdd" @Add-succ="addSucc"></Add-Logo>
       <el-button type="warning" icon="el-icon-star-off" circle class="button-collect"></el-button>
       <el-button @click="onChange" type="danger" icon="el-icon-bell" circle class="button-d"></el-button>
       <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
@@ -34,6 +34,7 @@
 
 <script>
 import axios from 'axios'
+import { getToken } from 'utils/auth'
 import AddLogo from './components/Addlogo'
 export default {
   name: 'app',
@@ -45,7 +46,8 @@ export default {
       imgList: [],
       loading: false,
       AddLogoVisible: false,
-      display: true
+      display: true,
+      galleryid: this.$route.params.id
     }
   },
   methods: {
@@ -67,10 +69,21 @@ export default {
     closeAdd () {
       this.AddLogoVisible = false
     },
+    addSucc (code) {
+      if (code === 200) {
+        alert('添加成功')
+      } else {
+        alert('添加失败')
+      }
+      this.AddLogoVisible = false
+    },
     getDetailInfo () {
-      axios.get('/api/logo.json', {
-        params: {
-          galleryid: this.$route.params.id
+      const postdata = {
+        token: getToken()
+      }
+      axios.post('/api/mylogo/id', postdata, {
+        headers: {
+          'Content-Type': 'application/json'
         }
       }).then(this.handleGetDetailSucc)
       console.log(this.$route.params.id)

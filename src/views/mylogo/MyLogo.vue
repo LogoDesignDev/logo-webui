@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios'
 import store from 'store'
+import { getToken } from 'utils/auth'
 import MyLogoEdit from './components/Edit'
 import MyLogoAdd from './components/Add'
 export default {
@@ -58,8 +59,15 @@ export default {
     }
   },
   methods: {
-    getLogoInfo () {
-      axios.get('/api/logo.json').then(this.handleGetLogoInfoSucc)
+    getGalleryInfo () {
+      const postdata = {
+        token: getToken()
+      }
+      axios.post('/mylogo', postdata, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(this.handleGetGalleryInfoSucc)
     },
     setLoading () {
       this.loading = true
@@ -67,7 +75,7 @@ export default {
         this.loading = false
       }, 600)
     },
-    handleGetLogoInfoSucc (res) {
+    handleGetGalleryInfoSucc (res) {
       res = res.data
       if (res.ret && res.data) {
         const data = res.data

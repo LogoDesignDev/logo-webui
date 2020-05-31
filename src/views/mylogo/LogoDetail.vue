@@ -44,7 +44,12 @@ export default {
   methods: {
     goBack () {
       this.$router.go(-1)
+    },
+    singleLogoInfo () {
     }
+  },
+  mounted () {
+    this.singleLogoInfo()
   }
 }
 </script>
