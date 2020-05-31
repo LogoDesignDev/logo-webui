@@ -25,6 +25,7 @@
 
 <script>
 import axios from 'axios'
+import { getToken } from 'utils/auth'
 export default {
   name: 'MyLogoEdit',
   props: {
@@ -51,14 +52,18 @@ export default {
       this.$emit('dialog-cancel')
     },
     updateGallery () {
-      axios.get('api/code.json', {
-        params: {
-          id: this.$props.id,
-          name: this.form.name,
-          author: this.form.author,
-          region: this.form.region
-        }
-      }).then(this.handleUpdateGallerySucc)
+      const postdata = {
+        name: this.form.name,
+        region: this.form.region,
+        token: getToken(),
+        id: this.$props.id
+      }
+      axios.post('api/mylogo/updategallery', postdata,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(this.handleUpdateGallerySucc)
     },
     handleUpdateGallerySucc (res) {
       res = res.data
@@ -66,14 +71,16 @@ export default {
       this.$emit('update-succ', code)
     },
     deleteGallery () {
-      axios.get('api/code.json', {
-        params: {
-          id: this.$props.id,
-          name: this.form.name,
-          author: this.form.author,
-          region: this.form.region
-        }
-      }).then(this.handleDeleteGallerySucc)
+      const postdata = {
+        token: getToken(),
+        id: this.$props.id
+      }
+      axios.post('api/mylogo/deletegallery', postdata,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(this.handleDeleteGallerySucc)
     },
     handleDeleteGallerySucc (res) {
       res = res.data
