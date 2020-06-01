@@ -19,12 +19,17 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { getToken } from 'utils/auth'
 export default {
   name: 'DetailAdd',
   props: {
     AddLogoVisible: {
       type: Boolean,
       default: false
+    },
+    galleryid: {
+      type: Number
     }
   },
   data () {
@@ -43,6 +48,24 @@ export default {
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    AddLogo () {
+      const postdata = {
+        name: this.form.name,
+        galleryid: this.$props.galleryid,
+        token: getToken()
+      }
+      axios.post('api/mylogo/addlogo', postdata,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(this.handleAddLogoSucc)
+    },
+    handleAddLogoSucc (res) {
+      res = res.data
+      const code = res.code
+      this.$emit('Add-succ', code)
     }
   }
 }
