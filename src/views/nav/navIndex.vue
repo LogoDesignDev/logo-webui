@@ -80,11 +80,11 @@
 
 .footer {
   margin-top: 20px;
-  height: 150px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(245, 245, 245);
+  background: rgb(42, 47, 53);
 }
 
 .leftContainer {
