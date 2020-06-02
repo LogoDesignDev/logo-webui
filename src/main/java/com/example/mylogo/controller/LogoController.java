@@ -5,6 +5,7 @@ import com.example.mylogo.dao.UserTemplate;
 import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
 import com.example.mylogo.entity.Gallery;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.java.Log;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,29 @@ public class LogoController {
         return res;
     }
 
+    // TODO
+    @PostMapping("/creation/generate")
+    public Map<String, Object> createLogo(@RequestBody Map<String, Object> map){
+        HashMap<String, Object> res = new HashMap<>();
+        Integer count = (Integer)map.get("count");
+        ArrayList<Map<String, Object>> paramList = (ArrayList<Map<String, Object>>)map.get("paramList");
+
+        if (count > 8 || count != paramList.size()){
+            res.put("code", 501); // invalid args.
+            return res;
+        }
+        // for each map, create a logo
+        //      save logo to db.
+        ArrayList<String> bss = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            String bs64 = this.logoTemplate.createLogo(paramList.get(i));
+            bss.add(bs64);
+        }
+        res.put("base64List", bss);
+        res.put("code", 200);
+        return res;
+    }
+
     @PostMapping("/home/getFirstUrl")
     public Map<String, Object> getFirstUrl(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
@@ -131,7 +155,6 @@ public class LogoController {
             return res;
         }
 
-        // TODO
         List<Logo> allLogo = logoTemplate.getAllPublishedLogo(map);
         ArrayList<String> result = new ArrayList<>();
         int n = allLogo.size();
@@ -139,16 +162,17 @@ public class LogoController {
         if(allLogo == null || allLogo.size() == 0){
             res.put("code", 501); //表示没有logo
         }else{
-            result.add(allLogo.get(0).getUrl());
+            String firstEle = allLogo.get(0).getUrl();
+            result.add(firstEle);
             if (n >= 2){
                 result.add(allLogo.get(1).getUrl());
             }else{
-                result.add(allLogo.get(0).getUrl());
+                result.add(firstEle);
             }
             if (n >= 3){
                 result.add(allLogo.get(2).getUrl());
             }else{
-                result.add(allLogo.get(0).getUrl());
+                result.add(firstEle);
             }
             res.put("code", 200); // 安装文档
             res.put("logoUrl", result);

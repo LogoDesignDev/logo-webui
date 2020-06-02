@@ -59,19 +59,32 @@ public class LogoTemplate {
          */
     public String createLogo(Map<String, Object> map){
         String token = (String) map.get("token");
+        /*
         if(!redisTokenManager.checkToken(token)){ //token失效或者过期
             return "null";
-        }
+        }*/
 
         String url = "";
 
         final String port = "1234";
         Double era = (Double)map.getOrDefault("era",  0.7);
+        era = Math.max(0.0, Math.min(1.0, era));
+
         Double maturity = (Double)map.getOrDefault("maturity", 0.4);
-        Double weight = (Double)map.getOrDefault("weigh", 0.5);
+        maturity = Math.max(0.0, Math.min(1.0, maturity));
+
+        Double weight = (Double)map.getOrDefault("weight", 0.5);
+        weight = Math.max(0.0, Math.min(1.0, weight));
+
         Double personality = (Double)map.getOrDefault("personality",  0.5);
+        personality = Math.max(0.0, Math.min(1.0, personality));
+
         Double definition = (Double)map.getOrDefault("definition",  0.7);
+        definition = Math.max(0.0, Math.min(1.0, definition));
+
         Double concept = (Double)map.getOrDefault("concept", 0.6);
+        concept = Math.max(0.0, Math.min(1.0, concept));
+
         Integer amount = (int)map.getOrDefault("amount", 1);
         String text = (String)map.getOrDefault("text", "default_world!");
         String req_url = "http://localhost:" + port + "/getOneFont?payload={%22type%22:%22all%22,%22era%22:%22" + era
