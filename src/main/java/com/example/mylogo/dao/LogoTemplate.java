@@ -248,7 +248,7 @@ public class LogoTemplate {
     /*
      *获取用户的所有图库id
      */
-    public List<Gallery> getAllGallery(Map<String,Object> map){
+    public ArrayList<Map> getAllGallery(Map<String,Object> map){
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
             return null;
@@ -257,14 +257,16 @@ public class LogoTemplate {
         Query query = Query.query(Criteria.where("userId").is(UserId));
         User user  = mongoTemplate.findOne(query,User.class);
         assert user != null;
-        List<Gallery> list = new LinkedList<>();
-        ObjectId[] gallery = user.getGallery();
-        int num = 0;
-        while(num<gallery.length){
-            Query query1 = Query.query(Criteria.where("userId").is(UserId));
-            Gallery gallery1  = mongoTemplate.findOne(query1,Gallery.class);
-            list.add(gallery1);
-            num++;
+        ArrayList<Map> list = new ArrayList<>();
+        List<ObjectId> galleryid = user.getGallery();
+        for(ObjectId objectId : galleryid){
+            HashMap<String,Object> res = new HashMap();
+            Query query1 = Query.query(Criteria.where("galleryId").is(objectId));
+            Gallery gallery = mongoTemplate.findOne(query1, Gallery.class);
+
+            res.put("id",gallery.getGalleryId().toString());
+            res.put("name",gallery.getName());
+            list.add(res);
         }
         return list;
     }
@@ -273,7 +275,7 @@ public class LogoTemplate {
     /*
      *获取图库的所有内容
      */
-    public ArrayList<Logo> getAllLogo(Map<String,Object> map){
+    public ArrayList<Map> getAllLogo(Map<String,Object> map){
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
             return null;
@@ -283,11 +285,15 @@ public class LogoTemplate {
         Gallery gallery = mongoTemplate.findOne(query,Gallery.class);
 
         List<ObjectId> list = gallery.getlogoList();
-        ArrayList<Logo> list1 = new ArrayList<>();
+        ArrayList<Map> list1 = new ArrayList<>();
         for(ObjectId id : list){
+            HashMap<String,Object> res = new HashMap<>();
             Query query1 = Query.query(Criteria.where("logoId").is(id));
             Logo logo = mongoTemplate.findOne(query1,Logo.class);
-            list1.add(logo);
+
+            res.put("id",logo.getLogoId().toString());
+            res.put("imgUrl",logo.getUrl());
+            list1.add(res);
         }
         return list1;
     }
@@ -311,6 +317,7 @@ public class LogoTemplate {
         gallery.setRegion(region);
         user.setGallery(gallery.getGalleryId());
         mongoTemplate.save(gallery,"gallery");
+        mongoTemplate.save(user);
         return gallery.getCreatetime();
     }
 
@@ -329,8 +336,10 @@ public class LogoTemplate {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String updatetime = formatter.format(date);
         Query query = Query.query(Criteria.where("galleryId").is(id));
-        Update update = Update.update("region",region).set("updatetime",updatetime).set("name",name);
-        mongoTemplate.updateFirst(query,update,Gallery.class);
+        Gallery gallery = mongoTemplate.findOne(query,Gallery.class);
+        gallery.setName(name);
+        gallery.setRegion(region);
+        mongoTemplate.save(gallery);
         return updatetime;
     }
 
@@ -350,6 +359,7 @@ public class LogoTemplate {
         user.delGallery(new ObjectId(id));
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         mongoTemplate.remove(query1,Gallery.class);
+        mongoTemplate.save(user);
         return 1;
     }
 
@@ -390,9 +400,7 @@ public class LogoTemplate {
         assert gallery != null;
 
         gallery.addLogo(logo.getLogoId());
-        List<ObjectId> list = gallery.getlogoList();
-        Update update = Update.update("logoList",list);
-        mongoTemplate.updateFirst(query1,update,Gallery.class);
+        mongoTemplate.save(gallery);
 
         return 1;
     }
@@ -413,9 +421,7 @@ public class LogoTemplate {
         assert gallery != null;
 
         gallery.delLogo(new ObjectId(logoId));
-        List<ObjectId> list = gallery.getlogoList();
-        Update update = Update.update("logoList",list);
-        mongoTemplate.updateFirst(query,update,Gallery.class);
+        mongoTemplate.save(gallery);
 
         return 1;
     }
@@ -423,47 +429,49 @@ public class LogoTemplate {
     /*
    收藏logo
    */
-    public int collectLogo(Map<String,Object> map){
+    public Logo collectLogo(Map<String,Object> map){
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
-            return 0;
+            return null;
         }
 
         String id = (String) map.get("galleryid");
         String logoId = (String) map.get("logoid");
-        int collect = (int)map.get("collect");
 
         Query query = Query.query(Criteria.where("logoId").is(logoId));
         Logo logo = mongoTemplate.findOne(query,Logo.class);
         assert logo != null;
 
-        Update update = Update.update("collect",collect+1);
-        mongoTemplate.updateFirst(query,update,Logo.class);
+        Query query1 = Query.query(Criteria.where("userId").is(id));
+        User user = mongoTemplate.findOne(query1,User.class);
+        user.addMarkedLogo(new ObjectId(logoId));
 
-        return 1;
+        logo.setCollect(logo.getCollect()+1);
+        mongoTemplate.save(logo);
+        mongoTemplate.save(user);
+
+        return logo;
     }
 
     /*
    点赞logo
    */
-    public int likeLogo(Map<String,Object> map){
+    public Logo likeLogo(Map<String,Object> map){
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
-            return 0;
+            return null;
         }
 
-        String id = (String) map.get("galleryid");
         String logoId = (String) map.get("logoid");
-        int like = (int)map.get("like");
 
         Query query = Query.query(Criteria.where("logoId").is(logoId));
         Logo logo = mongoTemplate.findOne(query,Logo.class);
         assert logo != null;
 
-        Update update = Update.update("like",like+1);
-        mongoTemplate.updateFirst(query,update,Logo.class);
+        logo.setLike(logo.getLike()+1);
+        mongoTemplate.save(logo);
 
-        return 1;
+        return logo;
     }
 
     /*
