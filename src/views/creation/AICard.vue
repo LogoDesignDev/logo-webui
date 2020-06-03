@@ -9,7 +9,7 @@
       </div>
       <el-input v-model="input" placeholder="请输入您的品牌关键字"></el-input>
       <!-- 按钮 -->
-      <el-button type="primary" round>立即生成</el-button>
+      <el-button type="primary" round @click="toGenerate">立即生成</el-button>
     </div>
     <!-- 常显示 -->
     <div class="mainCard">
@@ -116,6 +116,17 @@ export default {
 
   data () {
     return {
+    }
+  },
+
+  methods: {
+    /**
+     * 跳转到生成页
+     */
+    toGenerate () {
+      this.$router.push({
+        path: '/creation/generate'
+      })
     }
   }
 }

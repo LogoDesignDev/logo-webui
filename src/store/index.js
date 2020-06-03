@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Message } from 'element-ui'
 import { getToken } from '../utils/auth'
 import { getUserInfo } from 'api/user'
 import { serverPrx } from 'utils/default'
@@ -63,10 +62,10 @@ export default new Vuex.Store({
           userPicUrl: serverPrx + data.userPicUrl + '?' + Math.random()
         })
       }).catch((err) => {
-        Message({
-          message: '用户信息拉取失败：' + err.message,
-          type: 'error'
-        })
+        // Message({
+        //   message: '用户信息拉取失败：' + err.message,
+        //   type: 'error'
+        // })
       })
     }
   },

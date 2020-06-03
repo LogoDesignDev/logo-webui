@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 导航栏 -->
-    <el-menu v-if="!navBarHidden" :default-active="$route.path" class="nav" mode="horizontal">
+    <el-menu v-if="!navBarHidden" :default-active="path" class="nav" mode="horizontal">
       <!-- 居中显示标签（hidden为true则不显示） -->
       <el-menu-item
         v-for="item in removeHiddenRoutes"
@@ -169,7 +169,7 @@ export default {
     /**
      * 过滤掉隐藏的路由（hidden为true）
      */
-    removeHiddenRoutes: function () {
+    removeHiddenRoutes () {
       const tempRoutes = []
       const routes = this.$router.options.routes
 
@@ -185,19 +185,32 @@ export default {
     /**
      * 是否隐藏导航栏
      */
-    navBarHidden: function () {
+    navBarHidden () {
       return store.state.navBarHidden
     },
 
     /**
      * 是否已登录
      */
-    isloggedIn: function () {
+    isloggedIn () {
       return store.state.isloggedIn
     },
 
-    userInfo: function () {
+    userInfo () {
       return store.state.userInfo
+    },
+
+    /**
+     * 当前路由
+     */
+    path () {
+      const end = this.$route.path.indexOf('/', 1)
+
+      if (end === -1) {
+        return this.$route.path
+      } else {
+        return this.$route.path.slice(0, end)
+      }
     }
   },
 

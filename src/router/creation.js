@@ -7,12 +7,12 @@ export default [
       title: '创作'
     },
     component: () => import('@/views/creation/creationIndex.vue')
-    // children: [
-    //   {
-    //     path: 'followAndFans',
-    //     name: 'followAndFans',
-    //     component: () => import('@/views/personal/followAndFans/FAFIndex.vue')
-    //   }
-    // ]
-  }
-]
+  }, {
+    path: '/creation/generate',
+    name: 'generate',
+    hidden: true,
+    meta: {
+      title: '创作——生成'
+    },
+    component: () => import('@/views/creation/generate/generateIndex.vue')
+  }]
