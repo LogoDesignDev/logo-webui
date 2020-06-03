@@ -339,6 +339,7 @@ public class LogoTemplate {
         Gallery gallery = mongoTemplate.findOne(query,Gallery.class);
         gallery.setName(name);
         gallery.setRegion(region);
+        gallery.setUpdatetime(updatetime);
         mongoTemplate.save(gallery);
         return updatetime;
     }
@@ -357,8 +358,11 @@ public class LogoTemplate {
         User user  = mongoTemplate.findOne(query,User.class);
         assert user != null;
         user.delGallery(new ObjectId(id));
+
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
-        mongoTemplate.remove(query1,Gallery.class);
+        Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
+
+        mongoTemplate.remove(gallery);
         mongoTemplate.save(user);
         return 1;
     }

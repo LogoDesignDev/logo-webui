@@ -20,7 +20,7 @@ public class User {
     private Integer fansCount;//粉丝数
     private Integer prodCount;//用户作品数
     private String userPicUrl;//用户头像url
-    private List<ObjectId> gallery;   //用户最多5个图库
+    private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
 
     private List<ObjectId> logoList;
@@ -49,11 +49,11 @@ public class User {
 
     //设置图库id
     public void setGallery(ObjectId galleryid){
-        this.gallery.add(galleryid);
+        gallery.add(galleryid);
     }
 
     public void delGallery(ObjectId galleryid){
-        this.gallery.remove(galleryid);
+        gallery.remove(galleryid);
     }
 
     public Integer getProdCount(){return prodCount;}

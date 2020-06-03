@@ -24,6 +24,7 @@ public class Gallery {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         createtime = formatter.format(date);
+        updatetime = formatter.format(date);
     }
 
     public ObjectId getGalleryId(){return galleryId;}
