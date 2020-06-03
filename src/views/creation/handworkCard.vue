@@ -32,7 +32,7 @@
         </div>
       </div>
       <!-- 按钮 -->
-      <el-button type="success" round>立即前往制作</el-button>
+      <el-button type="success" round @click="toHandwork">立即前往制作</el-button>
     </div>
   </div>
 </template>
@@ -133,6 +133,15 @@ export default {
 
   data () {
     return {
+    }
+  },
+
+  methods: {
+    /**
+     * 跳转到制作页
+     */
+    toHandwork () {
+      this.$message.warning('暂未开放，敬请期待')
     }
   }
 }

@@ -7,7 +7,7 @@
       <div class="detailTitle">
         只需一步即可智能生成
       </div>
-      <el-input v-model="input" placeholder="请输入您的品牌关键字"></el-input>
+      <el-input v-model="keyword" placeholder="请输入您的品牌关键字"></el-input>
       <!-- 按钮 -->
       <el-button type="primary" round @click="toGenerate">立即生成</el-button>
     </div>
@@ -116,6 +116,7 @@ export default {
 
   data () {
     return {
+      keyword: ''
     }
   },
 
@@ -125,7 +126,10 @@ export default {
      */
     toGenerate () {
       this.$router.push({
-        path: '/creation/generate'
+        path: '/creation/generate',
+        query: {
+          keyword: this.keyword
+        }
       })
     }
   }
