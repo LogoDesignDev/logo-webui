@@ -308,7 +308,7 @@ public class UserTemplate {
         user1.addFans(userid);
 
         user.setFocusCount(user.getFocusCount()+1);
-        user1.setFansCount(user.getFansCount()+1);
+        user1.setFansCount(user1.getFansCount()+1);
         mongoTemplate.save(user);
         mongoTemplate.save(user1);
         return id;
