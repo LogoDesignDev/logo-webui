@@ -128,7 +128,7 @@ public class LogoController {
     public Map<String, Object> createLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
         Integer count = (Integer)map.get("count");
-        ArrayList<Map<String, Object>> paramList = (ArrayList<Map<String, Object>>)map.get("paramList");
+        ArrayList<Map<String, Object>> paramList = (ArrayList<Map<String, Object>>)map.get("paramsList");
 
         if (count > 8 || count != paramList.size()){
             res.put("code", 501); // invalid args.

@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -124,11 +123,13 @@ public class LogoTemplate {
             e.printStackTrace();
         }
 
-        File file = new File("./tmp.png");
         try{
             // svg --> .png
+            File file = new File("./tmp.png");
             FileOutputStream fo = new FileOutputStream(file);
             byte[] bs = svgCode.getBytes("utf-8");
+
+            System.out.println("png lens:" + bs.length +  " byte");
             PNGTranscoder t = new PNGTranscoder();
             TranscoderInput inp = new TranscoderInput(new ByteArrayInputStream(bs));
             TranscoderOutput outp = new TranscoderOutput(fo);
@@ -137,17 +138,18 @@ public class LogoTemplate {
             fo.close();
 
             // png file --> byte[] --> string(base64)
+            file = new File("./tmp.png");
             FileInputStream fi = new FileInputStream(file);
             Base64.Encoder encoder = Base64.getEncoder();
-            byte[] ebs = encoder.encode(fi.readAllBytes());
-            url = ebs.toString();
-
+            bs = fi.readAllBytes();
+            System.out.println("input lens:" + bs.length +  " byte");
+            url = new String(encoder.encode(bs));
         }catch (IOException e){
             e.printStackTrace();
         }catch (TranscoderException e){
             e.printStackTrace();
         }
-        System.out.println("base64:url = " + url);
+        //System.out.println("base64:url = " + url);
         return url;
     }
 
