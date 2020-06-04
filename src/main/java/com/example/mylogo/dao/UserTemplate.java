@@ -277,6 +277,7 @@ public class UserTemplate {
             HashMap<String,Object> res = new HashMap<>();
             Query query1 = Query.query(Criteria.where("userId").is(objectId));
             User user2 = mongoTemplate.findOne(query1, User.class);
+
             res.put("uid",user2.getUserId().toString());
             res.put("userPicUrl",user2.getUserPicUrl());
             res.put("username",user2.getUsername());
@@ -295,13 +296,21 @@ public class UserTemplate {
             return null;
         }
         ObjectId userid=redisTokenManager.getUserId(token);
+
+        //查询关注人
         Query query = Query.query(Criteria.where("userId").is(userid));
         User user = mongoTemplate.findOne(query, User.class);
-        List<ObjectId> list = user.getFocusList();
-        list.add(new ObjectId(id));
+        //查询被关注人
+        Query query1=Query.query(Criteria.where("userId").is(id));
+        User user1 = mongoTemplate.findOne(query1,User.class);
 
-        Update update = Update.update("focusList",list);
-        mongoTemplate.updateFirst(query,update,Logo.class);
+        user.addFocus(new ObjectId(id));
+        user1.addFans(userid);
+
+        user.setFocusCount(user.getFocusCount()+1);
+        user1.setFansCount(user1.getFansCount()+1);
+        mongoTemplate.save(user);
+        mongoTemplate.save(user1);
         return id;
     }
 
@@ -315,13 +324,21 @@ public class UserTemplate {
             return null;
         }
         ObjectId userid=redisTokenManager.getUserId(token);
+
+        //查询取消关注人
         Query query = Query.query(Criteria.where("userId").is(userid));
         User user = mongoTemplate.findOne(query, User.class);
-        List<ObjectId> list = user.getFocusList();
-        list.remove(new ObjectId(id));
 
-        Update update = Update.update("focusList",list);
-        mongoTemplate.updateFirst(query,update,Logo.class);
+        //查询被取消关注人
+        Query query1=Query.query(Criteria.where("userId").is(id));
+        User user1 = mongoTemplate.findOne(query1,User.class);
+
+        user.removeFocus(new ObjectId(id));
+        user1.removeFans(userid);
+        user.setFocusCount(user.getFocusCount()-1);
+        user1.setFansCount(user1.getFansCount()-1);
+        mongoTemplate.save(user);
+        mongoTemplate.save(user1);
         return id;
     }
 
@@ -333,7 +350,7 @@ public class UserTemplate {
         Query query = Query.query(Criteria.where("userId").is(id));
         User user = mongoTemplate.findOne(query, User.class);
         if(user==null){
-            return 0;
+            return -1;
         }
         return user.getProdCount();
     }
@@ -347,7 +364,7 @@ public class UserTemplate {
         User user = mongoTemplate.findOne(query, User.class);
 
         if(user==null){
-            return 0;
+            return -1;
         }
         return user.getFansCount();
     }
@@ -361,7 +378,7 @@ public class UserTemplate {
         User user = mongoTemplate.findOne(query, User.class);
 
         if(user==null){
-            return 0;
+            return -1;
         }
         return user.getFocusCount();
     }
@@ -375,7 +392,7 @@ public class UserTemplate {
         User user = mongoTemplate.findOne(query, User.class);
 
         if(user==null){
-            return 0;
+            return -1;
         }
         return user.getBeLikedCount();
     }
@@ -389,7 +406,7 @@ public class UserTemplate {
         User user = mongoTemplate.findOne(query, User.class);
 
         if(user==null){
-            return 0;
+            return -1;
         }
         return user.getBeMarkedCount();
     }

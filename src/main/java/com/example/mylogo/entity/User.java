@@ -20,7 +20,7 @@ public class User {
     private Integer fansCount;//粉丝数
     private Integer prodCount;//用户作品数
     private String userPicUrl;//用户头像url
-    private ObjectId[] gallery;   //用户最多5个图库
+    private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
 
     private List<ObjectId> logoList;
@@ -39,31 +39,21 @@ public class User {
         beLikedCount = 0;
         beMarkedCount = 0;
         galleryidCount = 0;
+        focusCount = 0;
         prodCount = 0;
         fansCount = 0;
         focusList = new ArrayList<>();
         fansList = new ArrayList<>();
-        gallery = new ObjectId[5];
+        gallery = new ArrayList<>();
     }
 
     //设置图库id
     public void setGallery(ObjectId galleryid){
-        if (gallery[galleryidCount]!=null){
-            gallery[galleryidCount]=galleryid;
-            galleryidCount+=1;
-        }
+        gallery.add(galleryid);
     }
 
     public void delGallery(ObjectId galleryid){
-        int count=0;
-        while(gallery[count]!=galleryid)
-            count++;
-        while(count<galleryidCount){
-            int flag=count;
-            gallery[count]=gallery[flag+1];
-            count++;
-        }
-        galleryidCount-=1;
+        gallery.remove(galleryid);
     }
 
     public Integer getProdCount(){return prodCount;}
@@ -72,7 +62,7 @@ public class User {
 
     public Integer getFocusCount(){return focusCount;}
 
-    public ObjectId[] getGallery(){return gallery;}
+    public List<ObjectId> getGallery(){return gallery;}
 
     public String getUserPicUrl(){return userPicUrl;}
 
@@ -162,6 +152,15 @@ public class User {
         starLogoList.add(objectId);
     }
 
+    //粉丝改变
+    public void addFans(ObjectId objectId){fansList.add(objectId);}
+
+    public void removeFans(ObjectId objectId){fansList.remove(objectId);}
+
+    //关注用户改变
+    public void addFocus(ObjectId objectId){focusList.add(objectId);}
+
+    public void removeFocus(ObjectId objectId){focusList.remove(objectId);}
 
     public Integer getBeLikedCount() {
         return beLikedCount;
@@ -211,7 +210,7 @@ public class User {
         this.userPicUrl = userPicUrl;
     }
 
-    public void setGallery(ObjectId[] gallery) {
+    public void setGallery(List<ObjectId> gallery) {
         this.gallery = gallery;
     }
 

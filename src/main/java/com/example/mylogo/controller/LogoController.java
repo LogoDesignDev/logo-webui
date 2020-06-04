@@ -187,19 +187,12 @@ public class LogoController {
     public Map<String, Object> getAllGallery(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
-        List<Gallery> allGallery = logoTemplate.getAllGallery(map);
+        ArrayList<Map> allGallery = logoTemplate.getAllGallery(map);
         if(allGallery == null){
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
-            ArrayList<ObjectId> id = new ArrayList<>();
-            ArrayList<String> name = new ArrayList<>();
-            for(Gallery g: allGallery){
-                id.add(g.getGalleryId());
-                name.add(g.getName());
-            }
-            res.put("name", name);
-            res.put("id",id);
+            res.put("logoList",allGallery);
         }
         return res;
     }
@@ -211,7 +204,7 @@ public class LogoController {
     public Map<String, Object> getAllGalleryInfo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
-        ArrayList<Logo> allLogo = logoTemplate.getAllLogo(map);
+        ArrayList<Map> allLogo = logoTemplate.getAllLogo(map);
         if(allLogo == null){
             res.put("code", 500); //表示token不存在或失效
         }else{
@@ -330,11 +323,14 @@ public class LogoController {
     public Map<String, Object> collectLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
-        int flag = logoTemplate.collectLogo(map);
-        if(flag == 0){
+        Logo logo = logoTemplate.collectLogo(map);
+        if(logo == null){
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
+            res.put("galleryid",map.get("galleryid"));
+            res.put("logoid",logo.getLogoId().toString());
+            res.put("like",logo.getCollect());
         }
         return res;
     }
@@ -346,11 +342,14 @@ public class LogoController {
     public Map<String, Object> likeLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
-        int flag = logoTemplate.likeLogo(map);
-        if(flag == 0){
+        Logo logo = logoTemplate.likeLogo(map);
+        if(logo == null){
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
+            res.put("galleryid",map.get("galleryid"));
+            res.put("logoid",logo.getLogoId().toString());
+            res.put("like",logo.getLike());
         }
         return res;
     }

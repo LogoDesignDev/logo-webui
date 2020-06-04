@@ -18,4 +18,6 @@ class LogoTemplateTest {
 
         assertEquals(1, 1+0);
     }
+
+
 }

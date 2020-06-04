@@ -324,8 +324,8 @@ public class UserController{
         HashMap<String, Object> res = new HashMap<>();
 
         Integer count = userTemplate.prodCount(map);
-        if(count == 0){
-            res.put("code", 500); //表示查询不到
+        if(count == -1){
+            res.put("code", 520); //表示查询不到
         }else{
             res.put("code", 200);
             res.put("count",count);
@@ -342,8 +342,8 @@ public class UserController{
         HashMap<String, Object> res = new HashMap<>();
 
         Integer count = userTemplate.fansCount(map);
-        if(count == 0){
-            res.put("code", 500); //表示查询不到
+        if(count == -1){
+            res.put("code", 520); //表示查询不到
         }else{
             res.put("code", 200);
             res.put("count",count);
@@ -360,8 +360,8 @@ public class UserController{
         HashMap<String, Object> res = new HashMap<>();
 
         Integer count = userTemplate.focusCount(map);
-        if(count == 0){
-            res.put("code", 500); //表示查询不到
+        if(count == -1){
+            res.put("code", 520); //表示查询不到
         }else{
             res.put("code", 200);
             res.put("count",count);
@@ -378,8 +378,8 @@ public class UserController{
         HashMap<String, Object> res = new HashMap<>();
 
         Integer count = userTemplate.belikedCount(map);
-        if(count == 0){
-            res.put("code", 500); //表示查询不到
+        if(count == -1){
+            res.put("code", 520); //表示查询不到
         }else{
             res.put("code", 200);
             res.put("count",count);
@@ -396,8 +396,8 @@ public class UserController{
         HashMap<String, Object> res = new HashMap<>();
 
         Integer count = userTemplate.beMarkedCount(map);
-        if(count == 0){
-            res.put("code", 500); //表示查询不到
+        if(count == -1){
+            res.put("code", 520); //表示查询不到
         }else{
             res.put("code", 200);
             res.put("count",count);
