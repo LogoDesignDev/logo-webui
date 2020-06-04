@@ -8,26 +8,36 @@
       <el-button @click="onChange" type="danger" icon="el-icon-bell" circle class="button-d"></el-button>
       <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
     </div>
-    <div class = "container">
-      <el-row v-loading="loading" :data="imgList">
-        <el-col :span="4" v-for="(item, index) in imgList" :key="index" class="col">
-            <div>
-              <el-card :body-style="{ padding: '0px'}" class="card">
-                <img :src="item.imgUrl" class="image">
-                <div id="hoverView">
-                  <div id="infoView">
-                    <div id="hoverTitle">{{item.id}}</div>
-                    <div id="line" />
-                    <div id="hoverTips">
-                      <el-button @click="goDetail(item.id)" :imgUrl="item.imgUrl" type="primary" icon="el-icon-edit" circle class="button-edit"></el-button>
-                      <el-button @click="onChange" type="primary" icon="el-icon-delete" circle class="button-de"></el-button>
+    <div v-if="isloggedIn">
+      <div class = "container" v-loading="loading" :data="imgList">
+        <el-row v-if="isData">
+          <el-col :span="4" v-for="(item, index) in imgList" :key="index" class="col">
+              <div>
+                <el-card :body-style="{ padding: '0px'}" class="card">
+                  <img :src="item.imgUrl" class="image">
+                  <div id="hoverView">
+                    <div id="infoView">
+                      <div id="hoverTitle">{{item.id}}</div>
+                      <div id="line" />
+                      <div id="hoverTips">
+                        <el-button @click="goDetail(item.id)" :imgUrl="item.imgUrl" type="primary" icon="el-icon-edit" circle class="button-edit"></el-button>
+                        <el-button @click="onChange" type="primary" icon="el-icon-delete" circle class="button-de"></el-button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </el-card>
-            </div>
-        </el-col>
-      </el-row>
+                </el-card>
+              </div>
+          </el-col>
+        </el-row>
+        <div class="notFoundView" v-else>
+          <i class="iconfont icon-not-found"/>
+          您还没有图片~
+        </div>
+      </div>
+    </div>
+    <div class="notFoundView" v-else>
+      <i class="iconfont icon-not-found"/>
+      <el-button type="primary" @click="toLogin">点击登录</el-button>
     </div>
   </div>
 </template>
@@ -35,6 +45,7 @@
 <script>
 import axios from 'axios'
 import { getToken } from 'utils/auth'
+import store from 'store'
 import AddLogo from './components/Addlogo'
 export default {
   name: 'app',
@@ -48,6 +59,18 @@ export default {
       AddLogoVisible: false,
       display: true,
       galleryid: this.$route.params.id
+    }
+  },
+  computed: {
+    isloggedIn: function () {
+      return store.state.isloggedIn
+    },
+    isData: function () {
+      if (this.imgList.length === 0) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   methods: {
@@ -79,7 +102,8 @@ export default {
     },
     getDetailInfo () {
       const postdata = {
-        token: getToken()
+        token: getToken(),
+        id: this.galleryid
       }
       axios.post('/api/mylogo/id', postdata, {
         headers: {
@@ -90,14 +114,23 @@ export default {
     },
     handleGetDetailSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        const data = res.data
-        this.imgList = data.items
+      console.log(res.code)
+      console.log(res.items)
+      if (res.code === 200) {
+        this.imgList = res.items
       }
     },
     goDetail (id) {
       this.$router.push({
         path: `/mylogo/detail/galleryid=${this.$route.params.id}/logoid=${id}`
+      })
+    },
+    toLogin () {
+      this.$router.push({
+        path: '/login',
+        query: {
+          mode: 'login'
+        }
       })
     }
   },
@@ -217,7 +250,7 @@ export default {
   }
 
   .container {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-left: 200px;
     margin-right: 100px;
   }
@@ -247,6 +280,20 @@ export default {
 
   .delete-img {
     display: block;
+  }
+
+  .notFoundView {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: grey;
+  }
+
+  .notFoundView i {
+    font-size: 150px;
+    color: #E9E9EB;
   }
 
   .clearfix:before,

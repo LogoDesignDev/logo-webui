@@ -4,18 +4,18 @@
     <div v-if="isloggedIn">
       <div class = "container-header">
         <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>
-        <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
+        <MyLogo-Add :logoList="logoList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
       </div>
-      <div class = "container" v-loading="loading" :data="iconList">
+      <div class = "container" v-loading="loading" :data="logoList">
         <div class="notFoundView" v-if="isIconList">
           <i class="iconfont icon-not-found"/>
           您还没有图库~
         </div>
         <el-row v-else>
-          <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
+          <el-col :span="4" v-for="(item, index) in logoList" :key="index" class="col">
               <el-card :body-style="{ padding: '0px'}" class="card">
-                <img :src="item.imgUrl" class="image">
-                <el-tag class="name" type="primary" effect="plain">{{ item.desc }}</el-tag>
+                <img :src="imgUrl" class="image">
+                <el-tag class="name" type="primary" effect="plain">{{ item.name }}</el-tag>
                 <div style="padding: 14px;">
                   <time class="time">Date: {{ currentDate }}</time>
                   <div class="bottom clearfix">
@@ -53,7 +53,8 @@ export default {
       dialogFormVisible: false,
       AddFormVisible: false,
       currentDate: (new Date()).toLocaleDateString(),
-      iconList: [],
+      logoList: [],
+      imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
       loading: false
     }
   },
@@ -62,10 +63,10 @@ export default {
       return store.state.isloggedIn
     },
     isIconList: function () {
-      if (this.iconList == null) {
-        return false
-      } else {
+      if (this.logoList == null) {
         return true
+      } else {
+        return false
       }
     }
   },
@@ -74,7 +75,7 @@ export default {
       const postdata = {
         token: getToken()
       }
-      axios.post('/mylogo', postdata, {
+      axios.post('/api/mylogo', postdata, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -88,9 +89,9 @@ export default {
     },
     handleGetGalleryInfoSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        const data = res.data
-        this.iconList = data.iconList
+      console.log(res.code)
+      if (res.code === 200) {
+        this.logoList = res.logoList
       }
     },
     edit () {
@@ -98,17 +99,23 @@ export default {
     },
     succUpdate (code) {
       if (code === 200) {
-        alert('修改成功')
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
       } else {
-        alert('修改失败')
+        this.$message.error('修改失败，请重试')
       }
       this.dialogFormVisible = false
     },
     succDelete (code) {
       if (code === 200) {
-        alert('删除成功')
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        })
       } else {
-        alert('删除失败')
+        this.$message.error('删除失败，请重试')
       }
       this.dialogFormVisible = false
     },
@@ -128,6 +135,7 @@ export default {
         this.$message.error('添加失败，请重试')
       }
       this.AddFormVisible = false
+      this.getGalleryInfo()
     },
     closeAdd () {
       this.AddFormVisible = false

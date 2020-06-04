@@ -40,7 +40,7 @@ export default {
   data () {
     return {
       form: {
-        name: '你好',
+        name: '',
         region: '',
         author: ''
       },
