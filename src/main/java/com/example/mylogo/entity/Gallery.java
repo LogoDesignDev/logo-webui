@@ -1,6 +1,7 @@
 package com.example.mylogo.entity;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Document(collection = "gallery")
 public class Gallery {
+    @Id
     private ObjectId galleryId;//图库id
     private String name;//图库名称
     private String region;//图库权限
