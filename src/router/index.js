@@ -54,6 +54,12 @@ const routes = [
     name: 'login',
     hidden: true,
     component: () => import('../views/login/loginIndex.vue')
+  },
+  {
+    path: '/rank',
+    name: 'rank',
+    hidden: true,
+    component: () => import('../views/rank/index.vue')
   }
 ]
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <view-title name="排行榜" tips="每天0:00更新" to="/a" />
+    <view-title name="排行榜" tips="每天0:00更新" to="/rank" />
     <div id="main">
       <show-card-1
         :src="urlArr[0]"

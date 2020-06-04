@@ -7,7 +7,11 @@
         <MyLogo-Add :iconList="iconList" :AddFormVisible="AddFormVisible" v-if="AddFormVisible" @Add-cancel="closeAdd" @Add-succ="succAdd"></MyLogo-Add>
       </div>
       <div class = "container" v-loading="loading" :data="iconList">
-        <el-row>
+        <div class="notFoundView" v-if="isIconList">
+          <i class="iconfont icon-not-found"/>
+          您还没有图库~
+        </div>
+        <el-row v-else>
           <el-col :span="4" v-for="(item, index) in iconList" :key="index" class="col">
               <el-card :body-style="{ padding: '0px'}" class="card">
                 <img :src="item.imgUrl" class="image">
@@ -56,6 +60,13 @@ export default {
   computed: {
     isloggedIn: function () {
       return store.state.isloggedIn
+    },
+    isIconList: function () {
+      if (this.iconList == null) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   methods: {
@@ -109,9 +120,12 @@ export default {
     },
     succAdd (code) {
       if (code === 200) {
-        alert('添加成功')
+        this.$message({
+          message: '添加成功',
+          type: 'success'
+        })
       } else {
-        alert('添加失败')
+        this.$message.error('添加失败，请重试')
       }
       this.AddFormVisible = false
     },
@@ -133,7 +147,7 @@ export default {
     }
   },
   mounted () {
-    this.getLogoInfo()
+    this.getGalleryInfo()
     this.setLoading()
   }
 }
@@ -226,6 +240,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: grey;
   }
 
   .notFoundView i {
