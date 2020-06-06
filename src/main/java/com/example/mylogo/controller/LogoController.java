@@ -263,7 +263,7 @@ public class LogoController {
             res.put("code", 200);
             res.put("collect",logo.getCollect());
             res.put("like",logo.getLike());
-            res.put("author",logo.getAuthorId());
+            res.put("author",logo.getAuthorId().toString());
             res.put("name",logo.getName());
         }
         return res;
@@ -274,10 +274,8 @@ public class LogoController {
     */
     @PostMapping("/mylogo/galleryid/addlogo")
     public Map<String, Object> addNewLogo(@RequestBody Map<String, Object> map){
-        HashMap<String, Object> res = new HashMap<>();
-
-        int flag = logoTemplate.addLogo(map);
-        if(flag == 0){
+        HashMap<String,Object> res = logoTemplate.addLogo(map);
+        if(res == null){
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
@@ -313,9 +311,6 @@ public class LogoController {
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
-            res.put("galleryid",map.get("galleryid"));
-            res.put("logoid",logo.getLogoId().toString());
-            res.put("like",logo.getCollect());
         }
         return res;
     }
@@ -332,9 +327,38 @@ public class LogoController {
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
-            res.put("galleryid",map.get("galleryid"));
-            res.put("logoid",logo.getLogoId().toString());
-            res.put("like",logo.getLike());
+        }
+        return res;
+    }
+
+    /*
+    用户取消收藏一个logo
+    */
+    @PostMapping("/mylogo/uncollect")
+    public Map<String, Object> delcollectLogo(@RequestBody Map<String, Object> map){
+        HashMap<String, Object> res = new HashMap<>();
+
+        Logo logo = logoTemplate.delcollectLogo(map);
+        if(logo == null){
+            res.put("code", 500); //表示token不存在或失效
+        }else{
+            res.put("code", 200);
+        }
+        return res;
+    }
+
+    /*
+   用户取消点赞一个logo
+   */
+    @PostMapping("/mylogo/unlike")
+    public Map<String, Object> dellikeLogo(@RequestBody Map<String, Object> map){
+        HashMap<String, Object> res = new HashMap<>();
+
+        Logo logo = logoTemplate.dellikeLogo(map);
+        if(logo == null){
+            res.put("code", 500); //表示token不存在或失效
+        }else{
+            res.put("code", 200);
         }
         return res;
     }

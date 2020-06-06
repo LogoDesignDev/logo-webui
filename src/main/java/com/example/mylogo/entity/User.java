@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Document(collection = "user")
@@ -24,14 +23,13 @@ public class User {
     private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
 
-
-    private List<ObjectId> logoList; //用户自己的logoList
-    private List<ObjectId> markedLogoList; //收藏的logo数组
-    private List<ObjectId> starLogoList; //点赞的logo数组
-    private Integer beLikedCount;   //全部作品的被赞数总和
-    private Integer beMarkedCount;  //全部作品的被收藏数总和
-    private List<ObjectId> focusList; //关注列表
-    private List<ObjectId> fansList; //粉丝列表
+    private List<ObjectId> logoList;
+    private List<ObjectId> markedLogoList;
+    private List<ObjectId> starLogoList;
+    private Integer beLikedCount;   //被赞数
+    private Integer beMarkedCount;  //被收藏数
+    private List<ObjectId> focusList;//关注列表
+    private List<ObjectId> fansList;//粉丝列表
 
     public User() {
         userId = new ObjectId();
@@ -47,7 +45,8 @@ public class User {
         focusList = new ArrayList<>();
         fansList = new ArrayList<>();
         gallery = new ArrayList<>();
-
+        Gallery gallery1 = new Gallery();
+        gallery.add(gallery1.getGalleryId());
     }
 
     //设置图库id
@@ -139,6 +138,8 @@ public class User {
         markedLogoList.add(objectId);
     }
 
+    public void delMarkedLogo(ObjectId objectId){markedLogoList.remove(objectId);}
+
     public void setUserId(ObjectId userId) {
         this.userId = userId;
     }
@@ -154,6 +155,8 @@ public class User {
     public void addStarLogo(ObjectId objectId){
         starLogoList.add(objectId);
     }
+
+    public void delStarLogo(ObjectId objectId) {starLogoList.remove(objectId);}
 
     //粉丝改变
     public void addFans(ObjectId objectId){fansList.add(objectId);}

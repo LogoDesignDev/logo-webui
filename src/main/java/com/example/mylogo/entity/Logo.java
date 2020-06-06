@@ -15,14 +15,24 @@ public class Logo {
     private String introduce; //logo的介绍
     private String url; //图片的路径
     private String name;//图片的名字
+    private String authorName;//作者名字
     private int like;//点赞数
     private int collect;//收藏数
+    private String publishedTime;//发布时间
 
     public Logo() {
+        logoId = new ObjectId();
         published = false;
         like = 0;
         collect = 0;
     }
+    public void setAuthorName(String name){this.authorName = name;}
+
+    public String getAuthorName(){return authorName;}
+
+    public void setPublishedTime(String time){this.publishedTime = time;}
+
+    public String getPublishedTime(){return publishedTime;}
 
     public int getLike(){return like;}
 

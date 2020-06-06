@@ -388,27 +388,37 @@ public class LogoTemplate {
     /*
      *添加新的logo
      */
-    public int addLogo(Map<String,Object>map){
+    public HashMap<String,Object> addLogo(Map<String,Object>map){
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
-            return 0;
+            return null;
         }
 
         String id = (String) map.get("galleryid");
         String logoUrl = (String) map.get("imgUrl");
+        String logoname = (String) map.get("name");
+        String logoauthor = (String) map.get("author");
 
-        Query query = Query.query(Criteria.where("url").is(logoUrl));
-        Logo logo = mongoTemplate.findOne(query,Logo.class);
-        assert logo != null;
+        Logo logo = new Logo();
+        logo.setUrl(logoUrl);
+        logo.setName(logoname);
+        logo.setAuthorName(logoauthor);
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
         assert gallery != null;
 
         gallery.addLogo(logo.getLogoId());
-        mongoTemplate.save(gallery);
 
-        return 1;
+        HashMap<String,Object> res = new HashMap<>();
+        res.put("logoid",logo.getLogoId().toString());
+        res.put("name",logo.getName());
+        res.put("author",logo.getAuthorName());
+        res.put("imgUrl",logo.getUrl());
+        mongoTemplate.save(gallery);
+        mongoTemplate.save(logo,"logo");
+
+        return res;
     }
 
     /*
@@ -441,7 +451,7 @@ public class LogoTemplate {
             return null;
         }
 
-        String id = (String) map.get("galleryid");
+        String id = redisTokenManager.getUserId(token).toString();
         String logoId = (String) map.get("logoid");
 
         Query query = Query.query(Criteria.where("logoId").is(logoId));
@@ -453,8 +463,15 @@ public class LogoTemplate {
         user.addMarkedLogo(new ObjectId(logoId));
 
         logo.setCollect(logo.getCollect()+1);
+
+        ObjectId userId = logo.getAuthorId();
+        Query query2 = Query.query(Criteria.where("userId").is(userId));
+        User user1 = mongoTemplate.findOne(query2,User.class);
+        user1.setBeMarkedCount(user1.getBeMarkedCount()+1);
+
         mongoTemplate.save(logo);
         mongoTemplate.save(user);
+        mongoTemplate.save(user1);
 
         return logo;
     }
@@ -474,8 +491,93 @@ public class LogoTemplate {
         Logo logo = mongoTemplate.findOne(query,Logo.class);
         assert logo != null;
 
+        ObjectId userId = logo.getAuthorId();
+        Query query1 = Query.query(Criteria.where("userId").is(userId));
+        User user = mongoTemplate.findOne(query1,User.class);
+        assert user != null;
+
+        String userId1 = redisTokenManager.getUserId(token).toString();
+        Query query2 = Query.query(Criteria.where("userId").is(userId1));
+        User user1 = mongoTemplate.findOne(query2,User.class);
+
+        user1.addStarLogo(new ObjectId(logoId));
+
         logo.setLike(logo.getLike()+1);
+        user.setBeLikedCount(user.getBeLikedCount()+1);
+
         mongoTemplate.save(logo);
+        mongoTemplate.save(user);
+        mongoTemplate.save(user1);
+
+        return logo;
+    }
+
+    /*
+   取消收藏logo
+   */
+    public Logo delcollectLogo(Map<String,Object> map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return null;
+        }
+
+        String id = redisTokenManager.getUserId(token).toString();
+        String logoId = (String) map.get("logoid");
+
+        Query query = Query.query(Criteria.where("logoId").is(logoId));
+        Logo logo = mongoTemplate.findOne(query,Logo.class);
+        assert logo != null;
+
+        Query query1 = Query.query(Criteria.where("userId").is(id));
+        User user = mongoTemplate.findOne(query1,User.class);
+        user.delMarkedLogo(new ObjectId(logoId));
+
+        logo.setCollect(logo.getCollect()+1);
+
+        ObjectId userId = logo.getAuthorId();
+        Query query2 = Query.query(Criteria.where("userId").is(userId));
+        User user1 = mongoTemplate.findOne(query2,User.class);
+        user1.setBeMarkedCount(user1.getBeMarkedCount()-1);
+
+        mongoTemplate.save(logo);
+        mongoTemplate.save(user);
+        mongoTemplate.save(user1);
+
+        return logo;
+    }
+
+    /*
+   取消点赞logo
+   */
+    public Logo dellikeLogo(Map<String,Object> map){
+        String token = (String) map.get("token");
+        if(!redisTokenManager.checkToken(token)){
+            return null;
+        }
+
+        String logoId = (String) map.get("logoid");
+
+        Query query = Query.query(Criteria.where("logoId").is(logoId));
+        Logo logo = mongoTemplate.findOne(query,Logo.class);
+        assert logo != null;
+
+        ObjectId userId = logo.getAuthorId();
+        Query query1 = Query.query(Criteria.where("userId").is(userId));
+        User user = mongoTemplate.findOne(query1,User.class);
+        assert user != null;
+
+        String userId1 = redisTokenManager.getUserId(token).toString();
+        Query query2 = Query.query(Criteria.where("userId").is(userId1));
+        User user1 = mongoTemplate.findOne(query2,User.class);
+
+        user1.delStarLogo(new ObjectId(logoId));
+
+        logo.setLike(logo.getLike()-1);
+        user.setBeLikedCount(user.getBeLikedCount()-1);
+
+        mongoTemplate.save(logo);
+        mongoTemplate.save(user);
+        mongoTemplate.save(user1);
 
         return logo;
     }
@@ -518,6 +620,46 @@ public class LogoTemplate {
      */
     public void saveLogoMeta(LogoMeta meta) throws Exception{
 
+    }
+
+    /*
+   根据关键词搜索Logo
+    */
+    public List<Logo> findLogoByKeyword(Map<String, Object>map){
+        String keyword = (String) map.get("keyword");
+        int order = (int) map.get("order");
+        Query query = Query.query(Criteria.where("name").regex(".*?" + keyword + ".*?"));
+        List<Logo> list = mongoTemplate.find(query, Logo.class);
+        Comparator<Logo> comparator = null;
+        if(order == 1){
+            comparator = new Comparator<Logo>() {
+                @Override
+                public int compare(Logo o1, Logo o2) {
+                    return  o2.getLogoId().getTimestamp() - o1.getLogoId().getTimestamp();
+                }
+            };
+        }
+        else if(order == 2){
+            comparator = new Comparator<Logo>() {
+                @Override
+                public int compare(Logo o1, Logo o2) {
+                    return o2.getLike()  - o1.getLike();
+                }
+            };
+        }
+        else if(order == 3){
+            comparator = new Comparator<Logo>() {
+                @Override
+                public int compare(Logo o1, Logo o2) {
+                    return o2.getCollect() - o1.getCollect();
+                }
+            };
+        }
+        if(comparator != null){
+            Collections.sort(list, comparator);
+        }
+
+        return list;
     }
 
 }
