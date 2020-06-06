@@ -63,7 +63,7 @@ export default {
       return store.state.isloggedIn
     },
     isIconList: function () {
-      if (this.logoList == null) {
+      if (this.logoList.length === 0) {
         return true
       } else {
         return false
@@ -92,6 +92,8 @@ export default {
       console.log(res.code)
       if (res.code === 200) {
         this.logoList = res.logoList
+      } else {
+        this.logoList.length = 0
       }
     },
     edit () {

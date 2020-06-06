@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 导航栏 -->
     <el-menu v-if="!navBarHidden" :default-active="path" class="nav" mode="horizontal">
       <!-- 居中显示标签（hidden为true则不显示） -->
@@ -48,9 +48,9 @@
     <router-view />
 
     <!-- 备案号 -->
-    <footer class="footer" v-if="!navBarHidden">
+    <div class="footer" v-if="!navBarHidden">
       <a class="tips" href="www.beian.miit.gov.cn">粤ICP备19158305号</a>
-    </footer>
+    </div>
   </div>
 </template>
 

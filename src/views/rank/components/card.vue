@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="card">
     <div class="content">
-      <div class="left">1</div>
+      <div class="left">{{ this.$props.id }}</div>
       <div class="img">
-        <el-image class="smallImg" :src="src" :fit="cover"></el-image>
+        <el-image class="smallImg" :src="src" :fit="fit"></el-image>
       </div>
       <div class="right">
         <div class="name">Air Jordan 1</div>
         <div class="author"> linyuhan</div>
       </div>
       <div class="collect">
-        <iconfont class="iconFont" name="icon-collect" />1.1k
+        <iconfont class="iconFont" name="icon-collect" />{{ collect }}
       </div>
     </div>
     <el-divider></el-divider>
@@ -19,7 +19,12 @@
 
 <script>
 export default {
-  props: ['src']
+  props: ['src', 'id', 'like', 'collect'],
+  data () {
+    return {
+      fit: 'fill'
+    }
+  }
 }
 </script>
 
@@ -34,7 +39,7 @@ export default {
     font-weight: 400;
     color: black;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 10px;
   }
   .img {
     flex: 0.2;
@@ -42,10 +47,11 @@ export default {
   .smallImg {
     height: 100px;
     width: 100px;
+    border-radius: 5px;
   }
   .right {
     flex: 0.4;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   .name {
     font-size: 40px;
