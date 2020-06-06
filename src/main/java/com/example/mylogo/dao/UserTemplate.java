@@ -411,4 +411,61 @@ public class UserTemplate {
         }
         return user.getBeMarkedCount();
     }
+
+
+    /*
+    根据关键词搜索用户
+     */
+    public List<User> findUserByKeyword(Map<String, Object>map){
+        String keyword = (String) map.get("keyword");
+        int order = (int) map.get("order");
+        Query query = Query.query(Criteria.where("username").regex(".*?" + keyword + ".*?"));
+        List<User> list = mongoTemplate.find(query, User.class);
+        Comparator<User> comparator = null;
+        if(order == 1){
+            comparator = new Comparator<User>() {
+                @Override
+                public int compare(User o1, User o2) {
+                    return  o2.getUserId().getTimestamp() - o1.getUserId().getTimestamp();
+                }
+            };
+        }
+        else if(order == 2){
+            comparator = new Comparator<User>() {
+                @Override
+                public int compare(User o1, User o2) {
+                    return o2.getFansCount() - o1.getFansCount();
+                }
+            };
+        }
+        else if(order == 3){
+            comparator = new Comparator<User>() {
+                @Override
+                public int compare(User o1, User o2) {
+                    return o2.getBeLikedCount() - o1.getBeLikedCount();
+                }
+            };
+        }
+        else if(order == 4){
+            comparator = new Comparator<User>() {
+                @Override
+                public int compare(User o1, User o2) {
+                    return o2.getBeMarkedCount() - o1.getBeMarkedCount();
+                }
+            };
+        }
+        else if(order == 5){
+            comparator = new Comparator<User>() {
+                @Override
+                public int compare(User o1, User o2) {
+                    return o2.getLogoList().size() - o1.getLogoList().size();
+                }
+            };
+        }
+        if(comparator != null){
+            Collections.sort(list, comparator);
+        }
+
+        return list;
+    }
 }

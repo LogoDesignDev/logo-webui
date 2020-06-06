@@ -405,4 +405,16 @@ public class UserController{
         }
         return res;
     }
+
+
+    // 通过关键字查找用户
+    @PostMapping("/search/author")
+    public Map<String, Object> findUserByKeyword(@RequestBody Map<String, Object>map){
+        HashMap<String, Object> res = new HashMap<>();
+
+
+        return res;
+    }
+
+
 }

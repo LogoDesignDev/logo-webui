@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "user")
@@ -22,6 +23,7 @@ public class User {
     private String userPicUrl;//用户头像url
     private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
+
 
     private List<ObjectId> logoList;
     private List<ObjectId> markedLogoList;
@@ -45,6 +47,7 @@ public class User {
         focusList = new ArrayList<>();
         fansList = new ArrayList<>();
         gallery = new ArrayList<>();
+
     }
 
     //设置图库id
