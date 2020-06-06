@@ -30,23 +30,23 @@ class MylogoApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("username", "lmy");
-        map.put("password", "123");
-        map.put("email", "em");
-        map.put("phone", "ph");
-        String token = "257fcf343f6344e1963c79e18ea18abf";
-        String newPwd = "123456";
-        String oldPwd = "123";
-        map.put("token", token);
-        map.put("oldPwd", oldPwd);
-        map.put("newPwd", newPwd);
-        map.put("keyword", "lm");
-        map.put("order", 1);
-        List<User> list = userTemplate.findUserByKeyword(map);
-        for(User user:list){
-            System.out.println(user.getUserId().getTimestamp() + " " + user.getUsername());
-        }
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("username", "lmy");
+//        map.put("password", "123");
+//        map.put("email", "em");
+//        map.put("phone", "ph");
+//        String token = "257fcf343f6344e1963c79e18ea18abf";
+//        String newPwd = "123456";
+//        String oldPwd = "123";
+//        map.put("token", token);
+//        map.put("oldPwd", oldPwd);
+//        map.put("newPwd", newPwd);
+//        map.put("keyword", "lm");
+//        map.put("order", 1);
+//        List<User> list = userTemplate.findUserByKeyword(map);
+//        for(User user:list){
+//            System.out.println(user.getUserId().getTimestamp() + " " + user.getUsername());
+//        }
 //        userTemplate.modifyPassword(map);
 //        userTemplate.uploadIcon(map);
 

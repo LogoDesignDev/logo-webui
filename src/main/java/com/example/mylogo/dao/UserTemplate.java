@@ -419,7 +419,16 @@ public class UserTemplate {
     public List<User> findUserByKeyword(Map<String, Object>map){
         String keyword = (String) map.get("keyword");
         int order = (int) map.get("order");
-        Query query = Query.query(Criteria.where("username").regex(".*?" + keyword + ".*?"));
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").regex(".*?" + keyword + ".*?"));
+//        query.fields().include("userId")
+//                .include("username")
+//                .include("userPicUrl")
+//                .include("beLikedCount")
+//                .include("beMarkedCount")
+//                .include("fansCount")
+//                .include("logoList");
+
         List<User> list = mongoTemplate.find(query, User.class);
         Comparator<User> comparator = null;
         if(order == 1){
@@ -465,6 +474,8 @@ public class UserTemplate {
         if(comparator != null){
             Collections.sort(list, comparator);
         }
+
+
 
         return list;
     }
