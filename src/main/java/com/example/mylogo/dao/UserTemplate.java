@@ -240,6 +240,7 @@ public class UserTemplate {
         if(!redisTokenManager.checkToken(token)){
             return null;
         }
+
         return mongoTemplate.findAll(User.class);
     }
 

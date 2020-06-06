@@ -55,14 +55,9 @@ public class LogoController {
 
 
     // 获取首页需要的logo
-    @PostMapping("/home/getRecommend")
+    @GetMapping("/home/getRecommend")
     public Map<String, Object> getHomePageLogo(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
-        String token = (String)map.get("token");
-        if (token == null || userTemplate.tokenAvailable(token)){
-            res.put("code", 500);
-            return res;
-        }
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
         List<Map<String, Object>> result = new ArrayList<>();
@@ -85,14 +80,9 @@ public class LogoController {
     }
 
     // 获取首页需要的user
-    @PostMapping("/home/getDesigner")
+    @GetMapping("/home/getDesigner")
     public Map<String, Object> getHomePageUser(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
-        String token = (String)map.get("token");
-        if (token == null || userTemplate.tokenAvailable(token)){
-            res.put("code", 500);
-            return res;
-        }
 
         // TODO
         List<User> allUser = userTemplate.getAllUser(map);
@@ -106,16 +96,16 @@ public class LogoController {
             //        "like": 1234,
             //        "collect": 1234,
             //        "prod": 1234
-            hm.put("uid", allUser.get(i).getUserId());
-            hm.put("userPicUrl", allUser.get(i).getUserPicUrl());
-            hm.put("username", allUser.get(i).getUsername());
-            hm.put("like", allUser.get(i).getBeLikedCount()); // 获赞数量
-            hm.put("collect", allUser.get(i).getMarkedLogoList().size()); // 收藏0
-            hm.put("prod", allUser.get(i).getLogoList().size());
-            result.add(hm);
+                hm.put("uid", allUser.get(i).getUserId());
+                hm.put("userPicUrl", allUser.get(i).getUserPicUrl());
+                hm.put("username", allUser.get(i).getUsername());
+                hm.put("like", allUser.get(i).getBeLikedCount()); // 获赞数量
+                hm.put("collect", allUser.get(i).getMarkedLogoList().size()); // 收藏0
+                hm.put("prod", allUser.get(i).getLogoList().size());
+                result.add(hm);
         }
         if(allUser == null || allUser.size() == 0){
-            res.put("code", 501); //表示token不存在或失效
+            res.put("code", 501);
         }else{
             res.put("code", 200); // 安装文档
             res.put("desinger", result);
@@ -130,7 +120,7 @@ public class LogoController {
         Integer count = (Integer)map.get("count");
         ArrayList<Map<String, Object>> paramList = (ArrayList<Map<String, Object>>)map.get("paramsList");
 
-        if (count > 8 || count != paramList.size()){
+        if (count > 8 || paramList == null || count != paramList.size()){
             res.put("code", 501); // invalid args.
             return res;
         }
@@ -146,14 +136,9 @@ public class LogoController {
         return res;
     }
 
-    @PostMapping("/home/getFirstUrl")
+    @GetMapping("/home/getFirstUrl")
     public Map<String, Object> getFirstUrl(@RequestBody Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
-        String token = (String)map.get("token");
-        if (token == null || userTemplate.tokenAvailable(token)){
-            res.put("code", 500);
-            return res;
-        }
 
         List<Logo> allLogo = logoTemplate.getAllPublishedLogo(map);
         ArrayList<String> result = new ArrayList<>();

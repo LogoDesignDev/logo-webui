@@ -115,7 +115,7 @@ public class LogoTemplate {
                         svgCode = svgCode.concat(v[i]);
                     }
                     svgCode = svgCode.replaceAll("<g>", "<g transform=\"matrix(1,0,0,1,0,150)\">"); // 坐标变换
-                    System.out.println(svgCode);
+                    //System.out.println(svgCode);
                 }
             }
             cont.disconnect();
@@ -486,9 +486,10 @@ public class LogoTemplate {
      */
     public List<Logo> getAllPublishedLogo(Map<String, Object> map){
         String token = (String) map.get("token");
+        /*
         if(!redisTokenManager.checkToken(token)){
             return null;
-        }
+        }*/
 
         Query query = Query.query(Criteria.where("published").is(true));
         //获取所有的已发布的logo
