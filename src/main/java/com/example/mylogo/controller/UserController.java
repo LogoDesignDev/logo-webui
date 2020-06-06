@@ -411,10 +411,10 @@ public class UserController{
     @PostMapping("/search/author")
     public Map<String, Object> findUserByKeyword(@RequestBody Map<String, Object>map){
         HashMap<String, Object> res = new HashMap<>();
-
-
+        List<User> authorList = userTemplate.findUserByKeyword(map);
+        res.put("authorList", authorList);
+        res.put("code", 200);
         return res;
     }
-
-
+    
 }

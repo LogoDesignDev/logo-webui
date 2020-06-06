@@ -185,7 +185,7 @@ public class LogoTemplate {
             out.flush();
             out.close();
             Logo logo = new Logo();
-            logo.setUrl("/usr/share/nginx/html/image/" + imgName);
+            logo.setUrl("/root/image/" + imgName);
 
             //通过token 获取user
             ObjectId userId = redisTokenManager.getUserId(token);
