@@ -25,13 +25,13 @@ public class User {
     private int galleryidCount; //计算图库数量
 
 
-    private List<ObjectId> logoList;
-    private List<ObjectId> markedLogoList;
-    private List<ObjectId> starLogoList;
-    private Integer beLikedCount;   //被赞数
-    private Integer beMarkedCount;  //被收藏数
-    private List<ObjectId> focusList;//关注列表
-    private List<ObjectId> fansList;//粉丝列表
+    private List<ObjectId> logoList; //用户自己的logoList
+    private List<ObjectId> markedLogoList; //收藏的logo数组
+    private List<ObjectId> starLogoList; //点赞的logo数组
+    private Integer beLikedCount;   //全部作品的被赞数总和
+    private Integer beMarkedCount;  //全部作品的被收藏数总和
+    private List<ObjectId> focusList; //关注列表
+    private List<ObjectId> fansList; //粉丝列表
 
     public User() {
         userId = new ObjectId();
