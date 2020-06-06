@@ -461,6 +461,7 @@ public class LogoTemplate {
         Query query1 = Query.query(Criteria.where("userId").is(id));
         User user = mongoTemplate.findOne(query1,User.class);
         user.addMarkedLogo(new ObjectId(logoId));
+        mongoTemplate.save(user);
 
         logo.setCollect(logo.getCollect()+1);
 
@@ -470,7 +471,6 @@ public class LogoTemplate {
         user1.setBeMarkedCount(user1.getBeMarkedCount()+1);
 
         mongoTemplate.save(logo);
-        mongoTemplate.save(user);
         mongoTemplate.save(user1);
 
         return logo;
@@ -495,6 +495,8 @@ public class LogoTemplate {
         Query query1 = Query.query(Criteria.where("userId").is(userId));
         User user = mongoTemplate.findOne(query1,User.class);
         assert user != null;
+        user.setBeLikedCount(user.getBeLikedCount()+1);
+        mongoTemplate.save(user);
 
         String userId1 = redisTokenManager.getUserId(token).toString();
         Query query2 = Query.query(Criteria.where("userId").is(userId1));
@@ -503,10 +505,9 @@ public class LogoTemplate {
         user1.addStarLogo(new ObjectId(logoId));
 
         logo.setLike(logo.getLike()+1);
-        user.setBeLikedCount(user.getBeLikedCount()+1);
+
 
         mongoTemplate.save(logo);
-        mongoTemplate.save(user);
         mongoTemplate.save(user1);
 
         return logo;
@@ -531,8 +532,9 @@ public class LogoTemplate {
         Query query1 = Query.query(Criteria.where("userId").is(id));
         User user = mongoTemplate.findOne(query1,User.class);
         user.delMarkedLogo(new ObjectId(logoId));
+        mongoTemplate.save(user);
 
-        logo.setCollect(logo.getCollect()+1);
+        logo.setCollect(logo.getCollect()-1);
 
         ObjectId userId = logo.getAuthorId();
         Query query2 = Query.query(Criteria.where("userId").is(userId));
@@ -540,7 +542,6 @@ public class LogoTemplate {
         user1.setBeMarkedCount(user1.getBeMarkedCount()-1);
 
         mongoTemplate.save(logo);
-        mongoTemplate.save(user);
         mongoTemplate.save(user1);
 
         return logo;
@@ -566,17 +567,18 @@ public class LogoTemplate {
         User user = mongoTemplate.findOne(query1,User.class);
         assert user != null;
 
+        user.setBeLikedCount(user.getBeLikedCount()-1);
+        mongoTemplate.save(user);
+
         String userId1 = redisTokenManager.getUserId(token).toString();
         Query query2 = Query.query(Criteria.where("userId").is(userId1));
         User user1 = mongoTemplate.findOne(query2,User.class);
 
         user1.delStarLogo(new ObjectId(logoId));
-
         logo.setLike(logo.getLike()-1);
-        user.setBeLikedCount(user.getBeLikedCount()-1);
+
 
         mongoTemplate.save(logo);
-        mongoTemplate.save(user);
         mongoTemplate.save(user1);
 
         return logo;
