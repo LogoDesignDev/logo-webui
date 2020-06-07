@@ -10,23 +10,37 @@
         <button class="generateBtn" @click="generateLogos(6)">立即生成</button>
       </div>
     </div>
-    <!-- 按钮区域 -->
-    <div class="tipsContainer">
-      <span>对生成结果不满意？试试</span>
-      <el-button type="primary" size="mini" icon="el-icon-refresh" @click="generateLogos(6)">换一批</el-button>
+    <!-- loading -->
+    <div class="loadingCard" v-if="loading">
+      <div class="el-icon-loading" />
+      <div class="tips">生成中...</div>
     </div>
-    <!-- 生成结果 -->
-    <div class="resultContainer" v-if="base64List.length !== 0" :v-loading="loading">
-      <showCard
-        v-for="base64 in base64List"
-        :key="base64"
-        :src="'data:image/jpeg;base64,' + base64" />
+
+    <div class="resultCard" v-else>
+      <!-- 按钮区域 -->
+      <div class="tipsContainer">
+        <span>对生成结果不满意？试试</span>
+        <el-button type="primary" size="mini" icon="el-icon-refresh" @click="generateLogos(6)">换一批</el-button>
+      </div>
+      <!-- 生成结果 -->
+      <div class="resultContainer" v-if="base64List.length !== 0">
+        <showCard
+          v-for="(base64, index) in base64List"
+          :key="index"
+          :src="'data:image/jpeg;base64,' + base64"
+          @click="showPreview(index)" />
+      </div>
+      <!-- 错误处理 -->
+      <div class="notFoundContainer" v-else>
+        <iconfont name="icon-not-found" style="font-size: 150px;" />
+        <div>LOGO生成失败，换个关键词试试~</div>
+      </div>
     </div>
-    <!-- 错误处理 -->
-    <div class="notFoundContainer" v-else :v-loading="loading">
-      <iconfont name="icon-not-found" style="font-size: 150px;" />
-      <div>LOGO生成失败，换个关键词试试~</div>
-    </div>
+
+    <!-- 预览 -->
+    <el-dialog :visible.sync="previewVisible" width="fit-content" >
+      <preview :logoSrc="logoSrc" :keyword="keyword" @saveSuccess="previewVisible=false"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -111,18 +125,36 @@
   color: #909399;
   font-size: 14px;
 }
+
+.resultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingCard {
+  height: 602px;
+  padding-top: 30px;
+  text-align: center;
+}
+
 </style>
 
 <script>
 import showCard from './components/showCard'
+import preview from './preview'
 import { generate } from 'api/creation'
 export default {
   components: {
-    showCard
+    showCard,
+    preview
   },
 
   data () {
     return {
+      logoSrc: '',
+      previewVisible: false,
       loading: false,
       keyword: this.$route.query.keyword,
       base64List: []
@@ -135,14 +167,13 @@ export default {
 
   methods: {
     generateLogos (count) {
-      this.loading = true
+      this.base64List = []
 
       if (this.keyword === '') {
-        this.base64List = []
-
         return
       }
 
+      this.loading = true
       const params = {
         count: count,
         paramsList: []
@@ -173,10 +204,14 @@ export default {
         }
       }).catch((err) => {
         // ————失败回调
-        this.$message.error('用户信息拉取失败：' + err.message)
       }).finally(() => {
         this.loading = false
       })
+    },
+
+    showPreview (index) {
+      this.previewVisible = true
+      this.logoSrc = 'data:image/jpeg;base64,' + this.base64List[index]
     }
   }
 }
