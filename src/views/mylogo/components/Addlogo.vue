@@ -1,26 +1,18 @@
 <template>
   <el-dialog title="添加" :visible.sync="AddLogoVisible" :before-close="modalClose"
   :modal-append-to-body="false" :close-on-click-modal="false">
-    <el-upload
-      action="https://jsonplaceholder.typicode.com/posts/"
-      list-type="picture-card"
-      :on-preview="handlePictureCardPreview"
-      :on-remove="handleRemove">
-      <i class="el-icon-plus"></i>
-    </el-upload>
-    <el-dialog :visible.sync="dialogVisible" append-to-body="true">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
+    <img :src="previewImageSrc">
+    <input type="file" @change="displayImage" ref="fileInput">
     <div slot="footer" class="dialog-footer">
       <el-button @click="modalClose">取 消</el-button>
-      <el-button type="primary" @click="modalClose">确 定</el-button>
+      <el-button type="primary" @click="uploadImage">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import axios from 'axios'
 import { getToken } from 'utils/auth'
+import { upload, addlogo } from 'api/mylogo'
 export default {
   name: 'DetailAdd',
   props: {
@@ -34,38 +26,46 @@ export default {
   },
   data () {
     return {
-      dialogImageUrl: '',
-      dialogVisible: false
+      previewImageSrc: null,
+      file: null
     };
   },
   methods: {
-    modalClose () {
-      this.$emit('Add-cancel')
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
-    },
-    AddLogo () {
-      const postdata = {
-        name: this.form.name,
-        galleryid: this.$props.galleryid,
-        token: getToken()
+    displayImage () {
+      const file = this.$refs.fileInput.files[0]
+      this.file = file
+      const fr = new FileReader()
+      fr.onload = (e) => {
+        this.previewImageSrc = e.target.result
       }
-      axios.post('api/mylogo/addlogo', postdata,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(this.handleAddLogoSucc)
+      fr.readAsDataURL(file)
+    },
+    uploadImage () {
+      const formdata = new FormData()
+      formdata.append('file', this.file)
+      upload(formdata).then(this.AddLogo)
+    },
+    AddLogo (res) {
+      const data = res.data
+      console.log(data.url)
+      if (data.code === 200) {
+        const postdata = {
+          token: getToken(),
+          galleryid: this.$props.galleryid,
+          name: 'yuhan',
+          author: 'yuhan',
+          imgUrl: 'http://47.115.52.184:8900/' + data.url
+        }
+        addlogo(postdata).then(this.handleAddLogoSucc)
+      }
     },
     handleAddLogoSucc (res) {
       res = res.data
       const code = res.code
       this.$emit('Add-succ', code)
+    },
+    modalClose () {
+      this.$emit('Add-cancel')
     }
   }
 }

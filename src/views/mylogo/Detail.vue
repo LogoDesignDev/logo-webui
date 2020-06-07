@@ -4,7 +4,7 @@
       <img src="https://s1.ax1x.com/2020/06/07/t2WUmT.png" class="header-img">
       <el-button @click="addlogo" type="primary" icon="el-icon-plus" circle class="button-plus"></el-button>
       <Add-Logo :galleryid="galleryid" :AddLogoVisible="AddLogoVisible" v-if="AddLogoVisible" @Add-cancel="closeAdd" @Add-succ="addSucc"></Add-Logo>
-      <el-button type="warning" icon="el-icon-star-off" circle class="button-collect"></el-button>
+      <el-button @click="onChange" type="warning" icon="el-icon-star-off" circle class="button-collect"></el-button>
       <el-button @click="onChange" type="danger" icon="el-icon-bell" circle class="button-d"></el-button>
       <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
     </div>
@@ -20,8 +20,8 @@
                       <div id="hoverTitle">{{item.id}}</div>
                       <div id="line" />
                       <div id="hoverTips">
-                        <el-button @click="goDetail(item.id)" :imgUrl="item.imgUrl" type="primary" icon="el-icon-edit" circle class="button-edit"></el-button>
-                        <el-button @click="onChange" type="primary" icon="el-icon-delete" circle class="button-de"></el-button>
+                        <el-button @click="goDetail(item.id, item.imgUrl)" :imgUrl="item.imgUrl" type="primary" icon="el-icon-edit" circle class="button-edit"></el-button>
+                        <el-button @click="deleteLogo(item.id)" type="primary" icon="el-icon-delete" circle class="button-de"></el-button>
                       </div>
                     </div>
                   </div>
@@ -45,6 +45,7 @@
 <script>
 import axios from 'axios'
 import { getToken } from 'utils/auth'
+import { deletelogoById } from 'api/mylogo'
 import store from 'store'
 import AddLogo from './components/Addlogo'
 export default {
@@ -83,8 +84,23 @@ export default {
         this.loading = false
       }, 600)
     },
-    onChange () {
-      alert(1)
+    deleteLogo (id) {
+      const postdata = {
+        token: getToken(),
+        galleryid: this.galleryid,
+        logoid: id
+      }
+      deletelogoById(postdata).then(this.handleDeleteSucc)
+    },
+    handleDeleteSucc (res) {
+      res = res.data
+      if (res.code === 200) {
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        })
+      }
+      this.getDetailInfo()
     },
     addlogo () {
       this.AddLogoVisible = true
@@ -94,11 +110,15 @@ export default {
     },
     addSucc (code) {
       if (code === 200) {
-        alert('添加成功')
+        this.$message({
+          message: '添加成功',
+          type: 'success'
+        })
       } else {
-        alert('添加失败')
+        this.$message.error('添加失败')
       }
       this.AddLogoVisible = false
+      this.getDetailInfo()
     },
     getDetailInfo () {
       const postdata = {
@@ -120,9 +140,12 @@ export default {
         this.imgList = res.items
       }
     },
-    goDetail (id) {
+    goDetail (id, url) {
       this.$router.push({
-        path: `/mylogo/detail/galleryid=${this.$route.params.id}/logoid=${id}`
+        path: `/mylogo/detail/${this.$route.params.id}/${id}`,
+        query: {
+          param: url
+        }
       })
     },
     toLogin () {
@@ -132,6 +155,9 @@ export default {
           mode: 'login'
         }
       })
+    },
+    onChange () {
+      this.$message.warning('暂未开放，敬请期待')
     }
   },
   mounted () {
@@ -250,7 +276,7 @@ export default {
   }
 
   .container {
-    margin-top: 20px;
+    margin-top: 40px;
     margin-left: 200px;
     margin-right: 100px;
   }

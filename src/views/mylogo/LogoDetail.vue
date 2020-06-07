@@ -5,22 +5,26 @@
       <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
     </div>
     <div class = "container">
-      <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6" class="img">
+      <el-image :src="src" :fit="fit" class="img"></el-image>
       <div class="rightcontent">
         <div class="content1">
           <el-button type="success" icon="el-icon-download" class="button-psd">下载PSD</el-button>
           <el-button type="primary" icon="el-icon-download" class="button-png">下载PNG</el-button>
         </div>
         <div class="content2">
-          <el-button type="warning" icon="el-icon-star-on" class="button-collect"> 1.1k</el-button>
-          <el-button type="danger" icon="el-icon-message-solid" class="button-like"> 1.1k</el-button>
+          <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+            <el-button @click="collectChange" type="warning" :icon="icon" class="button-collect"> {{ this.collect }}</el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="点赞" placement="bottom">
+            <el-button type="danger" icon="el-icon-message-solid" class="button-like"> {{ this.like }}</el-button>
+          </el-tooltip>
         </div>
         <div class="content3">
           <el-card class="box-card">
-            <div i class="el-icon-s-claim"> 作品名称：篮球鞋</div><br /><br />
-            <div i class="el-icon-s-custom"> 作者：篮球鞋</div>
+            <div i class="el-icon-s-claim"> 作品名称：{{ this.name }}</div><br /><br />
+            <div i class="el-icon-s-custom"> 作者：{{ this.author }}</div>
           </el-card>
-          <el-button type="primary" icon="el-icon-edit" class="button-edit">在线编辑</el-button>
+          <el-button @click="editLogo" type="primary" icon="el-icon-edit" class="button-edit">在线编辑</el-button>
         </div>
       </div>
     </div>
@@ -31,6 +35,8 @@
 
 <script>
 import recommend from './components/recommend'
+import { getLogoDetail, collectPlus, collectLess } from 'api/mylogo'
+import { getToken } from 'utils/auth'
 export default {
   name: 'LogoDetail',
   components: {
@@ -38,7 +44,15 @@ export default {
   },
   data () {
     return {
-      List: []
+      collect: 23,
+      like: 0,
+      author: null,
+      name: null,
+      src: this.$route.query.param,
+      fit: 'contain',
+      galleryid: this.$route.params.galleryid,
+      logoid: this.$route.params.logoid,
+      icon: 'el-icon-star-off'
     }
   },
   methods: {
@@ -46,6 +60,65 @@ export default {
       this.$router.go(-1)
     },
     singleLogoInfo () {
+      console.log(this.galleryid)
+      console.log(this.logoid)
+      console.log(getToken())
+      const postdata = {
+        token: getToken(),
+        logoid: this.logoid
+      }
+      getLogoDetail(postdata).then(this.handlesingleLogoInfoSucc)
+    },
+    handlesingleLogoInfoSucc (res) {
+      res = res.data
+      if (res.code === 200) {
+        this.collect = res.collect
+        console.log(this.collect)
+        this.like = res.like
+        this.name = res.name
+        this.author = res.author
+      } else {
+        console.log(500)
+      }
+    },
+    collectChange () {
+      if (this.icon === 'el-icon-star-off') {
+        this.icon = 'el-icon-star-on'
+        const postdata = {
+          token: getToken(),
+          logoid: this.logoid,
+          collect: this.collect
+        }
+        collectPlus(postdata).then((res) => {
+          res = res.data
+          if (res.code === 200) {
+            this.$message({
+              message: '收藏成功',
+              type: 'success'
+            })
+          }
+        })
+        this.singleLogoInfo()
+      } else {
+        const postdata = {
+          token: getToken(),
+          logoid: this.logoid,
+          collect: this.collect
+        }
+        collectLess(postdata).then((res) => {
+          res = res.data
+          if (res.code === 200) {
+            this.$message({
+              message: '取消收藏成功',
+              type: 'warning'
+            })
+          }
+        })
+        this.singleLogoInfo()
+      }
+    },
+    editLogo () {
+      this.$message.warning('暂未开放，敬请期待')
     }
   },
   mounted () {
@@ -100,6 +173,8 @@ export default {
   }
   .img {
     flex: 1;
+    width: 200px;
+    height: 400px;
     margin-right: 10px;
     border-radius: 5px;
   }

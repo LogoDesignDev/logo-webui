@@ -13,3 +13,19 @@ export function getGalleryInfo (params) {
 export function addlogo (params) {
   return request.post('/mylogo/galleryid/addlogo', params)
 }
+
+export function deletelogoById (params) {
+  return request.post('/mylogo/deletelogo', params)
+}
+
+export function getLogoDetail (params) {
+  return request.post('/mylogo/galleryid/logoid', params)
+}
+
+export function collectPlus (params) {
+  return request.post('/mylogo/collect', params)
+}
+
+export function collectLess (params) {
+  return request.post('/mylogo/uncollect', params)
+}
