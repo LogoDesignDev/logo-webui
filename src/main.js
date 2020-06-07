@@ -2,8 +2,8 @@ import Vue from 'vue'
 import nav from './views/nav/navIndex.vue'
 import router from './router'
 import store from './store'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
 import ImageViewer from 'vue2-viewer'
 
 // 全局样式
@@ -18,7 +18,7 @@ import iconfont from './components/iconfont'
 Vue.component('iconfont', iconfont)
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+// Vue.use(ElementUI)
 Vue.use(ImageViewer)
 
 new Vue({
