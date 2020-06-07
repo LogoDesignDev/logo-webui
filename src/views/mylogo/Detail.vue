@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <img src="../../assets/home_bg.png" class="header-img">
+      <img src="https://s1.ax1x.com/2020/06/07/t2WUmT.png" class="header-img">
       <el-button @click="addlogo" type="primary" icon="el-icon-plus" circle class="button-plus"></el-button>
       <Add-Logo :galleryid="galleryid" :AddLogoVisible="AddLogoVisible" v-if="AddLogoVisible" @Add-cancel="closeAdd" @Add-succ="addSucc"></Add-Logo>
       <el-button type="warning" icon="el-icon-star-off" circle class="button-collect"></el-button>

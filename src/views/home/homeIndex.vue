@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <!-- 轮播图（todo） -->
-    <img src="../../assets/home_bg.png">
+    <img src="https://s1.ax1x.com/2020/06/07/t2WUmT.png">
 
     <div id="main">
       <!-- 榜单 -->

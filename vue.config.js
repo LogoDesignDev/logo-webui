@@ -22,6 +22,11 @@ module.exports = {
     }
   },
 
+  configureWebpack: {
+    externals: {
+    }
+  },
+
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))

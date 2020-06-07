@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img class="bg" src="../../../../assets/previewCard/preview-3.png">
+    <img class="bg" src="https://s1.ax1x.com/2020/06/07/t2fKjx.png">
     <!-- logo -->
     <div><img class="logo-1" :src="logoSrc"></div>
   </div>

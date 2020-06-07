@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../../assets/home_bg.png" class="header-img">
+    <img src="https://s1.ax1x.com/2020/06/07/t2WUmT.png" class="header-img">
     <div v-if="isloggedIn">
       <div class = "container-header">
         <el-button @click="add" class="add" type="primary" icon="el-icon-plus"> 新建图库</el-button>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <img src="../../assets/home_bg.png" class="header-img">
+      <img src="https://s1.ax1x.com/2020/06/07/t2WUmT.png" class="header-img">
       <el-button type="info" icon="el-icon-back" circle class="button-back" @click="goBack"></el-button>
     </div>
     <div class = "container">
