@@ -60,7 +60,7 @@ public class LogoTemplate {
         目前将图片保存在 logo-weibui/tmp.png中， 同时返回其base64值
          */
     public String createLogo(Map<String, Object> map){
-        String token = (String) map.get("token");
+        //String token = (String) map.get("token");
         /*
         if(!redisTokenManager.checkToken(token)){ //token失效或者过期
             return "null";
@@ -592,7 +592,7 @@ public class LogoTemplate {
     存在mongo
      */
     public List<Logo> getAllPublishedLogo(Map<String, Object> map){
-        String token = (String) map.get("token");
+        //String token = (String) map.get("token");
         /*
         if(!redisTokenManager.checkToken(token)){
             return null;

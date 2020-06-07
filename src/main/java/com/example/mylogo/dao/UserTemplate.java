@@ -236,10 +236,11 @@ public class UserTemplate {
     获取所有的用户
      */
     public List<User> getAllUser(Map<String, Object>map){
+        /*
         String token = (String) map.get("token");
         if(!redisTokenManager.checkToken(token)){
             return null;
-        }
+        }*/
 
         return mongoTemplate.findAll(User.class);
     }

@@ -24,13 +24,14 @@ public class LogoController {
     社区模块
      */
     @PostMapping("/getAllPublishedLogo")
-    public Map<String, Object> getAllPublishedLogo(@RequestBody Map<String, Object> map){
+    public Map<String, Object> getAllPublishedLogo(Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
+        /*
         String token = (String)map.get("token");
         if (token == null || userTemplate.tokenAvailable(token)){
             res.put("code", 500);
             return res;
-        }
+        }*/
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
         if(allPublishedLogo == null){
@@ -45,7 +46,7 @@ public class LogoController {
 
     // 获取首页需要的logo
     @GetMapping("/home/getRecommend")
-    public Map<String, Object> getHomePageLogo(@RequestBody Map<String, Object> map){
+    public Map<String, Object> getHomePageLogo(Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
         List<Logo> allPublishedLogo = logoTemplate.getAllPublishedLogo(map);
@@ -70,7 +71,7 @@ public class LogoController {
 
     // 获取首页需要的user
     @GetMapping("/home/getDesigner")
-    public Map<String, Object> getHomePageUser(@RequestBody Map<String, Object> map){
+    public Map<String, Object> getHomePageUser(Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
         // TODO
@@ -126,7 +127,7 @@ public class LogoController {
     }
 
     @GetMapping("/home/getFirstUrl")
-    public Map<String, Object> getFirstUrl(@RequestBody Map<String, Object> map){
+    public Map<String, Object> getFirstUrl(Map<String, Object> map){
         HashMap<String, Object> res = new HashMap<>();
 
         List<Logo> allLogo = logoTemplate.getAllPublishedLogo(map);
