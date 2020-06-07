@@ -12,6 +12,7 @@ public class User {
 
     @Id
     private ObjectId userId;
+    private String uId;
     private String username;
     private String password;
     private String email;
@@ -33,6 +34,7 @@ public class User {
 
     public User() {
         userId = new ObjectId();
+        uId = userId.toString();
         logoList = new ArrayList<>();
         markedLogoList = new ArrayList<>();
         starLogoList = new ArrayList<>();
@@ -226,5 +228,13 @@ public class User {
 
     public void setGalleryidCount(int galleryidCount) {
         this.galleryidCount = galleryidCount;
+    }
+
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 }

@@ -30,27 +30,24 @@ class MylogoApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("username", "lmy");
-//        map.put("password", "123");
-//        map.put("email", "em");
-//        map.put("phone", "ph");
-//        String token = "257fcf343f6344e1963c79e18ea18abf";
-//        String newPwd = "123456";
-//        String oldPwd = "123";
-//        map.put("token", token);
-//        map.put("oldPwd", oldPwd);
-//        map.put("newPwd", newPwd);
-//        map.put("keyword", "lm");
-//        map.put("order", 1);
+//        for(int i = 1;i < 100;i++){
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("username", "username"+i);
+//            map.put("password", "password"+i);
+//            map.put("email", "email"+i);
+//            map.put("phone", "phone"+i);
+//
+//            userTemplate.registUser(map);
+//        }
+
 //        List<User> list = userTemplate.findUserByKeyword(map);
 //        for(User user:list){
-//            System.out.println(user.getUserId().getTimestamp() + " " + user.getUsername());
+//            System.out.println(user.getUserId().toString() + " " + user.getUsername());
 //        }
 //        userTemplate.modifyPassword(map);
 //        userTemplate.uploadIcon(map);
 
-        //userTemplate.registUser(map);
+
 
 //        User user = new User();
 //        user.setUsername("lmb");

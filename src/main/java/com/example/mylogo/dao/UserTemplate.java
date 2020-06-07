@@ -422,13 +422,13 @@ public class UserTemplate {
         int order = (int) map.get("order");
         Query query = new Query();
         query.addCriteria(Criteria.where("username").regex(".*?" + keyword + ".*?"));
-//        query.fields().include("userId")
-//                .include("username")
-//                .include("userPicUrl")
-//                .include("beLikedCount")
-//                .include("beMarkedCount")
-//                .include("fansCount")
-//                .include("logoList");
+        query.fields().include("userId")
+                .include("username")
+                .include("userPicUrl")
+                .include("beLikedCount")
+                .include("beMarkedCount")
+                .include("fansCount")
+                .include("logoList");
 
         List<User> list = mongoTemplate.find(query, User.class);
         Comparator<User> comparator = null;
@@ -475,8 +475,6 @@ public class UserTemplate {
         if(comparator != null){
             Collections.sort(list, comparator);
         }
-
-
 
         return list;
     }
