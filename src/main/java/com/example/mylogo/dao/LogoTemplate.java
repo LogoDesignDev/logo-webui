@@ -670,23 +670,19 @@ public class LogoTemplate {
     /*
     上传图片
     */
-    public String fileUpload(Map<String,Object> map){
-        MultipartFile file =(MultipartFile) map.get("file");
-        if(file.isEmpty()){
-            return null;
-        }
+    public String fileUpload(MultipartFile file){
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-        String filePath = "/root/image"; // 上传后的路径
+        String filePath = "/root/image/"; // 上传后的路径
         fileName = UUID.randomUUID() + suffixName; // 新文件名
-        String real = filePath +"/"+ fileName;
+        String real = filePath + fileName;
         File dest = new File(real);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
         try {
             file.transferTo(dest);
-            return real;
+            return "image/"+fileName;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

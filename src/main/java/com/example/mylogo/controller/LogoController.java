@@ -6,6 +6,8 @@ import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.*;
 
 @RestController
@@ -351,10 +353,10 @@ public class LogoController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> imageUpload(@RequestBody Map<String, Object> map)
+    public Map<String, Object> imageUpload(@RequestParam("file") MultipartFile file)
     {
         HashMap<String, Object> res = new HashMap<>();
-        String url = logoTemplate.fileUpload(map);
+        String url = logoTemplate.fileUpload(file);
         if(url == null){
             res.put("code",510);
         }else{
