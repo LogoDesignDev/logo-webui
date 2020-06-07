@@ -16,6 +16,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -662,6 +665,33 @@ public class LogoTemplate {
         }
 
         return list;
+    }
+
+    /*
+    上传图片
+    */
+    public String fileUpload(Map<String,Object> map){
+        MultipartFile file =(MultipartFile) map.get("file");
+        if(file.isEmpty()){
+            return null;
+        }
+        String fileName = file.getOriginalFilename();
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+        String filePath = "/root/image"; // 上传后的路径
+        fileName = UUID.randomUUID() + suffixName; // 新文件名
+        String real = filePath +"/"+ fileName;
+        File dest = new File(real);
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(dest);
+            return real;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 }

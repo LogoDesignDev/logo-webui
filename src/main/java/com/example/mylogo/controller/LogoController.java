@@ -4,22 +4,9 @@ import com.example.mylogo.dao.LogoTemplate;
 import com.example.mylogo.dao.UserTemplate;
 import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
-import com.example.mylogo.entity.Gallery;
-import io.netty.handler.codec.serialization.ObjectEncoder;
-import lombok.extern.java.Log;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @RestController
 public class LogoController {
@@ -359,6 +346,20 @@ public class LogoController {
             res.put("code", 500); //表示token不存在或失效
         }else{
             res.put("code", 200);
+        }
+        return res;
+    }
+
+    @PostMapping("/upload")
+    public Map<String, Object> imageUpload(@RequestBody Map<String, Object> map)
+    {
+        HashMap<String, Object> res = new HashMap<>();
+        String url = logoTemplate.fileUpload(map);
+        if(url == null){
+            res.put("code",510);
+        }else{
+            res.put("code",200);
+            res.put("url",url);
         }
         return res;
     }
