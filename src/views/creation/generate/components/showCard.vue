@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" @click="handleClick">
     <img id="viewImg" :src="src" />
     <!-- 底部缩略显示 -->
     <div id="bottomView">
@@ -77,12 +77,19 @@
   font-weight: bold;
   color: #C0C4CC;
   opacity: 0.2;
+  user-select: none;
 }
 
 </style>
 
 <script>
 export default {
-  props: ['src']
+  props: ['src'],
+
+  methods: {
+    handleClick () {
+      this.$emit('click')
+    }
+  }
 }
 </script>
