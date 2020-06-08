@@ -31,32 +31,32 @@ class MylogoApplicationTests {
     @Test
     @Ignore
     void addManyUser() throws IOException {
-        for(int i = 1;i <= 10;i++){
-            Map<String, Object> map = new HashMap<>();
-            int num = i * 6667;
-            map.put("username", "username"+ num);
-            map.put("password", "password"+ num);
-            map.put("email", "email"+ num);
-            map.put("phone", "phone"+ num);
-
-            int result = userTemplate.registUser(map);
-
-            try{
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                System.out.println("Err during sleeping...");
-                Assert.fail();
-            }
-        }
-
-        // check
-        ArrayList<User> all = new ArrayList<>();
-        all.addAll(userTemplate.getAllUser(new HashMap<>()));
-
-        int n = all.size();
-        for (int i = 0 ; i < n; i++){
-            System.out.println(all.get(i).getUsername());
-        }
+//        for(int i = 1;i <= 10;i++){
+//            Map<String, Object> map = new HashMap<>();
+//            int num = i * 6667;
+//            map.put("username", "username"+ num);
+//            map.put("password", "password"+ num);
+//            map.put("email", "email"+ num);
+//            map.put("phone", "phone"+ num);
+//
+//            int result = userTemplate.registUser(map);
+//
+//            try{
+//                Thread.sleep(1000);
+//            }catch(InterruptedException e){
+//                System.out.println("Err during sleeping...");
+//                Assert.fail();
+//            }
+//        }
+//
+//        // check
+//        ArrayList<User> all = new ArrayList<>();
+//        all.addAll(userTemplate.getAllUser(new HashMap<>()));
+//
+//        int n = all.size();
+//        for (int i = 0 ; i < n; i++){
+//            System.out.println(all.get(i).getUsername());
+//        }
 
 //        List<User> list = userTemplate.findUserByKeyword(map);
 //        for(User user:list){
