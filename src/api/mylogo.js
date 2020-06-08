@@ -10,6 +10,22 @@ export function getGalleryInfo (params) {
   return request.post('/mylogo', params)
 }
 
+export function getGalleryDetailInfo (params) {
+  return request.post('/mylogo/id', params)
+}
+
+export function addGallery (params) {
+  return request.post('/mylogo/addgallery', params)  
+}
+
+export function updateGalleryInfo (params) {
+  return request.post('/mylogo/updategallery', params)  
+}
+
+export function deleteGalleryInfo (params) {
+  return request.post('/mylogo/deletegallery', params)
+}
+
 export function addlogo (params) {
   return request.post('/mylogo/galleryid/addlogo', params)
 }

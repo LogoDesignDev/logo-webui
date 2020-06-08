@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="@/assets/rank_bg.png" class="header-img">
+    <img src="https://s1.ax1x.com/20020/6/08/tWQ93t.png" class="header-img">
     <div class="content">
       <div class="left">
         <div class="category">全部分类</div>

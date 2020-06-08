@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import store from 'store'
 import { getToken } from 'utils/auth'
+import { getGalleryInfo } from 'api/mylogo'
 import MyLogoEdit from './components/Edit'
 import MyLogoAdd from './components/Add'
 export default {
@@ -71,15 +71,12 @@ export default {
     }
   },
   methods: {
-    getGalleryInfo () {
+    getAllGalleryInfo () {
       const postdata = {
         token: getToken()
       }
-      axios.post('/api/mylogo', postdata, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(this.handleGetGalleryInfoSucc)
+      alert(getToken())
+      getGalleryInfo(postdata).then(this.handleGetGalleryInfoSucc)
     },
     setLoading () {
       this.loading = true
@@ -137,7 +134,7 @@ export default {
         this.$message.error('添加失败，请重试')
       }
       this.AddFormVisible = false
-      this.getGalleryInfo()
+      this.getAllGalleryInfo()
     },
     closeAdd () {
       this.AddFormVisible = false
@@ -157,7 +154,7 @@ export default {
     }
   },
   mounted () {
-    this.getGalleryInfo()
+    this.getAllGalleryInfo()
     this.setLoading()
   }
 }

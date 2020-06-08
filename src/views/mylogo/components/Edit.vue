@@ -26,6 +26,7 @@
 <script>
 import axios from 'axios'
 import { getToken } from 'utils/auth'
+import { updateGalleryInfo, deleteGalleryInfo } from 'api/mylogo'
 export default {
   name: 'MyLogoEdit',
   props: {
@@ -58,12 +59,7 @@ export default {
         token: getToken(),
         id: this.$props.id
       }
-      axios.post('api/mylogo/updategallery', postdata,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(this.handleUpdateGallerySucc)
+      updateGalleryInfo(postdata).then(this.handleUpdateGallerySucc)
     },
     handleUpdateGallerySucc (res) {
       res = res.data
@@ -75,12 +71,7 @@ export default {
         token: getToken(),
         id: this.$props.id
       }
-      axios.post('api/mylogo/deletegallery', postdata,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(this.handleDeleteGallerySucc)
+      deleteGalleryInfo(postdata).then(this.handleDeleteGallerySucc)
     },
     handleDeleteGallerySucc (res) {
       res = res.data

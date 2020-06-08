@@ -1,8 +1,15 @@
 <template>
   <el-dialog title="添加" :visible.sync="AddLogoVisible" :before-close="modalClose"
   :modal-append-to-body="false" :close-on-click-modal="false">
-    <img :src="previewImageSrc">
-    <input type="file" @change="displayImage" ref="fileInput">
+    <el-image :src="previewImageSrc" class="preImg" :fit="fit"></el-image>
+    <el-input
+      placeholder="请输入Logo名称"
+      v-model="input"
+      clearable>
+    </el-input>
+    <el-button>
+      <input type="file" @change="displayImage" ref="fileInput">
+    </el-button>
     <div slot="footer" class="dialog-footer">
       <el-button @click="modalClose">取 消</el-button>
       <el-button type="primary" @click="uploadImage">确 定</el-button>
@@ -13,6 +20,7 @@
 <script>
 import { getToken } from 'utils/auth'
 import { upload, addlogo } from 'api/mylogo'
+import store from 'store'
 export default {
   name: 'DetailAdd',
   props: {
@@ -27,7 +35,9 @@ export default {
   data () {
     return {
       previewImageSrc: null,
-      file: null
+      file: null,
+      fit: 'contain',
+      input: ''
     };
   },
   methods: {
@@ -52,8 +62,8 @@ export default {
         const postdata = {
           token: getToken(),
           galleryid: this.$props.galleryid,
-          name: 'yuhan',
-          author: 'yuhan',
+          name: this.input,
+          author: store.state.userInfo.username,
           imgUrl: 'http://47.115.52.184:8900/' + data.url
         }
         addlogo(postdata).then(this.handleAddLogoSucc)
@@ -72,5 +82,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+  .preImg {
+    width: 50px;
+    height: 50px;
+  }
 </style>

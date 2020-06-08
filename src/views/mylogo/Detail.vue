@@ -130,12 +130,9 @@ export default {
           'Content-Type': 'application/json'
         }
       }).then(this.handleGetDetailSucc)
-      console.log(this.$route.params.id)
     },
     handleGetDetailSucc (res) {
       res = res.data
-      console.log(res.code)
-      console.log(res.items)
       if (res.code === 200) {
         this.imgList = res.items
       }
