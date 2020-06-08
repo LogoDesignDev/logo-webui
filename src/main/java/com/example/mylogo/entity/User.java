@@ -1,14 +1,18 @@
 package com.example.mylogo.entity;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "user")
-public class User {
+public class User {@Autowired
+MongoTemplate mongoTemplate;
+
 
     @Id
     private ObjectId userId;
@@ -49,6 +53,7 @@ public class User {
         gallery = new ArrayList<>();
         Gallery gallery1 = new Gallery();
         gallery.add(gallery1.getGalleryId());
+        mongoTemplate.save(gallery1,"gallery");
     }
 
     //设置图库id

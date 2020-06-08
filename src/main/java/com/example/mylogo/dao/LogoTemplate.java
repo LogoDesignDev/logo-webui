@@ -397,6 +397,7 @@ public class LogoTemplate {
             return null;
         }
 
+        ObjectId userid = redisTokenManager.getUserId(token);
         String id = (String) map.get("galleryid");
         String logoUrl = (String) map.get("imgUrl");
         String logoname = (String) map.get("name");
@@ -406,6 +407,7 @@ public class LogoTemplate {
         logo.setUrl(logoUrl);
         logo.setName(logoname);
         logo.setAuthorName(logoauthor);
+        logo.setAuthorId(userid);
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);

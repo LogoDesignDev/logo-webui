@@ -253,7 +253,7 @@ public class LogoController {
             res.put("code", 200);
             res.put("collect",logo.getCollect());
             res.put("like",logo.getLike());
-            res.put("author",logo.getAuthorId().toString());
+            res.put("author",logo.getAuthorName());
             res.put("name",logo.getName());
         }
         return res;
