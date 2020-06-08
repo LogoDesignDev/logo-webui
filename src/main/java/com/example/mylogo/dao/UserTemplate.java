@@ -1,5 +1,6 @@
 package com.example.mylogo.dao;
 
+import com.example.mylogo.entity.Gallery;
 import com.example.mylogo.entity.Logo;
 import com.example.mylogo.entity.User;
 import com.example.mylogo.token.RedisTokenManager;
@@ -54,7 +55,10 @@ public class UserTemplate {
         user.setEmail(email);
         user.setPhone(phone);
         user.setUserPicUrl("/icon/default.jpg");
+        Gallery gallery = new Gallery();
+        user.setGallery(gallery.getGalleryId());
         mongoTemplate.save(user,"user");
+        mongoTemplate.save(gallery,"gallery");
         return 0;
     }
 
