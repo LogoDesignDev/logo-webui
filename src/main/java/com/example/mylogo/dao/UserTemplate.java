@@ -164,7 +164,7 @@ public class UserTemplate {
 
         User user = mongoTemplate.findOne(query1, User.class);
         assert user != null;
-        List<ObjectId> myLogoIdList = user.getLogoList();
+        List<Logo> myLogoIdList = user.getLogoList();
 
         Query query2 = Query.query(Criteria.where("logoId").in(myLogoIdList));
         List<Logo> myLogoList = mongoTemplate.find(query2, Logo.class);
@@ -358,7 +358,7 @@ public class UserTemplate {
         if(user==null){
             return -1;
         }
-        return user.getProdCount();
+        return user.getLogoList().size();
     }
 
     /*

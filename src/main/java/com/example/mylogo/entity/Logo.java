@@ -16,6 +16,7 @@ public class Logo {
     private String url; //图片的路径
     private String name;//图片的名字
     private String authorName;//作者名字
+    private String authorUrl;//作者头像url
     private int like;//点赞数
     private int collect;//收藏数
     private String publishedTime;//发布时间
@@ -26,6 +27,10 @@ public class Logo {
         like = 0;
         collect = 0;
     }
+    public void setAuthorUrl(String url){this.authorUrl = url;}
+
+    public String getAuthorUrl(){return authorUrl;}
+
     public void setAuthorName(String name){this.authorName = name;}
 
     public String getAuthorName(){return authorName;}

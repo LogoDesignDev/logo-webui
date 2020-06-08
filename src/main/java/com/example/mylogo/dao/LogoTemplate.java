@@ -189,8 +189,10 @@ public class LogoTemplate {
             User user = mongoTemplate.findOne(query, User.class);
             assert user != null;
 
-            user.addLogo(logo.getLogoId());
+            user.addLogo(logo);
             logo.setAuthorId(user.getUserId());
+            logo.setAuthorName(user.getUsername());
+            logo.setAuthorUrl(user.getUserPicUrl());
             mongoTemplate.save(logo, "logo");
             mongoTemplate.save(user, "user");
             return 0; //成功存图片
@@ -219,7 +221,10 @@ public class LogoTemplate {
         assert user != null;
 
         String logoId = (String) map.get("logoId");
-        user.delLogo(new ObjectId(logoId));
+
+        Query  query1 = Query.query(Criteria.where("logoId").is(logoId));
+        Logo logo = mongoTemplate.findOne(query1,Logo.class);
+        user.delLogo(logo);
         mongoTemplate.save(user, "user");
 
         return 0;
@@ -396,10 +401,13 @@ public class LogoTemplate {
         String logoname = (String) map.get("name");
         String logoauthor = (String) map.get("author");
 
+        Query query = Query.query(Criteria.where("userId").is(userid));
+        User user = mongoTemplate.findOne(query,User.class);
         Logo logo = new Logo();
         logo.setUrl(logoUrl);
         logo.setName(logoname);
         logo.setAuthorName(logoauthor);
+        logo.setAuthorUrl(user.getUserPicUrl());
         logo.setAuthorId(userid);
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
@@ -628,7 +636,19 @@ public class LogoTemplate {
     public List<Logo> findLogoByKeyword(Map<String, Object>map){
         String keyword = (String) map.get("keyword");
         int order = (int) map.get("order");
-        Query query = Query.query(Criteria.where("name").regex(".*?" + keyword + ".*?"));
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").regex(".*?" + keyword + ".*?"));
+        query.fields().include("logoId")
+                .include("name")
+                .include("title")
+                .include("introduce")
+                .include("url")
+                .include("like")
+                .include("collect")
+                .include("authorId")
+                .include("authorName")
+                .include("authorUrl");
+
         List<Logo> list = mongoTemplate.find(query, Logo.class);
         Comparator<Logo> comparator = null;
         if(order == 1){

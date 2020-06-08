@@ -19,12 +19,11 @@ public class User {
     private String phone;
     private Integer focusCount;//关注数
     private Integer fansCount;//粉丝数
-    private Integer prodCount;//用户作品数
     private String userPicUrl;//用户头像url
     private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
 
-    private List<ObjectId> logoList;
+    private List<Logo> logoList;
     private List<ObjectId> markedLogoList;
     private List<ObjectId> starLogoList;
     private Integer beLikedCount;   //被赞数
@@ -42,7 +41,6 @@ public class User {
         beMarkedCount = 0;
         galleryidCount = 0;
         focusCount = 0;
-        prodCount = 0;
         fansCount = 0;
         focusList = new ArrayList<>();
         fansList = new ArrayList<>();
@@ -57,8 +55,6 @@ public class User {
     public void delGallery(ObjectId galleryid){
         gallery.remove(galleryid);
     }
-
-    public Integer getProdCount(){return prodCount;}
 
     public Integer getFansCount(){return fansCount;}
 
@@ -107,21 +103,21 @@ public class User {
     }
 
 
-    public List<ObjectId> getLogoList() {
+    public List<Logo> getLogoList() {
         return logoList;
     }
 
-    public void setLogoList(List<ObjectId> logoList) {
+    public void setLogoList(List<Logo> logoList) {
         this.logoList = logoList;
     }
 
     //添加自己的logo
-    public void addLogo(ObjectId objectId){
-        logoList.add(objectId);
+    public void addLogo(Logo logo){
+        logoList.add(logo);
     }
 
-    public void delLogo(ObjectId objectId){
-        logoList.remove(objectId);
+    public void delLogo(Logo logo){
+        logoList.remove(logo);
     }
 
 
@@ -206,10 +202,6 @@ public class User {
 
     public void setFansCount(Integer fansCount) {
         this.fansCount = fansCount;
-    }
-
-    public void setProdCount(Integer prodCount) {
-        this.prodCount = prodCount;
     }
 
     public void setUserPicUrl(String userPicUrl) {
