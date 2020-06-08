@@ -60,12 +60,6 @@ public class LogoTemplate {
         目前将图片保存在 logo-weibui/tmp.png中， 同时返回其base64值
          */
     public String createLogo(Map<String, Object> map){
-        //String token = (String) map.get("token");
-        /*
-        if(!redisTokenManager.checkToken(token)){ //token失效或者过期
-            return "null";
-        }*/
-
         String url = "";
 
         final String port = "1234";
@@ -159,7 +153,6 @@ public class LogoTemplate {
 
     /*
     保存Logo
-
      */
     public int saveLogo(Map<String, Object> map) throws Exception {
         String token = (String) map.get("token");

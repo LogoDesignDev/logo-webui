@@ -1,23 +1,20 @@
 package com.example.mylogo;
 
+import com.example.mylogo.dao.LogoTemplate;
 import com.example.mylogo.dao.UserTemplate;
 import com.example.mylogo.entity.User;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import org.json.JSONObject;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.net.*;
+import java.net.http.HttpRequest;
+import java.util.*;
 
 @SpringBootTest
 class MylogoApplicationTests {
@@ -28,17 +25,38 @@ class MylogoApplicationTests {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    @Autowired
+    LogoTemplate logoTemplate;
+
     @Test
-    void contextLoads() throws IOException {
-//        for(int i = 1;i < 100;i++){
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("username", "username"+i);
-//            map.put("password", "password"+i);
-//            map.put("email", "email"+i);
-//            map.put("phone", "phone"+i);
-//
-//            userTemplate.registUser(map);
-//        }
+    @Ignore
+    void addManyUser() throws IOException {
+        for(int i = 1;i <= 10;i++){
+            Map<String, Object> map = new HashMap<>();
+            int num = i * 6667;
+            map.put("username", "username"+ num);
+            map.put("password", "password"+ num);
+            map.put("email", "email"+ num);
+            map.put("phone", "phone"+ num);
+
+            int result = userTemplate.registUser(map);
+
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                System.out.println("Err during sleeping...");
+                Assert.fail();
+            }
+        }
+
+        // check
+        ArrayList<User> all = new ArrayList<>();
+        all.addAll(userTemplate.getAllUser(new HashMap<>()));
+
+        int n = all.size();
+        for (int i = 0 ; i < n; i++){
+            System.out.println(all.get(i).getUsername());
+        }
 
 //        List<User> list = userTemplate.findUserByKeyword(map);
 //        for(User user:list){
@@ -46,9 +64,9 @@ class MylogoApplicationTests {
 //        }
 //        userTemplate.modifyPassword(map);
 //        userTemplate.uploadIcon(map);
-
-
-
+//
+//
+//
 //        User user = new User();
 //        user.setUsername("lmb");
 //        user.setPassword("123");
@@ -66,5 +84,4 @@ class MylogoApplicationTests {
 //        System.out.println(res);
 
     }
-
 }

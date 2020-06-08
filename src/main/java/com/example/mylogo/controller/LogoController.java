@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 @RestController
@@ -366,5 +369,55 @@ public class LogoController {
         }
         return res;
     }
+
+    @GetMapping("/genLogoForAllUser")
+    public Map<String, Object> genLogos(Map<String, Object> amap) throws Exception{
+        HashMap<String, Object> res = new HashMap<>();
+        String text = "hello~";
+        // init
+        ArrayList<User> all = new ArrayList<>();
+        all.addAll(userTemplate.getAllUser(new HashMap<>()));
+        System.out.println("Get all users, len = " + all.size());
+
+
+        int n = all.size();
+        for (int i = 0 ; i < n; i++){
+            HashMap<String, Object> map = new HashMap<>();
+            String bs64 = logoTemplate.createLogo(map);
+
+            String username = all.get(i).getUsername();
+            String pwd = all.get(i).getPassword();
+            map.put("username", username);
+            map.put("password", pwd);
+
+            // 登录
+            String token = userTemplate.login(map);
+            if (token == null){
+                System.out.println("invalided token.. for username = " + username);
+                continue;
+            }
+            map.put("token", token);
+
+            // 创建gallery test
+            map.put("name", "test");
+            map.put("region", "私有");
+            logoTemplate.addGallery(map);
+
+            // add logo
+            map.put("base64", bs64);
+            int resp = logoTemplate.saveLogo(map);
+            if (resp != 0){
+                System.out.println("Failed to save logo for resp = " + resp);
+            }
+
+
+            // logout
+            userTemplate.logout(token);
+
+        }
+
+        return res;
+    }
+
 
 }
