@@ -379,7 +379,6 @@ public class LogoController {
         all.addAll(userTemplate.getAllUser(new HashMap<>()));
         System.out.println("Get all users, len = " + all.size());
 
-
         int n = all.size();
         for (int i = 0 ; i < n; i++){
             HashMap<String, Object> map = new HashMap<>();
@@ -394,7 +393,8 @@ public class LogoController {
             String token = userTemplate.login(map);
             if (token == null){
                 System.out.println("invalided token.. for username = " + username);
-                continue;
+                res.put("code", 500);
+                return res;
             }
             map.put("token", token);
 
@@ -408,14 +408,16 @@ public class LogoController {
             int resp = logoTemplate.saveLogo(map);
             if (resp != 0){
                 System.out.println("Failed to save logo for resp = " + resp);
+                res.put("code", 500);
+                return res;
             }
-
-
             // logout
             userTemplate.logout(token);
+            System.out.println("user " + username + " done..");
 
+            Thread.sleep(500); // 500ms
         }
-
+        res.put("code", 200);
         return res;
     }
 
