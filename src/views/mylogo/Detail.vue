@@ -14,7 +14,7 @@
           <el-col :span="4" v-for="(item, index) in imgList" :key="index" class="col">
               <div>
                 <el-card :body-style="{ padding: '0px'}" class="card">
-                  <img :src="item.imgUrl" class="image">
+                  <el-image :src="item.imgUrl" class="image"></el-image>
                   <div id="hoverView">
                     <div id="infoView">
                       <div id="hoverTitle">{{item.id}}</div>
@@ -285,8 +285,8 @@ export default {
 
   .card {
     position: relative;
-    height: 350px;
-    margin-bottom: 20px;
+    height: 300px;
+    margin-bottom: 30px;
     cursor: pointer;
   }
 
@@ -298,6 +298,7 @@ export default {
 
   .image {
     width: 100%;
+    height: 100%;
     display: block;
   }
 

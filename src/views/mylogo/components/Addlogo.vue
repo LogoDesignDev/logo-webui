@@ -1,16 +1,21 @@
 <template>
   <el-dialog title="添加" :visible.sync="AddLogoVisible" :before-close="modalClose"
   :modal-append-to-body="false" :close-on-click-modal="false">
-    <el-image :src="previewImageSrc" class="preImg" :fit="fit"></el-image>
+    <div class="border">
+      <el-image v-if="previewImageSrc" :src="previewImageSrc" class="preImg" :fit="fit"></el-image>
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </div>
     <el-input
       placeholder="请输入Logo名称"
       v-model="input"
+      class="inputName"
       clearable>
     </el-input>
-    <el-button>
-      <input type="file" @change="displayImage" ref="fileInput">
-    </el-button>
     <div slot="footer" class="dialog-footer">
+      <el-button id="choosePicBtn">
+        <input type="file" @change="displayImage" ref="fileInput">
+        选择图片
+      </el-button>
       <el-button @click="modalClose">取 消</el-button>
       <el-button type="primary" @click="uploadImage">确 定</el-button>
     </div>
@@ -83,7 +88,44 @@ export default {
 
 <style lang="less" scoped>
   .preImg {
-    width: 50px;
-    height: 50px;
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .inputName {
+    width: 500px;
+    margin-top: 10px;
+  }
+  .border {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    width: 178px;
+    height: 178px;
+    margin-bottom: 10px;
+  }
+  #choosePicBtn {
+    height: 40px;
+    width: 100px;
+    padding: 0;
+    float: left;
+  }
+  #choosePicBtn input{
+    height: 40px;
+    width: 100px;
+    color: transparent;
+    opacity: 0;
+    position: absolute;
+    margin-left: -22px;
+    margin-top: -12px;
   }
 </style>

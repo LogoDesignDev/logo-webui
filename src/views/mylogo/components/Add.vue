@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { getToken } from 'utils/auth'
 import { addGallery } from 'api/mylogo'
 export default {

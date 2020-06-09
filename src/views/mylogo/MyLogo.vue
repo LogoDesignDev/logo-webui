@@ -75,7 +75,6 @@ export default {
       const postdata = {
         token: getToken()
       }
-      alert(getToken())
       getGalleryInfo(postdata).then(this.handleGetGalleryInfoSucc)
     },
     setLoading () {
@@ -106,6 +105,7 @@ export default {
         this.$message.error('修改失败，请重试')
       }
       this.dialogFormVisible = false
+      this.getAllGalleryInfo()
     },
     succDelete (code) {
       if (code === 200) {
@@ -117,6 +117,7 @@ export default {
         this.$message.error('删除失败，请重试')
       }
       this.dialogFormVisible = false
+      this.getAllGalleryInfo()
     },
     closeManage () {
       this.dialogFormVisible = false

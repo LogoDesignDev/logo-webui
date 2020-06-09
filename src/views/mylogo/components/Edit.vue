@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { getToken } from 'utils/auth'
 import { updateGalleryInfo, deleteGalleryInfo } from 'api/mylogo'
 export default {

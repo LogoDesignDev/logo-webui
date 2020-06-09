@@ -15,11 +15,11 @@ export function getGalleryDetailInfo (params) {
 }
 
 export function addGallery (params) {
-  return request.post('/mylogo/addgallery', params)  
+  return request.post('/mylogo/addgallery', params)
 }
 
 export function updateGalleryInfo (params) {
-  return request.post('/mylogo/updategallery', params)  
+  return request.post('/mylogo/updategallery', params)
 }
 
 export function deleteGalleryInfo (params) {
