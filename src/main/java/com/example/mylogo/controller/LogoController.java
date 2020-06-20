@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -21,6 +22,8 @@ public class LogoController {
 
     @Autowired
     UserTemplate userTemplate;
+
+    int MAX_NUM_RANK = 20; // 排行榜每次返回logo\designer的最大数目
 
     /*
     获取所有已发布的Logo
@@ -418,6 +421,136 @@ public class LogoController {
             Thread.sleep(500); // 500ms
         }
         res.put("code", 200);
+        return res;
+    }
+
+
+
+
+    // 2020-06-20
+    // 1 - compound
+    // 2 - like
+    // 3 - collection
+    private ArrayList<Logo> getSortedLogoList(Map<String, Object> map, int max_num, int type){
+        ArrayList<Logo> allLogo = (ArrayList)logoTemplate.getAllPublishedLogo(map);
+        ArrayList<Logo> res = new ArrayList<>();
+
+        switch (type) {
+            case 1: // compound
+                res.sort((a, b) ->
+                        (int) (10000 * (0.6 * a.getCollect() + 0.4 * a.getLike()) - (0.6 * b.getCollect() + 0.4 * b.getLike()))
+                );
+                break;
+            case 2: // by like
+                res.sort(
+                        (a, b) -> (int) (10000 * (a.getLike() - b.getLike()))
+                );
+                break;
+            case 3: // by collection
+                res.sort(
+                        (a, b) -> (int) (10000 * (a.getCollect() - b.getCollect()))
+                );
+                break;
+        }
+        Collections.reverse(res);
+        int n = allLogo.size();
+        for (int i = 0; i < n && i < max_num; i++){
+            res.add(res.get(i));
+        }
+        return res;
+    }
+
+    private List<Map<String, Object>> logoListToMapList(List<Logo> logos){
+        ArrayList<Map<String, Object>> mapList = new ArrayList<>();
+
+        int n = logos.size();
+        for(int i = 0; i < n; i++){
+            HashMap<String, Object> m = new HashMap<>();
+            Logo logo = logos.get(i);
+            m.put("id", i+1);
+            m.put("name", logo.getTitle());
+            m.put("author", logo.getAuthorName());
+            m.put("like", logo.getLike());
+            m.put("collect", logo.getCollect());
+            m.put("imgUrl", logo.getUrl());
+
+            mapList.add(m);
+        }
+
+        return mapList;
+    }
+
+    // 文档: https://www.showdoc.cc/773028851719006?page_id=4635997031235007
+    @GetMapping("/rank/complex")
+    public Map<String, Object> getCompoundLogoList(Map<String, Object> map) {
+        HashMap<String, Object> res = new HashMap<>();
+        ArrayList<Logo> lis = this.getSortedLogoList(map, MAX_NUM_RANK, 1);
+        ArrayList<Map<String, Object>> tmp = (ArrayList<Map<String, Object>>)logoListToMapList(lis);
+        int code = 200;
+        if (tmp.size() == 0){
+            code = 501;
+        }
+        res.put("code", code);
+        res.put("data", tmp);
+        return res;
+    }
+
+    // 文档: https://www.showdoc.cc/773028851719006?page_id=4636014022448957
+    @GetMapping("/rank/collect")
+    public Map<String, Object> getCollectLogoList(Map<String, Object> map) {
+        HashMap<String, Object> res = new HashMap<>();
+        ArrayList<Logo> lis = this.getSortedLogoList(map, MAX_NUM_RANK, 3);
+        ArrayList<Map<String, Object>> tmp = (ArrayList<Map<String, Object>>)logoListToMapList(lis);
+        int code = 200;
+        if (tmp.size() == 0){
+            code = 501;
+        }
+        res.put("code", code);
+        res.put("data", tmp);
+
+        return res;
+    }
+
+    // 文档: https://www.showdoc.cc/773028851719006?page_id=4636000129783658
+    @GetMapping("/rank/like")
+    public Map<String, Object> getlikeLogoList(Map<String, Object> map) {
+        HashMap<String, Object> res = new HashMap<>();
+        ArrayList<Logo> lis = this.getSortedLogoList(map, MAX_NUM_RANK, 2);
+        ArrayList<Map<String, Object>> tmp = (ArrayList<Map<String, Object>>)logoListToMapList(lis);
+        int code = 200;
+        if (tmp.size() == 0){
+            code = 501;
+        }
+        res.put("code", code);
+        res.put("data", tmp);
+        return res;
+    }
+
+    @GetMapping("/rank/designer")
+    public Map<String, Object> getDesigner(Map<String, Object> map){
+        HashMap<String, Object> res = new HashMap<>();
+        ArrayList<User> allUsers = (ArrayList<User>)userTemplate.getAllUser(map);
+        allUsers.sort(
+                (a, b) ->
+                        (int)(10000 * (0.3 * (a.getBeLikedCount() - b.getBeLikedCount()) + 0.7 * (a.getBeMarkedCount() - b.getBeMarkedCount() )))
+        );
+        ArrayList<Map<String, Object>> tmp = new ArrayList<>();
+        int n = allUsers.size();
+        for (int i = 0; i < MAX_NUM_RANK && i < n; i++){
+            HashMap<String, Object> m = new HashMap<>();
+            User user = allUsers.get(i);
+            m.put("id", i+1);
+            m.put("author", user.getUsername());
+            m.put("like", user.getBeLikedCount());
+            m.put("collect", user.getBeMarkedCount());
+            m.put("imgUrl", user.getUserPicUrl());
+        }
+        int code = 200;
+        if (tmp.size() == 0){
+            code = 501;
+        }
+        res.put("code", code);
+        res.put("data", tmp);
         return res;
     }
 
