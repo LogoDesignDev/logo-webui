@@ -402,9 +402,9 @@ public class LogoController {
             map.put("token", token);
 
             // 创建gallery test
-            map.put("name", "test");
-            map.put("region", "私有");
-            logoTemplate.addGallery(map);
+//            map.put("name", "test");
+//            map.put("region", "私有");
+//            logoTemplate.addGallery(map);
 
             // add logo
             map.put("base64", bs64);

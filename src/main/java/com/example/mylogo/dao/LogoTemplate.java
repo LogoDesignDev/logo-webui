@@ -189,10 +189,19 @@ public class LogoTemplate {
             User user = mongoTemplate.findOne(query, User.class);
             assert user != null;
 
-            user.addLogo(logo);
+            //图片默认存到第一个图库
+            ObjectId galleryId = user.getGallery().get(0);
+            Query query1 = Query.query(Criteria.where("galleryId").is(galleryId));
+            Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
+            assert gallery != null;
+
             logo.setAuthorId(user.getUserId());
             logo.setAuthorName(user.getUsername());
             logo.setAuthorUrl(user.getUserPicUrl());
+            gallery.addLogo(logo.getLogoId());
+
+            user.addLogo(logo);
+            mongoTemplate.save(gallery,"gallery");
             mongoTemplate.save(logo, "logo");
             mongoTemplate.save(user, "user");
             return 0; //成功存图片
