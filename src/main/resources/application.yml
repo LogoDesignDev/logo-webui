@@ -1,0 +1,24 @@
+server:
+  port: 8900
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  profiles:
+    active: a
+  data:
+    mongodb:
+      host: localhost
+      #host: 47.115.52.184
+      port: 27017
+      database: logo
+      username: root1
+      password: password
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+    timeout: 1000
+
+
