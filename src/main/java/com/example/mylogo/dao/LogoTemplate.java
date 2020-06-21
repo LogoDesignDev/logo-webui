@@ -181,7 +181,7 @@ public class LogoTemplate {
             out.flush();
             out.close();
             Logo logo = new Logo();
-            logo.setUrl("/root/image/" + imgName);
+            logo.setUrl("/image/" + imgName);
 
             //通过token 获取user
             ObjectId userId = redisTokenManager.getUserId(token);
@@ -243,7 +243,6 @@ public class LogoTemplate {
         Query query = Query.query(Criteria.where("logoId").is(logoId));
         Logo logo = mongoTemplate.findOne(query, Logo.class);
         assert logo != null; //确保logo存在
-        logo.setPublished(true);
         mongoTemplate.save(logo, "logo");
         return 0;
     }
@@ -415,6 +414,9 @@ public class LogoTemplate {
         assert gallery != null;
 
         gallery.addLogo(logo.getLogoId());
+
+        user.addLogo(logo);
+        mongoTemplate.save(user, "user");
 
         HashMap<String,Object> res = new HashMap<>();
         res.put("logoid",logo.getLogoId().toString());

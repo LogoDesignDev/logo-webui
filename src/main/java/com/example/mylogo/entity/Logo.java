@@ -9,9 +9,9 @@ public class Logo {
 
     @Id
     private ObjectId logoId;
+    private String lId; // logoId的toString
     private String title;
     private ObjectId authorId;
-    private boolean published; //是否是已经发布的或者私有
     private String introduce; //logo的介绍
     private String url; //图片的路径
     private String name;//图片的名字
@@ -23,7 +23,7 @@ public class Logo {
 
     public Logo() {
         logoId = new ObjectId();
-        published = false;
+        lId = logoId.toString();
         like = 0;
         collect = 0;
     }
@@ -89,15 +89,6 @@ public class Logo {
 
     public void setAuthorId(ObjectId authorId) {
         this.authorId = authorId;
-    }
-
-
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
     }
 
     public void setLogoId(ObjectId logoId) {

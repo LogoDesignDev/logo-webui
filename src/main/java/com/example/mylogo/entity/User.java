@@ -22,7 +22,6 @@ public class User {
     private String userPicUrl;//用户头像url
     private List<ObjectId> gallery;   //用户图库
     private int galleryidCount; //计算图库数量
-
     private List<Logo> logoList;
     private List<ObjectId> markedLogoList;
     private List<ObjectId> starLogoList;
@@ -84,8 +83,6 @@ public class User {
         this.password = password;
     }
 
-
-
     public String getEmail() {
         return email;
     }
@@ -101,7 +98,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public List<Logo> getLogoList() {
         return logoList;
