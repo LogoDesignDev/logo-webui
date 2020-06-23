@@ -203,6 +203,8 @@ public class LogoTemplate {
             logo.setAuthorId(user.getUserId());
             logo.setAuthorName(user.getUsername());
             logo.setAuthorUrl(user.getUserPicUrl());
+            Random r = new Random(1);
+            logo.setName("test"+r.nextInt(100));
             gallery.addLogo(logo.getLogoId());
 
             user.addLogo(logo);
@@ -671,16 +673,16 @@ public class LogoTemplate {
                 .include("authorUrl");
         List<Logo> list = mongoTemplate.find(query, Logo.class);
         List<Logo> logoList = new ArrayList<>();
-        if(order == 1){
+        if(datetime == 1){
             logoList = cheakdate(list,1);
         }
-        else if(order == 2){
+        else if(datetime == 2){
             logoList = cheakdate(list,7);
         }
-        else if(order == 3){
+        else if(datetime == 3){
             logoList = cheakdate(list,30);
         }
-        else {
+        else if(datetime == 4){
             logoList = list;
         }
         Comparator<Logo> comparator = null;
@@ -743,13 +745,17 @@ public class LogoTemplate {
     * */
     public List<Logo> cheakdate(List<Logo> list,int day) throws ParseException {
         List<Logo> list1 = new ArrayList<>();
+
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar =Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.DATE,calendar.get(Calendar.DATE) - day);
+        //前day天日期
         String pastDay = sdf.format(calendar.getTime());
+        //当天日期
         String today = sdf.format(date);
+
         Date beginTime = sdf.parse(today);
         Date endTime = sdf.parse(pastDay);
         //当天的日期
@@ -768,7 +774,7 @@ public class LogoTemplate {
                 list1.add(logo);
             }
         }
-        return null;
+        return list1;
     }
 
 }

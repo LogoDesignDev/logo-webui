@@ -375,7 +375,7 @@ public class LogoController {
     }
 
     @PostMapping("/search/prod")
-    public Map<String, Object> findUserByKeyword(@RequestBody Map<String, Object>map) throws ParseException {
+    public Map<String, Object> findLogoByKeyword(@RequestBody Map<String, Object>map) throws ParseException {
         HashMap<String, Object> res = new HashMap<>();
         List<Logo> authorList = logoTemplate.findLogoByKeyword(map);
         res.put("pordList", authorList);
