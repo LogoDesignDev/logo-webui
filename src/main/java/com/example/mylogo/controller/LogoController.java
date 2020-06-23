@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -370,6 +371,15 @@ public class LogoController {
             res.put("code",200);
             res.put("url",url);
         }
+        return res;
+    }
+
+    @PostMapping("/search/prod")
+    public Map<String, Object> findUserByKeyword(@RequestBody Map<String, Object>map) throws ParseException {
+        HashMap<String, Object> res = new HashMap<>();
+        List<Logo> authorList = logoTemplate.findLogoByKeyword(map);
+        res.put("pordList", authorList);
+        res.put("code", 200);
         return res;
     }
 

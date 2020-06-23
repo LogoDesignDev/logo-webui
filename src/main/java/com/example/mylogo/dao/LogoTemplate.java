@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.net.URL;
@@ -195,6 +196,10 @@ public class LogoTemplate {
             Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
             assert gallery != null;
 
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String publishTime = formatter.format(date);
+            logo.setPublishedTime(publishTime);
             logo.setAuthorId(user.getUserId());
             logo.setAuthorName(user.getUsername());
             logo.setAuthorUrl(user.getUserPicUrl());
@@ -417,6 +422,10 @@ public class LogoTemplate {
         logo.setAuthorName(logoauthor);
         logo.setAuthorUrl(user.getUserPicUrl());
         logo.setAuthorId(userid);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String updatetime = formatter.format(date);
+        logo.setPublishedTime(updatetime);
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
@@ -612,7 +621,7 @@ public class LogoTemplate {
             return null;
         }*/
 
-        Query query = Query.query(Criteria.where("published").is(true));
+        Query query = new Query();
         //获取所有的已发布的logo
         return mongoTemplate.find(query, Logo.class);
     }
@@ -644,9 +653,10 @@ public class LogoTemplate {
     /*
    根据关键词搜索Logo
     */
-    public List<Logo> findLogoByKeyword(Map<String, Object>map){
+    public List<Logo> findLogoByKeyword(Map<String, Object>map) throws ParseException {
         String keyword = (String) map.get("keyword");
         int order = (int) map.get("order");
+        int datetime = (int)map.get("datetime");
         Query query = new Query();
         query.addCriteria(Criteria.where("name").regex(".*?" + keyword + ".*?"));
         query.fields().include("logoId")
@@ -659,8 +669,20 @@ public class LogoTemplate {
                 .include("authorId")
                 .include("authorName")
                 .include("authorUrl");
-
         List<Logo> list = mongoTemplate.find(query, Logo.class);
+        List<Logo> logoList = new ArrayList<>();
+        if(order == 1){
+            logoList = cheakdate(list,1);
+        }
+        else if(order == 2){
+            logoList = cheakdate(list,7);
+        }
+        else if(order == 3){
+            logoList = cheakdate(list,30);
+        }
+        else {
+            logoList = list;
+        }
         Comparator<Logo> comparator = null;
         if(order == 1){
             comparator = new Comparator<Logo>() {
@@ -687,10 +709,10 @@ public class LogoTemplate {
             };
         }
         if(comparator != null){
-            Collections.sort(list, comparator);
+            Collections.sort(logoList, comparator);
         }
 
-        return list;
+        return logoList;
     }
 
     /*
@@ -714,6 +736,39 @@ public class LogoTemplate {
             return null;
         }
 
+    }
+
+    /*
+    获取相应时间段logo
+    * */
+    public List<Logo> cheakdate(List<Logo> list,int day) throws ParseException {
+        List<Logo> list1 = new ArrayList<>();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar =Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE,calendar.get(Calendar.DATE) - day);
+        String pastDay = sdf.format(calendar.getTime());
+        String today = sdf.format(date);
+        Date beginTime = sdf.parse(today);
+        Date endTime = sdf.parse(pastDay);
+        //当天的日期
+        Calendar dateNow = Calendar.getInstance();
+        dateNow.setTime(beginTime);
+        //前day天的日期
+        Calendar dateEnd = Calendar.getInstance();
+        dateEnd.setTime(endTime);
+
+        for(Logo logo:list){
+            String logoday = logo.getPublishedTime();
+            Date logoTime = sdf.parse(logoday);
+            Calendar dateLogo = Calendar.getInstance();
+            dateLogo.setTime(logoTime);
+            if(dateLogo.after(dateEnd)&&dateLogo.before(dateNow)){
+                list1.add(logo);
+            }
+        }
+        return null;
     }
 
 }
