@@ -4,6 +4,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Document(collection = "logo")
 public class Logo {
 
@@ -26,6 +29,9 @@ public class Logo {
         lId = logoId.toString();
         like = 0;
         collect = 0;
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        publishedTime = formatter.format(date);
     }
     public void setAuthorUrl(String url){this.authorUrl = url;}
 

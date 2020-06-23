@@ -196,10 +196,6 @@ public class LogoTemplate {
             Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
             assert gallery != null;
 
-            Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String publishTime = formatter.format(date);
-            logo.setPublishedTime(publishTime);
             logo.setAuthorId(user.getUserId());
             logo.setAuthorName(user.getUsername());
             logo.setAuthorUrl(user.getUserPicUrl());
@@ -424,10 +420,6 @@ public class LogoTemplate {
         logo.setAuthorName(logoauthor);
         logo.setAuthorUrl(user.getUserPicUrl());
         logo.setAuthorId(userid);
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String updatetime = formatter.format(date);
-        logo.setPublishedTime(updatetime);
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
@@ -665,6 +657,7 @@ public class LogoTemplate {
                 .include("name")
                 .include("title")
                 .include("introduce")
+                .include("publishedTime")
                 .include("url")
                 .include("like")
                 .include("collect")
