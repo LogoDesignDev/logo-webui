@@ -11,7 +11,7 @@
       </div>
       <div class="right">
         <card  v-for="(item, index) in rankList" :key="index"
-        :src="item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect"></card>
+        :src="item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect" @click="goDetail"></card>
         <div></div>
       </div>
     </div>
@@ -20,7 +20,7 @@
 
 <script>
 import card from './components/card'
-import axios from 'axios'
+import { getComplex, getCollect, getLike, getDesigner } from 'api/rank'
 export default {
   name: 'rank',
   components: {
@@ -98,7 +98,7 @@ export default {
         this.effect2 = 'plain'
         this.effect3 = 'plain'
         this.effect4 = 'plain'
-        axios.get('/api/logo.json').then(this.selectComplexSucc)
+        getComplex().then(this.selectComplexSucc)
       }
     },
     selectComplexSucc (res) {
@@ -113,7 +113,7 @@ export default {
         this.effect2 = 'dark'
         this.effect3 = 'plain'
         this.effect4 = 'plain'
-        axios.get('/api/logo.json').then(this.selectLikeSucc)
+        getLike().then(this.selectLikeSucc)
       }
     },
     selectLikeSucc (res) {
@@ -128,7 +128,7 @@ export default {
         this.effect2 = 'plain'
         this.effect3 = 'dark'
         this.effect4 = 'plain'
-        axios.get('/api/logo.json').then(this.selectCollectSucc)
+        getCollect().then(this.selectCollectSucc)
       }
     },
     selectCollectSucc (res) {
@@ -143,7 +143,7 @@ export default {
         this.effect2 = 'plain'
         this.effect3 = 'plain'
         this.effect4 = 'dark'
-        axios.get('/api/logo.json').then(this.selectDesignSucc)
+        getDesigner().then(this.selectDesignSucc)
       }
     },
     selectDesignSucc (res) {

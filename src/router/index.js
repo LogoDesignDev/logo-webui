@@ -44,7 +44,7 @@ const routes = [
     component: () => import('../views/mylogo/Detail.vue')
   },
   {
-    path: '/mylogo/detail/:galleryid/:logoid',
+    path: '/mylogo/logodetail/:logoid',
     name: 'LogoDetail',
     hidden: true,
     component: () => import('../views/mylogo/LogoDetail.vue')

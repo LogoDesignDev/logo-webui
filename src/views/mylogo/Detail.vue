@@ -43,9 +43,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { getToken } from 'utils/auth'
-import { deletelogoById } from 'api/mylogo'
+import { deletelogoById, getGalleryDetailInfo } from 'api/mylogo'
 import store from 'store'
 import AddLogo from './components/Addlogo'
 export default {
@@ -125,11 +124,7 @@ export default {
         token: getToken(),
         id: this.galleryid
       }
-      axios.post('/api/mylogo/id', postdata, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(this.handleGetDetailSucc)
+      getGalleryDetailInfo(postdata).then(this.handleGetDetailSucc)
     },
     handleGetDetailSucc (res) {
       res = res.data
@@ -139,10 +134,7 @@ export default {
     },
     goDetail (id, url) {
       this.$router.push({
-        path: `/mylogo/detail/${this.$route.params.id}/${id}`,
-        query: {
-          param: url
-        }
+        path: `/mylogo/logodetail/${id}`
       })
     },
     toLogin () {
