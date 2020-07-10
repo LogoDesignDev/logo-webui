@@ -605,7 +605,8 @@ public class LogoTemplate {
     }
 
     /*
-    获取所有已发布的logo
+    #获取所有已发布的logo
+    获取所有的logo
     存在mongo
      */
     public List<Logo> getAllPublishedLogo(Map<String, Object> map){
@@ -615,9 +616,9 @@ public class LogoTemplate {
             return null;
         }*/
 
-        Query query = new Query();
-        //获取所有的已发布的logo
-        return mongoTemplate.find(query, Logo.class);
+        // Query query = Query.query(Criteria.where("published").is(true));
+        // 获取所有的已发布的logo
+        return mongoTemplate.findAll(Logo.class);
     }
 
 

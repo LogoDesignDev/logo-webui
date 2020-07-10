@@ -434,30 +434,27 @@ public class LogoController {
         return res;
     }
 
-
-
-
     // 2020-06-20
     // 1 - compound
     // 2 - like
     // 3 - collection
     private ArrayList<Logo> getSortedLogoList(Map<String, Object> map, int max_num, int type){
-        ArrayList<Logo> allLogo = (ArrayList)logoTemplate.getAllPublishedLogo(map);
+        ArrayList<Logo> allLogo = (ArrayList<Logo>)logoTemplate.getAllPublishedLogo(map);
         ArrayList<Logo> res = new ArrayList<>();
 
         switch (type) {
             case 1: // compound
-                res.sort((a, b) ->
+                allLogo.sort((a, b) ->
                         (int) (10000 * (0.6 * a.getCollect() + 0.4 * a.getLike()) - (0.6 * b.getCollect() + 0.4 * b.getLike()))
                 );
                 break;
             case 2: // by like
-                res.sort(
+                allLogo.sort(
                         (a, b) -> (int) (10000 * (a.getLike() - b.getLike()))
                 );
                 break;
             case 3: // by collection
-                res.sort(
+                allLogo.sort(
                         (a, b) -> (int) (10000 * (a.getCollect() - b.getCollect()))
                 );
                 break;
@@ -465,7 +462,7 @@ public class LogoController {
         Collections.reverse(res);
         int n = allLogo.size();
         for (int i = 0; i < n && i < max_num; i++){
-            res.add(res.get(i));
+            res.add(allLogo.get(i));
         }
         return res;
     }
@@ -554,6 +551,8 @@ public class LogoController {
             m.put("like", user.getBeLikedCount());
             m.put("collect", user.getBeMarkedCount());
             m.put("imgUrl", user.getUserPicUrl());
+
+            tmp.add(m);
         }
         int code = 200;
         if (tmp.size() == 0){
