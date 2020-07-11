@@ -2,7 +2,7 @@
   <div class="authorResultCardContainer">
     <!-- 左边用户信息区 -->
     <div class="leftContainer">
-      <div>
+      <div @click="toPersonal" style="cursor: pointer;">
         <img class="userPic-middle" :src="serverPrx + data.userPicUrl" />
         <div class="title-2">{{ data.username }}</div>
       </div>
@@ -26,10 +26,10 @@
     <!-- 右边作品展示区 -->
     <div class="rightContainer">
       <div class="prodCard" v-if="data.logoList[0]">
-        <img class="prodPic" :src="serverPrx + data.logoList[0].url">
+        <img class="prodPic" :src="serverPrx + (data.logoList[0].url[0]==='/'?'':'/') + data.logoList[0].url">
       </div>
       <div class="prodCard" v-if="data.logoList[1]">
-        <img class="prodPic" :src="serverPrx + data.logoList[1].url">
+        <img class="prodPic" :src="serverPrx + (data.logoList[1].url[0]==='/'?'':'/') + data.logoList[1].url">
       </div>
     </div>
   </div>
@@ -87,7 +87,8 @@
   width:  200px;
   height: 140px;
   border-radius: 5px;
-  background: black;
+  border: 1px solid #DCDFE6;
+  /* background: black; */
 }
 
 .prodPic {
@@ -118,6 +119,15 @@ export default {
      */
     transition (num) {
       return num < 1000 ? num : (num / 1000).toFixed(1) + 'K'
+    },
+
+    toPersonal () {
+      this.$router.push({
+        path: '/personal',
+        query: {
+          uid: this.data.uId
+        }
+      })
     }
   }
 }

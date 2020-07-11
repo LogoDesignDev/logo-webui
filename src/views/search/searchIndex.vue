@@ -56,6 +56,7 @@
       </el-select>
     </div>
     <!-- 作品搜索结果 -->
+    <prod :list="prodList" :page="search.page" @pageChange="handlePageChange" />
     <!-- 设计师搜索结果 -->
     <designer :list="authorList" :page="search.page" @pageChange="handlePageChange" />
     <!-- 没有搜索到结果 -->
@@ -73,6 +74,7 @@
 
 <style scoped>
 .searchContainer {
+  min-height: 700px;
   padding-bottom: 50px;
   display: flex;
   flex-direction: column;
@@ -206,11 +208,13 @@
 </style>
 
 <script>
-import designer from './designer/designerIndex'
+import prod from './prod'
+import designer from './designer'
 import { searchAuthor, searchProd } from 'api/search'
 
 export default {
   components: {
+    prod,
     designer
   },
 
@@ -355,12 +359,17 @@ export default {
 
     updateProdList () {
       this.loading = true
-      searchProd().then((res) => {
+      const params = {
+        keyword: this.keyword,
+        order: Number(this.search.designerOrder),
+        datetime: Number(this.search.datetime)
+      }
+      searchProd(params).then((res) => {
         // ———— 成功回调 ————
         const data = res.data
         switch (data.code) {
           case 200:
-            this.authorList = data.authorList
+            this.prodList = data.pordList // 这里接口的pord拼错了
             break
         }
       }).catch((err) => {

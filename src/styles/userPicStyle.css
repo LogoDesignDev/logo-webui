@@ -5,6 +5,14 @@
   border: 1px solid #E4E7ED;
 }
 
+.userPic-minimini {
+  /* margin-right: 5px; */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #E4E7ED;
+}
+
 .userPic-mini {
   /* margin-right: 5px; */
   width: 30px;
