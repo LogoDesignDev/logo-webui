@@ -480,6 +480,7 @@ public class LogoController {
             m.put("like", logo.getLike());
             m.put("collect", logo.getCollect());
             m.put("imgUrl", logo.getUrl());
+            m.put("logoid", logo.getLogoId().toString());
 
             mapList.add(m);
         }

@@ -621,8 +621,6 @@ public class LogoTemplate {
         return mongoTemplate.findAll(Logo.class);
     }
 
-
-
     /*
     TODO: 2020-05-21
     获取一个Logo
