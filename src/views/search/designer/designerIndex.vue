@@ -4,10 +4,11 @@
       <div class="authorCard" v-for="(info, index) in pageView.pageList" :key="index">
         <authorResultCard :data="info" />
         <!-- 最后一个不需要分割线 -->
-        <el-divider v-if="index !== pageView.pageList.length - 1"/>
+        <div class="line" v-if="index !== pageView.pageList.length - 1"/>
       </div>
     </div>
     <el-pagination
+      v-if="list.length !== 0"
       layout="prev, pager, next"
       :total="pageView.total"
       :page-size="pageView.pageSize"
@@ -41,6 +42,13 @@
 
 .el-pagination /deep/ * {
   background: none !important;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  transform: scaleY(0.5);
+  background: #DCDFE6;
 }
 </style>
 

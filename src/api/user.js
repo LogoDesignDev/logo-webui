@@ -1,4 +1,5 @@
 import request from 'utils/request'
+import nodeRequest from 'utils/nodeRequest'
 
 export function login (params) {
   return request.post('/user/login', params)
@@ -10,6 +11,10 @@ export function register (params) {
 
 export function getUserInfo (params) {
   return request.post('/user/getUserInfo', params)
+}
+
+export function getUserInfoByUid (params) {
+  return nodeRequest.get('/user/getUserInfoByUid', { params })
 }
 
 export function getUserPic (params) {

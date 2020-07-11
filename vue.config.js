@@ -18,6 +18,15 @@ module.exports = {
         pathRewrite: { // 重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'
           '^/api': ''
         }
+      },
+      '/node': {
+        // target: 'http://47.115.52.184:8900',
+        target: 'http://0.0.0.0:3000',
+        ws: true, // 代理websockets
+        changeOrigin: true, // 虚拟的站点需要更管origin
+        pathRewrite: { // 重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'
+          '^/node': ''
+        }
       }
     }
   },

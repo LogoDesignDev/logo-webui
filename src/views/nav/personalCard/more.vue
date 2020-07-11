@@ -9,16 +9,16 @@
       <div id="right">
         <span class="title-2">{{ userInfo.username }}</span>
         <div>
-          <number-show text="关注" number="100" to="/personal?mode=follow" />
-          <number-show text="粉丝" number="100" to="/personal?mode=fans" />
-          <number-show text="作品" number="100" to="/personal" />
+          <number-show text="关注" :number="userInfo.followCount" to="/personal?mode=follow" />
+          <number-show text="粉丝" :number="userInfo.fansCount" to="/personal?mode=fans" />
+          <number-show text="作品" :number="userInfo.prodCount" to="/personal" />
         </div>
       </div>
     </div>
     <el-divider />
     <!-- 跳转 -->
     <div id="linkTo">
-      <link-card icon="el-icon-user" text="个人主页" to="/personal" />
+      <link-card icon="el-icon-user" text="个人主页" :to="'/personal?uid=' + userInfo.uid" />
       <link-card icon="el-icon-document" text="我的作品" to="/personal" />
     </div>
     <el-divider />

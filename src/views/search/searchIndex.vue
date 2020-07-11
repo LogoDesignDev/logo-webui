@@ -6,7 +6,7 @@
       <div>
         <!-- 搜索框 -->
         <div id="search-input">
-          <input placeholder="请输入您要查找的内容" v-model="search.keyword">
+          <input placeholder="请输入您要查找的内容" v-model="keyword">
           <button class="el-icon-search" @click="searchClicked" style="cursor: pointer;" />
         </div>
         <!-- radio -->
@@ -58,6 +58,16 @@
     <!-- 作品搜索结果 -->
     <!-- 设计师搜索结果 -->
     <designer :list="authorList" :page="search.page" @pageChange="handlePageChange" />
+    <!-- 没有搜索到结果 -->
+    <div
+      v-if="!loading && ((search.mode === 'prod' && prodList.length === 0) || (search.mode === 'designer' && authorList.length === 0))"
+      class="nullView">
+      <iconfont name="icon-null" style="font-size: 140px;"/>
+      <div class="nullText">
+        <div class="nullTitle">抱歉，没有找到相关内容~</div>
+        <div class="nullTips">去看看推荐吧！</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -168,6 +178,31 @@
   background: rgb(245, 247, 250);
 }
 
+.nullView {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nullText {
+  padding-top: 30px;
+  margin-left: 30px;
+}
+
+.nullTitle {
+  line-height: 40px;
+  color: rgb(160, 207, 255);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.nullTips {
+  color: #C0C4CC;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 </style>
 
 <script>
@@ -182,8 +217,8 @@ export default {
   data () {
     return {
       searchHistoryKey: 'searchHistory', // localStorage的key
+      keyword: this.$route.query.keyword,
       search: {
-        keyword: this.$route.query.keyword,
         mode: this.$route.query.mode,
         prodOrder: Number(this.$route.query.prodOrder),
         designerOrder: Number(this.$route.query.designerOrder),
@@ -232,37 +267,41 @@ export default {
         }]
       },
       authorList: [],
-      prodList: []
+      prodList: [],
+      loading: false
     }
   },
 
   watch: {
-    'search.mode' (val) {
-      this.$router.push({
-        path: '/search?mode=' + this.search.mode +
-          '&keyword=' + this.search.keyword +
-          '&prodOrder=' + this.search.prodOrder +
-          '&designerOrder=' + this.search.designerOrder +
-          '&datetime=' + this.search.datetime +
-          '&page=' + this.search.page +
-          '&randomParam=5da5JR%2B8Zfnbdl41Qr49%2BLKa8sxppt5qpwn7JmqF1HAm3ZI4g7VeuEmCmfE' + Math.random()
-      })
-    },
-
-    'search.page' (val) {
-      this.$router.push({
-        path: '/search?mode=' + this.search.mode +
-          '&keyword=' + this.search.keyword +
-          '&prodOrder=' + this.search.prodOrder +
-          '&designerOrder=' + this.search.designerOrder +
-          '&datetime=' + this.search.datetime +
-          '&page=' + this.search.page +
-          '&randomParam=5da5JR%2B8Zfnbdl41Qr49%2BLKa8sxppt5qpwn7JmqF1HAm3ZI4g7VeuEmCmfE' + Math.random()
-      })
+    searchData: {
+      handler (newVal, oldVal) {
+        // 当变更前后的页码一样，说明并不是切换页，所以要把页码置1
+        if (newVal.page === oldVal.page) {
+          this.search.page = 1
+        }
+        this.$router.push({
+          path: '/search?mode=' + this.search.mode +
+            '&keyword=' + this.keyword +
+            '&prodOrder=' + this.search.prodOrder +
+            '&designerOrder=' + this.search.designerOrder +
+            '&datetime=' + this.search.datetime +
+            '&page=' + this.search.page +
+            '&randomParam=5da5JR%2B8Zfnbdl41Qr49%2BLKa8sxppt5qpwn7JmqF1HAm3ZI4g7VeuEmCmfE' + Math.random()
+        })
+      },
+      deep: true
     },
 
     '$route' (val) {
       this.$router.go(0)
+    }
+  },
+
+  computed: {
+    // 这里用上computed属性是因为直接watch直接监听对象的时候
+    // handler中的newVal与oldVal是一样的
+    searchData () {
+      return JSON.parse(JSON.stringify(this.search))
     }
   },
 
@@ -281,7 +320,7 @@ export default {
     searchClicked () {
       this.$router.push({
         path: '/search?mode=' + this.search.mode +
-          '&keyword=' + this.search.keyword +
+          '&keyword=' + this.keyword +
           '&prodOrder=' + this.search.prodOrder +
           '&designerOrder=' + this.search.designerOrder +
           '&datetime=' + this.search.datetime +
@@ -295,8 +334,9 @@ export default {
     },
 
     updateAuthorList () {
+      this.loading = true
       const params = {
-        keyword: this.search.keyword,
+        keyword: this.keyword,
         order: Number(this.search.designerOrder)
       }
       searchAuthor(params).then((res) => {
@@ -309,11 +349,24 @@ export default {
         }
       }).catch((err) => {
       }).finally(() => {
+        this.loading = false
       })
     },
 
     updateProdList () {
-      searchProd()
+      this.loading = true
+      searchProd().then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.authorList = data.authorList
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+        this.loading = false
+      })
     }
   }
 }
