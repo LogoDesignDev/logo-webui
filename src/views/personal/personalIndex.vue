@@ -18,7 +18,7 @@
           <input
             id="personal-3" class="optRadio" v-model="mode"
             type="radio" value="fans" />
-          <label class="optText" for="personal-3">粉丝CITEST · {{ userInfo.fansCount }}</label>
+          <label class="optText" for="personal-3">粉丝CITEST2 · {{ userInfo.fansCount }}</label>
         </div>
         <!-- 创作页 -->
         <prod v-if="mode==='prod'" :data="uid" />
