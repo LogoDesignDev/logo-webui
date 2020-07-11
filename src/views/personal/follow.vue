@@ -63,7 +63,7 @@
 
 <style>
 .el-pagination.is-background .el-pager li {
-  background-color: white !important;
+  background: rgb(226, 234, 250) !important;
 }
 
 .el-pagination.is-background .el-pager li.active {
