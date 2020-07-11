@@ -9,7 +9,7 @@
   /* margin-right: 5px; */
   width: 30px;
   height: 30px;
-  border-radius: 15px;
+  border-radius: 50%;
   border: 1px solid #E4E7ED;
 }
 
@@ -17,7 +17,14 @@
   /* margin-right: 5px; */
   width: 60px;
   height: 60px;
-  border-radius: 30px;
+  border-radius: 50%;
   border: 1px solid #E4E7ED;
 }
 
+.userPic-large {
+  /* margin-right: 5px; */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid #E4E7ED;
+}

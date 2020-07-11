@@ -79,7 +79,6 @@
 }
 
 .footer {
-  margin-top: 20px;
   height: 200px;
   display: flex;
   align-items: center;

@@ -52,9 +52,11 @@ export default {
      * 转到个人主页
      */
     toPersonal () {
-      console.log('22')
       this.$router.push({
-        path: '/personal'
+        path: '/personal',
+        query: {
+          uid: store.state.userInfo.uid
+        }
       })
     },
 

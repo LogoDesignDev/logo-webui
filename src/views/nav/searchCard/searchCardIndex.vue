@@ -15,12 +15,12 @@
         <label class="search-mode-text" for="1">作品</label>
         <input
           id="2" class="search-mode-radio" v-model="search.mode"
-          type="radio" value="user" />
+          type="radio" value="designer" />
         <label class="search-mode-text" for="2">设计师</label>
       </div>
       <!-- 搜索框 -->
       <div id="search-input">
-        <el-input placeholder="请输入您要查找的内容" v-model="search.text">
+        <el-input placeholder="请输入您要查找的内容" v-model="search.keyword">
           <el-button id="search-btn" slot="append" @click="toSearch">搜索</el-button>
         </el-input>
       </div>
@@ -148,7 +148,7 @@ export default {
     return {
       searchHistoryKey: 'searchHistory', // localStorage的key
       search: {
-        text: '',
+        keyword: '',
         mode: 'prod'
       },
       history: []
@@ -175,7 +175,7 @@ export default {
     /**
      * 删除某个记录
      */
-    delHistory (text, index) {
+    delHistory (keyword, index) {
       this.history.splice(index, 1)
       // 删除之后重新拼接存储
       let str = ''
@@ -207,7 +207,13 @@ export default {
      */
     toSearch () {
       this.$router.push({
-        path: '/search'
+        path: '/search?mode=' + this.search.mode +
+          '&keyword=' + this.search.keyword +
+          '&prodOrder=1' +
+          '&designerOrder=1' +
+          '&datetime=4' +
+          '&page=1' +
+          '&randomParam=5da5JR%2B8Zfnbdl41Qr49%2BLKa8sxppt5qpwn7JmqF1HAm3ZI4g7VeuEmCmfE' + Math.random()
       })
     }
   }
