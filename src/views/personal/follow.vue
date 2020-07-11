@@ -3,7 +3,7 @@
     <!-- 空提示 -->
     <div class="notFoundView" v-if="followList.length === 0">
       <iconfont name="icon-null" style="font-size: 150px;" />
-      <span class="tips">还没有关注的人</span>
+      <span class="tips">还没有关注的人eeee</span>
     </div>
 
     <!-- 列表 -->
