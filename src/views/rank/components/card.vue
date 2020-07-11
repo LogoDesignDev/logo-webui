@@ -3,11 +3,11 @@
     <div class="content">
       <div class="left">{{ this.$props.id }}</div>
       <div class="img">
-        <el-image class="smallImg" :src="src" :fit="fit"></el-image>
+        <el-image class="smallImg" :src="src" :fit="fit" @click="goDetail(id, src)"></el-image>
       </div>
       <div class="right">
         <div class="name">Air Jordan 1</div>
-        <div class="author"> linyuhan</div>
+        <div class="author">{{ this.$props.author }}</div>
       </div>
       <div class="collect">
         <iconfont class="iconFont" name="icon-collect" />{{ collect }}
@@ -19,10 +19,20 @@
 
 <script>
 export default {
-  props: ['src', 'id', 'like', 'collect'],
+  props: ['src', 'id', 'like', 'collect', 'author'],
   data () {
     return {
       fit: 'fill'
+    }
+  },
+  methods: {
+    goDetail (id, url) {
+      this.$router.push({
+        path: `/mylogo/logodetail/${id}`,
+        query: {
+          mode: url
+        }
+      })
     }
   }
 }

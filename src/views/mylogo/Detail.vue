@@ -134,7 +134,10 @@ export default {
     },
     goDetail (id, url) {
       this.$router.push({
-        path: `/mylogo/logodetail/${id}`
+        path: `/mylogo/logodetail/${id}`,
+        query: {
+          mode: url
+        }
       })
     },
     toLogin () {

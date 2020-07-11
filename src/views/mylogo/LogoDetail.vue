@@ -48,7 +48,7 @@ export default {
       like: 0,
       author: null,
       name: null,
-      src: this.$route.query.param,
+      src: this.$route.query.mode,
       fit: 'contain',
       galleryid: this.$route.params.galleryid,
       logoid: this.$route.params.logoid,
@@ -60,9 +60,6 @@ export default {
       this.$router.go(-1)
     },
     singleLogoInfo () {
-      console.log(this.galleryid)
-      console.log(this.logoid)
-      console.log(getToken())
       const postdata = {
         token: getToken(),
         logoid: this.logoid

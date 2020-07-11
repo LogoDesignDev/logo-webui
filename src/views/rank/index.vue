@@ -11,7 +11,7 @@
       </div>
       <div class="right">
         <card  v-for="(item, index) in rankList" :key="index"
-        :src="item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect" @click="goDetail"></card>
+        :author="item.author" :src="'http://47.115.52.184:8900'+item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect"></card>
         <div></div>
       </div>
     </div>
@@ -32,62 +32,7 @@ export default {
       effect2: 'plain',
       effect3: 'plain',
       effect4: 'plain',
-      rankList: [{
-        id: 1,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 2,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 3,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }, {
-        id: 4,
-        imgUrl: 'https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=488030022,1694816207&fm=173&app=25&f=JPEG?w=580&h=347&s=A08FB35A5E0616C664F5631C030010D6',
-        like: 123,
-        collect: 235
-      }]
+      rankList: []
     }
   },
   methods: {
@@ -103,8 +48,8 @@ export default {
     },
     selectComplexSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        this.rankList = res.data.items
+      if (res.code === 200) {
+        this.rankList = res.data
       }
     },
     selectLike () {
@@ -118,8 +63,8 @@ export default {
     },
     selectLikeSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        this.rankList = res.data.items
+      if (res.code === 200) {
+        this.rankList = res.data
       }
     },
     selectCollect () {
@@ -133,8 +78,8 @@ export default {
     },
     selectCollectSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        this.rankList = res.data.items
+      if (res.code === 200) {
+        this.rankList = res.data
       }
     },
     selectDesign () {
@@ -148,8 +93,8 @@ export default {
     },
     selectDesignSucc (res) {
       res = res.data
-      if (res.ret && res.data) {
-        this.rankList = res.data.items
+      if (res.code === 200) {
+        this.rankList = res.data
       }
     }
   },
