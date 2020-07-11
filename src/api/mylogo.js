@@ -45,3 +45,7 @@ export function collectPlus (params) {
 export function collectLess (params) {
   return request.post('/mylogo/uncollect', params)
 }
+
+export function likePlus (params) {
+  return request.post('/mylogo/like', params)
+}

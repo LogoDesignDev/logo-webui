@@ -3,14 +3,14 @@
     <div class="content">
       <div class="left">{{ this.$props.id }}</div>
       <div class="img">
-        <el-image class="smallImg" :src="src" :fit="fit" @click="goDetail(id, src)"></el-image>
+        <el-image class="smallImg" :src="src" :fit="fit" @click="goDetail(logoid, src)"></el-image>
       </div>
       <div class="right">
         <div class="name">Air Jordan 1</div>
         <div class="author">{{ this.$props.author }}</div>
       </div>
       <div class="collect">
-        <iconfont class="iconFont" name="icon-collect" />{{ collect }}
+        <iconfont class="iconFont" name="icon-collect" />{{ like }}
       </div>
     </div>
     <el-divider></el-divider>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  props: ['src', 'id', 'like', 'collect', 'author'],
+  props: ['src', 'id', 'like', 'collect', 'author', 'logoid'],
   data () {
     return {
       fit: 'fill'
@@ -58,6 +58,7 @@ export default {
     height: 100px;
     width: 100px;
     border-radius: 5px;
+    cursor: pointer;
   }
   .right {
     flex: 0.4;

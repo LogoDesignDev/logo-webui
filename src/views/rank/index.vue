@@ -11,7 +11,7 @@
       </div>
       <div class="right">
         <card  v-for="(item, index) in rankList" :key="index"
-        :author="item.author" :src="'http://47.115.52.184:8900'+item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect"></card>
+        :author="item.author" :src="'http://47.115.52.184:8900'+item.imgUrl" :id="item.id" :like="item.like" :collect="item.collect" :logoid="item.logoid"></card>
         <div></div>
       </div>
     </div>

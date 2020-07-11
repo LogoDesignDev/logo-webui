@@ -16,7 +16,7 @@
             <el-button @click="collectChange" type="warning" :icon="icon" class="button-collect"> {{ this.collect }}</el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="点赞" placement="bottom">
-            <el-button type="danger" icon="el-icon-message-solid" class="button-like"> {{ this.like }}</el-button>
+            <el-button @click="likeChange" type="danger" icon="el-icon-message-solid" class="button-like"> {{ this.like }}</el-button>
           </el-tooltip>
         </div>
         <div class="content3">
@@ -35,7 +35,7 @@
 
 <script>
 import recommend from './components/recommend'
-import { getLogoDetail, collectPlus, collectLess } from 'api/mylogo'
+import { getLogoDetail, collectPlus, collectLess, likePlus } from 'api/mylogo'
 import { getToken } from 'utils/auth'
 export default {
   name: 'LogoDetail',
@@ -94,6 +94,8 @@ export default {
               type: 'success'
             })
           }
+          this.icon = 'el-icon-star-on'
+          this.singleLogoInfo()
         })
         this.singleLogoInfo()
       } else {
@@ -110,9 +112,29 @@ export default {
               type: 'warning'
             })
           }
+          this.icon = 'el-icon-star-off'
+          this.singleLogoInfo()
         })
         this.singleLogoInfo()
       }
+    },
+    likeChange () {
+      const postdata = {
+        token: getToken(),
+        logoid: this.logoid,
+        collect: this.collect
+      }
+      likePlus(postdata).then((res) => {
+        res = res.data
+        if (res.code === 200) {
+          this.$message({
+            message: '点赞成功',
+            type: 'success'
+          })
+        }
+        this.singleLogoInfo()
+      })
+      this.singleLogoInfo()
     },
     editLogo () {
       this.$message.warning('暂未开放，敬请期待')
