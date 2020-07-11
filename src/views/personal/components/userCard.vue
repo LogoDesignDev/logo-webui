@@ -3,7 +3,7 @@
     <!-- 左边用户信息区 -->
     <div class="leftContainer" @click="toPersonal">
       <div>
-        <img class="userPic-middle" :src="data.userPicUrl" />
+        <img class="userPic-middle" :src="serverPrx + data.userPicUrl" />
         <div class="title-2">{{ data.username }}</div>
       </div>
     </div>
@@ -48,8 +48,16 @@
 </style>
 
 <script>
+import { serverPrx } from 'utils/default'
+
 export default {
   props: ['data'],
+
+  data () {
+    return {
+      serverPrx
+    }
+  },
 
   methods: {
     toPersonal () {
