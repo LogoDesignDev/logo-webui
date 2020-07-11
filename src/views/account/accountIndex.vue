@@ -24,6 +24,7 @@
 
 #mainContainer {
   margin-top: 10px;
+  min-height: 700px;
   width: 1000px;
   display: flex;
 }
