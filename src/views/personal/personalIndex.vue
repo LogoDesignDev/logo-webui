@@ -219,7 +219,7 @@ export default {
 
   data () {
     return {
-      mode: 'prod',
+      mode: this.$route.query.mode || 'prod',
       uid: this.$route.query.uid,
       userInfo: {
         username: '',

@@ -9,9 +9,9 @@
       <div id="right">
         <span class="title-2">{{ userInfo.username }}</span>
         <div>
-          <number-show text="关注" :number="userInfo.followCount" to="/personal?mode=follow" />
-          <number-show text="粉丝" :number="userInfo.fansCount" to="/personal?mode=fans" />
-          <number-show text="作品" :number="userInfo.prodCount" to="/personal" />
+          <number-show text="关注" :number="userInfo.followCount" :to="'/personal?uid=' + userInfo.uid + '&mode=follow'" />
+          <number-show text="粉丝" :number="userInfo.fansCount" :to="'/personal?uid=' + userInfo.uid + '&mode=fans'" />
+          <number-show text="作品" :number="userInfo.prodCount" :to="'/personal?uid=' + userInfo.uid + '&mode=prod'" />
         </div>
       </div>
     </div>
