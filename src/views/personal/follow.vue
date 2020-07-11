@@ -114,7 +114,7 @@ export default {
         const data = res.data
 
         switch (data.code) {
-          case 20000: // 获取成功
+          case 200: // 获取成功
             this.followList = data.followList
             this.switchPage(1) // 更新第一页列表
             break
