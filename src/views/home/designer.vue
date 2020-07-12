@@ -6,7 +6,8 @@
       <div id=userPicView>
         <user-pic-card
           v-for="item in userList" :key="item.rank"
-          :src="item .userPicUrl" :rank="item.rank"
+          :src="item.userPicUrl" :rank="item.rank"
+          :uid="item.uid" :isHover="item.isHover"
           @enter="changeDetailsInfo" />
       </div>
       <!-- 详细信息 -->
@@ -27,6 +28,10 @@
 </template>
 
 <style lang="less" scoped>
+#view {
+  height: 350px;
+}
+
 #main {
   margin-top: 40px;
   display: flex;
@@ -47,6 +52,7 @@
 import viewTitle from './components/viewTitle-2'
 import userPicCard from './components/userPicCard'
 import userDetailsCard from './components/userDetailsCard'
+import { getDesigner } from 'api/home'
 
 export default {
   components: {
@@ -59,23 +65,18 @@ export default {
     return {
       detailsCardShow: true,
       userList: [],
-      userDetails: null
+      userDetails: {
+        username: '',
+        like: 0,
+        collect: 0,
+        prod: 0,
+        rank: 0
+      }
     }
   },
 
-  created () {
-    for (let i = 0; i < 9; i++) {
-      const obj = {
-        username: '测试' + i,
-        userPicUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        like: i * 2000,
-        collect: i * 2000,
-        prod: i * 2000,
-        rank: i + 1
-      }
-      this.userList.push(obj)
-      this.userDetails = obj
-    }
+  mounted () {
+    this.updateUserList()
   },
 
   methods: {
@@ -85,10 +86,34 @@ export default {
       // 因此做了个定时处理，但是这个办法不稳定
       // 不过吧，能实现需求就好，你说是不？
       this.detailsCardShow = false
+      this.userList.forEach((item) => {
+        item.isHover = 'leave'
+      })
+      this.userList[rank - 1].isHover = 'hover'
       setTimeout(() => {
         this.userDetails = this.userList[rank - 1]
         this.detailsCardShow = true
       }, 200)
+    },
+
+    updateUserList () {
+      getDesigner().then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.userList = data.desinger // 这里也是拼错了
+            this.userList.forEach((item, index) => {
+              item.isHover = 'leave'
+              item.rank = index + 1
+            })
+            this.userList[0].isHover = 'hover'
+            this.changeDetailsInfo(1)
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+      })
     }
   }
 }

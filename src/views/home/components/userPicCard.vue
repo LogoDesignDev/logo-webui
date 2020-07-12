@@ -1,7 +1,11 @@
 <template>
-  <div id="picView" @mouseenter="emitEventEnter">
+  <div id="picView"
+    @mouseenter="emitEventEnter"
+    @mouseleave="emitEventLeave"
+    @click="toPersonal"
+    :isHover="isHover">
     <iconfont id="champion" :name="championIcon" />
-    <img id="userPic" class="userPic-middle" :src="src">
+    <img id="userPic" class="userPic-middle" :src="serverPrx + src">
     <div id=mask />
   </div>
 </template>
@@ -16,7 +20,7 @@
   transition: all 0.3s;
 }
 
-#picView:hover {
+#picView:hover, #picView[isHover='hover'] {
   transform: scale(1.2);
 }
 
@@ -24,7 +28,7 @@
   border: 2px solid rgb(245, 245, 245);
 }
 
-#picView:hover #userPic {
+#picView:hover #userPic, #picView[isHover='hover'] #userPic {
   border: 2px solid #909399;
 }
 
@@ -44,14 +48,22 @@
   position: absolute;
 }
 
-#picView:hover #mask {
+#picView:hover #mask, #picView[isHover='hover'] #mask {
   visibility: hidden;
 }
 </style>
 
 <script>
+import { serverPrx } from 'utils/default'
+
 export default {
-  props: ['src', 'rank'],
+  props: ['uid', 'src', 'rank', 'isHover'],
+
+  data () {
+    return {
+      serverPrx
+    }
+  },
 
   computed: {
     championIcon () {
@@ -62,6 +74,19 @@ export default {
   methods: {
     emitEventEnter () {
       this.$emit('enter', this.rank)
+    },
+
+    emitEventLeave () {
+      this.$emit('leave', this.rank)
+    },
+
+    toPersonal () {
+      this.$router.push({
+        path: '/personal',
+        query: {
+          uid: this.uid
+        }
+      })
     }
   }
 }
