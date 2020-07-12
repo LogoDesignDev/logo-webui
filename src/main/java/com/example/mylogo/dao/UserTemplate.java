@@ -311,7 +311,7 @@ public class UserTemplate {
         Query query1=Query.query(Criteria.where("userId").is(id));
         User user1 = mongoTemplate.findOne(query1,User.class);
 
-        if(!user.getFocusList().contains(id)){
+        if(!user.getFocusList().contains(new ObjectId(id))){
             user.addFocus(new ObjectId(id));
             user1.addFans(userid);
 
@@ -319,9 +319,12 @@ public class UserTemplate {
             user1.setFansCount(user1.getFansCount()+1);
             mongoTemplate.save(user);
             mongoTemplate.save(user1);
+            return id;
+        }else{
+            return null;
         }
 
-        return id;
+
     }
 
     /*
@@ -343,16 +346,19 @@ public class UserTemplate {
         Query query1=Query.query(Criteria.where("userId").is(id));
         User user1 = mongoTemplate.findOne(query1,User.class);
 
-        if(user.getFocusList().contains(id)){
+        if(user.getFocusList().contains(new ObjectId(id))){
             user.removeFocus(new ObjectId(id));
             user1.removeFans(userid);
             user.setFocusCount(user.getFocusCount()-1);
             user1.setFansCount(user1.getFansCount()-1);
             mongoTemplate.save(user);
             mongoTemplate.save(user1);
+            return id;
+        }else{
+            return null;
         }
 
-        return id;
+
     }
 
     /*
