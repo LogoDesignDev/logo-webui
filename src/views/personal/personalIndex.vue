@@ -269,14 +269,13 @@ export default {
     },
 
     myUserInfo () {
-      if (this.uid !== this.myUserInfo.uid) {
-        this.updateHasFollowed()
-      }
+      this.updateHasFollowed()
     }
   },
 
   mounted () {
     this.updateUserInfo()
+    this.updateHasFollowed()
   },
 
   methods: {

@@ -1,7 +1,9 @@
 <template>
   <div class="designerContainer">
     <div class="pageView">
-      <div class="authorCard" v-for="(info, index) in pageView.pageList" :key="index">
+      <div class="authorCard"
+        v-for="(info, index) in pageView.pageList"
+        :key="index">
         <authorResultCard :data="info" />
         <!-- 最后一个不需要分割线 -->
         <div class="line" v-if="index !== pageView.pageList.length - 1"/>
@@ -54,6 +56,8 @@
 
 <script>
 import authorResultCard from './components/authorResultCard'
+import { hasFollowed } from 'api/personal'
+import store from 'store'
 
 export default {
   props: ['list', 'page'],
@@ -66,6 +70,7 @@ export default {
     return {
       pageView: {
         pageList: [],
+        tempList: [],
         total: this.list.length,
         pageSize: 10
       }
@@ -79,7 +84,18 @@ export default {
       // 因为在mounted触发时，可能还没有拉取到搜索结果
       // 如果此时执行下面代码，必定是空
       const start = (this.page - 1) * this.pageView.pageSize
-      this.pageView.pageList = this.list.slice(start, start + this.pageView.pageSize)
+      this.pageView.tempList = this.list.slice(start, start + this.pageView.pageSize)
+      this.updateHasFollowed()
+    },
+
+    myUserInfo () {
+      this.updateHasFollowed()
+    }
+  },
+
+  computed: {
+    myUserInfo () {
+      return store.state.userInfo
     }
   },
 
@@ -89,6 +105,35 @@ export default {
   methods: {
     switchPage (curPage) {
       this.$emit('pageChange', curPage)
+    },
+
+    updateHasFollowed () {
+      const othersUidList = []
+      this.pageView.tempList.forEach((item) => {
+        item.hasFollowed = false
+        othersUidList.push(item.uId)
+      })
+      const params = {
+        uid: this.myUserInfo.uid || null,
+        othersUidList: othersUidList.join('|')
+      }
+      if (!params.uid || !params.othersUidList) {
+        return
+      }
+
+      hasFollowed(params).then((res) => {
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.pageView.tempList.forEach((item) => {
+              item.hasFollowed = data.ret[item.uId]
+            })
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+        this.pageView.pageList = this.pageView.tempList
+      })
     }
   }
 }

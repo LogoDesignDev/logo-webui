@@ -2,9 +2,33 @@
   <div class="authorResultCardContainer">
     <!-- 左边用户信息区 -->
     <div class="leftContainer">
-      <div @click="toPersonal" style="cursor: pointer;">
-        <img class="userPic-middle" :src="serverPrx + data.userPicUrl" />
-        <div class="title-2">{{ data.username }}</div>
+      <div style="cursor: pointer;">
+        <img
+          class="userPic-middle"
+          :src="serverPrx + data.userPicUrl"
+          @click="toPersonal"/>
+        <div
+          class="title-2"
+          @click="toPersonal">{{ data.username }}
+        </div>
+        <el-button
+          v-if="!data.hasFollowed"
+          type="primary"
+          round size="mini"
+          @click="follow">
+          关注
+        </el-button>
+        <div
+          v-if="data.hasFollowed"
+          @mouseenter="unfollowBtnText = '取消关注'"
+          @mouseleave="unfollowBtnText = '已关注'">
+          <el-button
+            type="info"
+            round size="mini"
+            @click="unfollow">
+            {{ unfollowBtnText }}
+          </el-button>
+        </div>
       </div>
       <div>
         <div class="numCard">
@@ -25,10 +49,10 @@
     </div>
     <!-- 右边作品展示区 -->
     <div class="rightContainer">
-      <div class="prodCard" v-if="data.logoList[0]">
+      <div class="prodCard" v-if="data.logoList[0]" @click="toLogoDetail(data.logoList[0].lId)">
         <img class="prodPic" :src="serverPrx + (data.logoList[0].url[0]==='/'?'':'/') + data.logoList[0].url">
       </div>
-      <div class="prodCard" v-if="data.logoList[1]">
+      <div class="prodCard" v-if="data.logoList[1]" @click="toLogoDetail(data.logoList[1].lId)">
         <img class="prodPic" :src="serverPrx + (data.logoList[1].url[0]==='/'?'':'/') + data.logoList[1].url">
       </div>
     </div>
@@ -59,6 +83,7 @@
 
 .title-2 {
   margin-left: 10px;
+  margin-right: 10px;
 }
 
 .numCard {
@@ -88,7 +113,7 @@
   height: 140px;
   border-radius: 5px;
   border: 1px solid #DCDFE6;
-  /* background: black; */
+  cursor: pointer;
 }
 
 .prodPic {
@@ -101,6 +126,8 @@
 </style>
 
 <script>
+import { follow, unfollow } from 'api/personal'
+import { getToken } from 'utils/auth'
 import { serverPrx } from 'utils/default'
 
 export default {
@@ -108,10 +135,10 @@ export default {
 
   data () {
     return {
-      serverPrx: serverPrx
+      serverPrx: serverPrx,
+      unfollowBtnText: '已关注'
     }
   },
-
   methods: {
     /**
      * 把十进制数转换成xxK的表达形式
@@ -127,6 +154,51 @@ export default {
         query: {
           uid: this.data.uId
         }
+      })
+    },
+
+    toLogoDetail (lId) {
+      this.$router.push({
+        path: `/mylogo/logodetail/${lId}`
+      })
+    },
+
+    follow () {
+      const params = {
+        token: getToken(),
+        uid: this.data.uId
+      }
+      follow(params).then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.$message.success('关注成功')
+            this.data.hasFollowed = true
+            this.$forceUpdate() // 这里不晓得为何设置true后不刷新，只好强制刷新了
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+      })
+    },
+
+    unfollow () {
+      const params = {
+        token: getToken(),
+        uid: this.data.uId
+      }
+      unfollow(params).then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.$message.warning('您已取消关注')
+            this.data.hasFollowed = false
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
       })
     }
   }

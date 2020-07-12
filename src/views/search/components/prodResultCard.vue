@@ -1,12 +1,14 @@
 <template>
   <div class="logoCardContainer">
     <div class="mainContainer">
-      <img class="logoPic" :src="serverPrx + (data.url[0]==='/'?'':'/') + data.url">
-      <div class="titleText">{{ data.name || '精美作品' }}</div>
-      <div class="tips">
-        <span class="label">作品</span>
-        <span><iconfont name="icon-like-2" />&nbsp;{{ transition(data.like) }}</span>
-        <span><iconfont name="icon-collect-2" />&nbsp;{{ transition(data.collect) }}</span>
+      <div @click="toLogoDetail(data.lId)">
+        <img class="logoPic" :src="serverPrx + (data.url[0]==='/'?'':'/') + data.url">
+        <div class="titleText">{{ data.name || '精美作品' }}</div>
+        <div class="tips">
+          <span class="label">作品</span>
+          <span><iconfont name="icon-like-2" />&nbsp;{{ transition(data.like) }}</span>
+          <span><iconfont name="icon-collect-2" />&nbsp;{{ transition(data.collect) }}</span>
+        </div>
       </div>
       <div class="author" @click="toPersonal" style="cursor: pointer;">
         <img class="userPic-minimini" :src="serverPrx + data.authorUrl" />
@@ -104,6 +106,12 @@ export default {
         query: {
           uid: this.data.authorId
         }
+      })
+    },
+
+    toLogoDetail (lId) {
+      this.$router.push({
+        path: `/mylogo/logodetail/${lId}`
       })
     }
   }
