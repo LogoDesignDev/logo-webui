@@ -211,6 +211,7 @@
 import prod from './prod'
 import designer from './designer'
 import { searchAuthor, searchProd } from 'api/search'
+import { SEARCH_HISTORY_KEY, SearchHistory } from 'utils/searchHistory'
 
 export default {
   components: {
@@ -322,6 +323,14 @@ export default {
 
   methods: {
     searchClicked () {
+      switch (this.search.mode) {
+        case 'prod':
+          new SearchHistory(SEARCH_HISTORY_KEY.PROD).addHistory(this.keyword)
+          break
+        case 'designer':
+          new SearchHistory(SEARCH_HISTORY_KEY.DESIGNER).addHistory(this.keyword)
+          break
+      }
       this.$router.push({
         path: '/search?mode=' + this.search.mode +
           '&keyword=' + this.keyword +

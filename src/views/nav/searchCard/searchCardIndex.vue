@@ -26,13 +26,24 @@
       </div>
       <!-- 搜索历史 -->
       <div id="search-history">
-        <span v-if="history.length === 0" class="tips" style="">暂无历史搜索记录</span>
-        <button v-else id="del-all-btn" class="el-icon-delete" @click="delAllHistory">
+        <span
+          v-if="history.active ? history.active.history.length === 0 : true"
+          class="tips" style="">
+          暂无历史搜索记录
+        </span>
+        <button
+          v-else id="del-all-btn"
+          class="el-icon-delete"
+          @click="delAllHistory">
           清空搜索历史
         </button>
-        <div id="history-container">
-          <history-item v-for='(item, index) in history' :key="index"
-          :text="item" :index="index" @buttonClicked="delHistory" />
+        <div v-if="history.active" id="history-container">
+          <history-item
+            v-for='(item, index) in history.active.history'
+            :key="index"
+            :text="item" :index="index"
+            @buttonClicked="delHistory"
+            @itemClicked="addSearch" />
         </div>
       </div>
     </div>
@@ -138,6 +149,7 @@
 
 <script>
 import historyItem from './components/historyItem'
+import { SEARCH_HISTORY_KEY, SearchHistory } from 'utils/searchHistory'
 
 export default {
   components: {
@@ -146,66 +158,48 @@ export default {
 
   data () {
     return {
-      searchHistoryKey: 'searchHistory', // localStorage的key
       search: {
         keyword: '',
         mode: 'prod'
       },
-      history: []
+      history: {
+        prod: null,
+        designer: null,
+        active: null
+      }
+    }
+  },
+
+  watch: {
+    'search.mode' () {
+      switch (this.search.mode) {
+        case 'prod':
+          this.history.active = this.history.prod
+          break
+        case 'designer':
+          this.history.active = this.history.designer
+          break
+      }
     }
   },
 
   mounted () {
-    const str = '我是历史啊1;我是历史啊2;我是历史啊33;我是历史啊4;我是历史啊5;我是历史啊21555;43534;;;;'
-    window.localStorage.setItem(this.searchHistoryKey, str)
+    // const str = '我是历史啊1;我是历史啊2;我是历史啊33;我是历史啊4;我是历史啊5;我是历史啊21555;43534;;;;'
+    // window.localStorage.setItem(SEARCH_HISTORY_KEY.PROD, str)
+    // const str2 = '我是历史啊1DESIGNER;DESIGNER我是历史啊2;我是历史啊33;我是历史啊4;我是历史啊5;我是历史啊21555;43534;;;;'
+    // window.localStorage.setItem(SEARCH_HISTORY_KEY.DESIGNER, str2)
 
-    // 读取历史记录
-    this.decodeHistoryStr(window.localStorage.getItem(this.searchHistoryKey))
+    this.history.prod = new SearchHistory(SEARCH_HISTORY_KEY.PROD)
+    this.history.designer = new SearchHistory(SEARCH_HISTORY_KEY.DESIGNER)
+    this.history.active = this.history.prod
   },
 
   methods: {
     /**
-     * 清空所有搜索记录
-     */
-    delAllHistory () {
-      window.localStorage.removeItem(this.searchHistoryKey)
-      this.history = []
-    },
-
-    /**
-     * 删除某个记录
-     */
-    delHistory (keyword, index) {
-      this.history.splice(index, 1)
-      // 删除之后重新拼接存储
-      let str = ''
-      this.history.forEach((item) => {
-        str = str + item + ';'
-      })
-      window.localStorage.setItem(this.searchHistoryKey, str)
-    },
-
-    /**
-     * 解析从localstorage中取出的历史搜索记录串
-     */
-    decodeHistoryStr (str) {
-      let temp = ''
-
-      this.history = []
-      for (let i = 0; i < str.length; i++) {
-        if (str[i] === ';') {
-          this.history.push(temp)
-          temp = ''
-        } else {
-          temp = temp + str[i]
-        }
-      }
-    },
-
-    /**
      * 前往搜索页
      */
     toSearch () {
+      this.history.active.addHistory(this.search.keyword)
       this.$router.push({
         path: '/search?mode=' + this.search.mode +
           '&keyword=' + this.search.keyword +
@@ -215,6 +209,18 @@ export default {
           '&page=1' +
           '&randomParam=5da5JR%2B8Zfnbdl41Qr49%2BLKa8sxppt5qpwn7JmqF1HAm3ZI4g7VeuEmCmfE' + Math.random()
       })
+    },
+
+    addSearch (text) {
+      this.search.keyword = text
+    },
+
+    delAllHistory () {
+      this.history.active.delAllHistory();
+    },
+
+    delHistory (index) {
+      this.history.active.delHistory(index);
     }
   }
 }

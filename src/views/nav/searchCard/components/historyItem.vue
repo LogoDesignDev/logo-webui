@@ -22,6 +22,13 @@
   cursor: pointer;
 }
 
+.tips {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .item:hover {
   background: rgb(240, 240, 240);
 }
@@ -51,7 +58,7 @@ export default {
 
   methods: {
     emitButtonSignal () {
-      this.$emit('buttonClicked', this.text, this.index)
+      this.$emit('buttonClicked', this.index)
     },
 
     emitItemSignal () {
