@@ -20,13 +20,13 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'about',
+    path: '/rank',
+    name: 'rank',
     hidden: false,
     meta: {
-      title: '其他'
+      title: '排行榜'
     },
-    component: () => import('../views/About.vue')
+    component: () => import('../views/rank/index.vue')
   },
   {
     path: '/mylogo',
