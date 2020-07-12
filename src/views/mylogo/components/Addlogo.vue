@@ -69,7 +69,7 @@ export default {
           galleryid: this.$props.galleryid,
           name: this.input,
           author: store.state.userInfo.username,
-          imgUrl: 'http://47.115.52.184:8900/' + data.url
+          imgUrl: data.url
         }
         addlogo(postdata).then(this.handleAddLogoSucc)
       }

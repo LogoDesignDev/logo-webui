@@ -14,7 +14,7 @@
           <el-col :span="4" v-for="(item, index) in imgList" :key="index" class="col">
               <div>
                 <el-card :body-style="{ padding: '0px'}" class="card">
-                  <el-image :src="item.imgUrl" class="image"></el-image>
+                  <el-image :src="'http://47.115.52.184:8900/'+item.imgUrl" class="image"></el-image>
                   <div id="hoverView">
                     <div id="infoView">
                       <div id="hoverTitle">{{item.id}}</div>

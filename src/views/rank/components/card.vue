@@ -3,7 +3,7 @@
     <div class="content">
       <div class="left">{{ this.$props.id }}</div>
       <div class="img">
-        <el-image class="smallImg" :src="src" :fit="fit" @click="goDetail(logoid, src)"></el-image>
+        <el-image class="smallImg" :src="src" :fit="fit" @click="goDetail(logoid, imgUrl)"></el-image>
       </div>
       <div class="right">
         <div class="name">Air Jordan 1</div>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  props: ['src', 'id', 'like', 'collect', 'author', 'logoid'],
+  props: ['src', 'id', 'like', 'collect', 'author', 'logoid', 'imgUrl'],
   data () {
     return {
       fit: 'fill'
