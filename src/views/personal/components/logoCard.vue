@@ -1,6 +1,6 @@
 <template>
   <div class="logoCardContainer">
-    <div class="mainContainer">
+    <div class="mainContainer" @click="toLogoDetail">
       <img class="logoPic" :src="serverPrx + (data.url[0]==='/'?'':'/') + data.url">
       <div class="titleText">{{ data.name || '精美作品' }}</div>
       <div class="tips">
@@ -71,7 +71,13 @@ export default {
   },
 
   methods: {
-    transition
+    transition,
+
+    toLogoDetail () {
+      this.$router.push({
+        path: `/mylogo/logodetail/${this.data.lId}`
+      })
+    }
   }
 }
 </script>

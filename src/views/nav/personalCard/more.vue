@@ -19,7 +19,7 @@
     <!-- 跳转 -->
     <div id="linkTo">
       <link-card icon="el-icon-user" text="个人主页" :to="'/personal?uid=' + userInfo.uid" />
-      <link-card icon="el-icon-document" text="我的作品" to="/personal" />
+      <link-card icon="el-icon-document" text="我的作品" :to="'/personal?uid=' + userInfo.uid + '&mode=prod'" />
     </div>
     <el-divider />
     <!-- 其他 -->

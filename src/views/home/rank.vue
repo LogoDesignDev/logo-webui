@@ -3,13 +3,13 @@
     <view-title name="排行榜" tips="每天0:00更新" to="/rank" />
     <div id="main">
       <show-card-1
-        :src="urlArr[0]"
+        :src="serverPrx + urlArr[0]"
         icon="icon-rank" name="综合榜" tips="综合各项人气指标" to="/a" />
       <show-card-1
-        :src="urlArr[1]"
+        :src="serverPrx + urlArr[1]"
         icon="icon-like" name="点赞榜" tips="根据点赞数排行" to="/a" />
       <show-card-1
-        :src="urlArr[2]"
+        :src="serverPrx + urlArr[2]"
         icon="icon-collect" name="收藏榜" tips="根据收藏数排行" to="/a" />
     </div>
   </div>
@@ -27,6 +27,7 @@
 import viewTitle from './components/viewTitle-1'
 import showCard from './components/showCard-1'
 import { getFirstUrl } from 'api/home'
+import { serverPrx } from 'utils/default'
 
 export default {
   components: {
@@ -36,6 +37,7 @@ export default {
 
   data () {
     return {
+      serverPrx,
       urlArr: ['', '', '']
     }
   },
@@ -53,7 +55,7 @@ export default {
         // ———— 成功回调 ————
         const data = res.data
         switch (data.code) {
-          case 20000: // 获取成功
+          case 200: // 获取成功
             this.urlArr = data.logoUrl
             break
         }
