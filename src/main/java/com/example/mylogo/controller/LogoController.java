@@ -93,7 +93,7 @@ public class LogoController {
             //        "like": 1234,
             //        "collect": 1234,
             //        "prod": 1234
-                hm.put("uid", allUser.get(i).getUserId());
+                hm.put("uid", allUser.get(i).getuId());
                 hm.put("userPicUrl", allUser.get(i).getUserPicUrl());
                 hm.put("username", allUser.get(i).getUsername());
                 hm.put("like", allUser.get(i).getBeLikedCount()); // 获赞数量

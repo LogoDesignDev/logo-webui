@@ -31,6 +31,25 @@ class MylogoApplicationTests {
     @Test
     @Ignore
     void addManyUser() throws IOException {
+//        for(int i = 1;i <= 100;i++){
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("username", "username"+i);
+//            map.put("password", "password"+i);
+//            map.put("email", "email"+i);
+//            map.put("phone", "phone"+i);
+//            userTemplate.registUser(map);
+//        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("keyword" ,"name");
+        map.put("order", 3);
+        List<User> list = userTemplate.findUserByKeyword(map);
+        System.out.println(list.size());
+        for(int i = 0;i < list.size();i++){
+            User user = list.get(i);
+            System.out.println(user.getUsername() + " " + user.getUserId() + " " + user.getFansCount() + " " + user.getBeLikedCount() + " " + user.getBeMarkedCount());
+
+        }
+
 //        for(int i = 1;i <= 10;i++){
 //            Map<String, Object> map = new HashMap<>();
 //            int num = i * 6667;
@@ -64,24 +83,7 @@ class MylogoApplicationTests {
 //        }
 //        userTemplate.modifyPassword(map);
 //        userTemplate.uploadIcon(map);
-//
-//
-//
-//        User user = new User();
-//        user.setUsername("lmb");
-//        user.setPassword("123");
-//        System.out.println("之前 " + user.getUserId());
-//        mongoTemplate.save(user);
-//        System.out.println("之后 " + user.getUserId());
-//        Query query = Query.query(Criteria.where("username").is("lmb"));
-//
-//        User user1 = mongoTemplate.findOne(query, User.class);
-//        assert user1 != null;
-//        System.out.println("查找 " + user1.getUserId().toString());
-//
-//
-//        String res = userTemplate.login(map);
-//        System.out.println(res);
+
 
     }
 }

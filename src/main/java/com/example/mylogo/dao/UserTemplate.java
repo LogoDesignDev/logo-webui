@@ -262,7 +262,7 @@ public class UserTemplate {
             HashMap<String,Object> res = new HashMap<>();
             Query query1 = Query.query(Criteria.where("userId").is(objectId));
             User user2 = mongoTemplate.findOne(query1, User.class);
-            res.put("uid",user2.getUserId().toString());
+            res.put("uid",user2.getuId());
             res.put("userPicUrl",user2.getUserPicUrl());
             res.put("username",user2.getUsername());
             list1.add(res);
@@ -275,7 +275,8 @@ public class UserTemplate {
      */
     public ArrayList<Map> getFansList(Map<String, Object>map){
         String id = (String) map.get("uid");
-        Query query = Query.query(Criteria.where("userId").is(id));
+        ObjectId userID = new ObjectId(id);
+        Query query = Query.query(Criteria.where("userId").is(userID));
         User user = mongoTemplate.findOne(query, User.class);
         List<ObjectId> list = user.getFansList();
         ArrayList<Map> list1 = new ArrayList<>();
@@ -427,6 +428,7 @@ public class UserTemplate {
         Query query = new Query();
         query.addCriteria(Criteria.where("username").regex(".*?" + keyword + ".*?"));
         query.fields().include("userId")
+                .include("uId")
                 .include("username")
                 .include("userPicUrl")
                 .include("beLikedCount")
@@ -448,7 +450,7 @@ public class UserTemplate {
             comparator = new Comparator<User>() {
                 @Override
                 public int compare(User o1, User o2) {
-                    return o2.getFansList().size()  - o1.getFansList().size();
+                    return o2.getFansCount()  - o1.getFansCount();
                 }
             };
         }

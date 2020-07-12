@@ -14,7 +14,7 @@ public class Logo {
     private ObjectId logoId;
     private String lId; // logoId的toString
     private String title;
-    private ObjectId authorId;
+    private String authorId;
     private String introduce; //logo的介绍
     private String url; //图片的路径
     private String name;//图片的名字
@@ -89,15 +89,23 @@ public class Logo {
         this.title = title;
     }
 
-    public ObjectId getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(ObjectId authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
     public void setLogoId(ObjectId logoId) {
         this.logoId = logoId;
+    }
+
+    public String getlId() {
+        return lId;
+    }
+
+    public void setlId(String lId) {
+        this.lId = lId;
     }
 }

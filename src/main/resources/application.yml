@@ -9,8 +9,8 @@ spring:
     active: a
   data:
     mongodb:
-      host: localhost
-      #host: 47.115.52.184
+#      host: localhost
+      host: 47.115.52.184
       port: 27017
       database: logo
       username: root1

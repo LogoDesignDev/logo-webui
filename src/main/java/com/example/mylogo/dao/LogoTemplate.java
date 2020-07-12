@@ -196,7 +196,7 @@ public class LogoTemplate {
             Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
             assert gallery != null;
 
-            logo.setAuthorId(user.getUserId());
+            logo.setAuthorId(user.getUserId().toString());
             logo.setAuthorName(user.getUsername());
             logo.setAuthorUrl(user.getUserPicUrl());
             Random r = new Random(1);
@@ -419,7 +419,7 @@ public class LogoTemplate {
         logo.setName(logoname);
         logo.setAuthorName(logoauthor);
         logo.setAuthorUrl(user.getUserPicUrl());
-        logo.setAuthorId(userid);
+        logo.setAuthorId(userid.toString());
 
         Query query1 = Query.query(Criteria.where("galleryId").is(id));
         Gallery gallery = mongoTemplate.findOne(query1,Gallery.class);
@@ -485,7 +485,7 @@ public class LogoTemplate {
 
         logo.setCollect(logo.getCollect()+1);
 
-        ObjectId userId = logo.getAuthorId();
+        ObjectId userId = new ObjectId(logo.getAuthorId());
         Query query2 = Query.query(Criteria.where("userId").is(userId));
         User user1 = mongoTemplate.findOne(query2,User.class);
         user1.setBeMarkedCount(user1.getBeMarkedCount()+1);
@@ -511,7 +511,7 @@ public class LogoTemplate {
         Logo logo = mongoTemplate.findOne(query,Logo.class);
         assert logo != null;
 
-        ObjectId userId = logo.getAuthorId();
+        ObjectId userId = new ObjectId(logo.getAuthorId());
         Query query1 = Query.query(Criteria.where("userId").is(userId));
         User user = mongoTemplate.findOne(query1,User.class);
         assert user != null;
@@ -556,7 +556,7 @@ public class LogoTemplate {
 
         logo.setCollect(logo.getCollect()-1);
 
-        ObjectId userId = logo.getAuthorId();
+        ObjectId userId = new ObjectId(logo.getAuthorId());
         Query query2 = Query.query(Criteria.where("userId").is(userId));
         User user1 = mongoTemplate.findOne(query2,User.class);
         user1.setBeMarkedCount(user1.getBeMarkedCount()-1);
@@ -582,7 +582,7 @@ public class LogoTemplate {
         Logo logo = mongoTemplate.findOne(query,Logo.class);
         assert logo != null;
 
-        ObjectId userId = logo.getAuthorId();
+        ObjectId userId = new ObjectId(logo.getAuthorId());
         Query query1 = Query.query(Criteria.where("userId").is(userId));
         User user = mongoTemplate.findOne(query1,User.class);
         assert user != null;
