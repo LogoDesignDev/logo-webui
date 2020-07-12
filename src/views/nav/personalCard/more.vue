@@ -130,6 +130,7 @@ export default {
     logout () {
       removeToken()
       store.commit('setIsloggedIn', false)
+      this.$router.go(0)
     }
   }
 }

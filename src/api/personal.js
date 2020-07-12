@@ -40,3 +40,7 @@ export function getUserBeCollectedCount (params) {
 export function getUserProdsByUid (params) {
   return nodeRequest.get('/personal/getUserProdsByUid', { params })
 }
+
+export function hasFollowed (params) {
+  return nodeRequest.get('/personal/hasFollowed', { params })
+}

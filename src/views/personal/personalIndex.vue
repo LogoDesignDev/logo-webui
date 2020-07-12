@@ -50,7 +50,20 @@
           </div>
           <el-button v-if="uid===myUserInfo.uid"
             type="primary" round @click="toAccountBase">账户设置</el-button>
-          <el-button v-else type="primary" round>关注</el-button>
+          <el-button
+            v-if="uid!==myUserInfo.uid && !hasFollowed"
+            type="primary"
+            round
+            @click="follow">
+            关注
+          </el-button>
+          <el-button
+            v-if="uid!==myUserInfo.uid && hasFollowed"
+            type="info"
+            round
+            @click="unfollow">
+            取消关注
+          </el-button>
           <el-divider></el-divider>
           <!-- 成就 -->
           <div class="achievementCard">
@@ -204,15 +217,25 @@
 import store from 'store'
 import axios from 'axios'
 import { getUserInfoByUid } from 'api/user'
-import { getProdCount, getFansCount, getFollowCount, getUserBeLikeCount, getUserBeCollectedCount } from 'api/personal'
+import {
+  hasFollowed,
+  follow,
+  unfollow,
+  getProdCount,
+  getFansCount,
+  getFollowCount,
+  getUserBeLikeCount,
+  getUserBeCollectedCount
+} from 'api/personal'
 import { serverPrx, transition } from 'utils/default'
-import follow from './follow'
+import { getToken } from 'utils/auth'
+import followCard from './follow'
 import prod from './prod'
 import fans from './fans'
 
 export default {
   components: {
-    follow,
+    follow: followCard,
     fans,
     prod
   },
@@ -229,7 +252,8 @@ export default {
         followCount: 0,
         beLikeCount: 0,
         beCollectedCount: 0
-      }
+      },
+      hasFollowed: false
     }
   },
 
@@ -242,6 +266,12 @@ export default {
   watch: {
     $route (to, from) {
       this.$router.go(0)
+    },
+
+    myUserInfo () {
+      if (this.uid !== this.myUserInfo.uid) {
+        this.updateHasFollowed()
+      }
     }
   },
 
@@ -289,6 +319,60 @@ export default {
     toAccountBase () {
       this.$router.push({
         path: '/account/base'
+      })
+    },
+
+    follow () {
+      const params = {
+        token: getToken(),
+        uid: this.uid
+      }
+      follow(params).then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.$message.success('关注成功')
+            this.hasFollowed = true
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+      })
+    },
+
+    unfollow () {
+      const params = {
+        token: getToken(),
+        uid: this.uid
+      }
+      unfollow(params).then((res) => {
+        // ———— 成功回调 ————
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.$message.warning('您已取消关注')
+            this.hasFollowed = false
+            break
+        }
+      }).catch((err) => {
+      }).finally(() => {
+      })
+    },
+
+    updateHasFollowed () {
+      const params = {
+        uid: this.myUserInfo.uid,
+        othersUidList: this.uid
+      }
+      hasFollowed(params).then((res) => {
+        const data = res.data
+        switch (data.code) {
+          case 200:
+            this.hasFollowed = data.ret[this.uid] || false
+        }
+      }).catch((err) => {
+      }).finally(() => {
       })
     }
   }
