@@ -653,6 +653,7 @@ public class LogoTemplate {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").regex(".*?" + keyword + ".*?"));
         query.fields().include("logoId")
+                .include("lId")
                 .include("name")
                 .include("title")
                 .include("introduce")
