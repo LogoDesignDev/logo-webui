@@ -417,4 +417,57 @@ public class UserController{
         return res;
     }
 
+    @GetMapping("/addfocus")
+    public Map<String, Object> addUserFocus(){
+        ArrayList<User> userArrayList = new ArrayList<>();
+        ArrayList<String> tokenArrayList = new ArrayList<>();
+        ArrayList<String> userIdArrayList = new ArrayList<>();
+        userArrayList.addAll(userTemplate.getAllUser(new HashMap<>()));
+
+        for (int i = 0; i < userArrayList.size(); i++) {
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("username",userArrayList.get(i).getUsername());
+            map.put("password",userArrayList.get(i).getPassword());
+            userIdArrayList.add(userArrayList.get(i).getuId());
+            tokenArrayList.add(userTemplate.login(map));
+        }
+
+        for (int i = 0; i < tokenArrayList.size()-3; i++) {
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("token",tokenArrayList.get(i));
+            for (int j = i+1; j < i+4; j++) {
+                map.put("uid",userIdArrayList.get(j));
+                userTemplate.follow(map);
+            }
+        }
+
+        for (int i = tokenArrayList.size()-3; i < tokenArrayList.size(); i++) {
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("token",tokenArrayList.get(i));
+            for (int j = 0; j < 3; j++) {
+                map.put("uid",userIdArrayList.get(j));
+                userTemplate.follow(map);
+            }
+        }
+
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("code",200);
+        return map;
+    }
+
+    @GetMapping("/addMangpeople")
+    public Map<String, Object> addPeople(){
+        for(int i = 1;i <= 100;i++){
+            Map<String, Object> map = new HashMap<>();
+            map.put("username", "username"+i);
+            map.put("password", "password"+i);
+            map.put("email", "email"+i);
+            map.put("phone", "phone"+i);
+            userTemplate.registUser(map);
+        }
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("code",200);
+        return map;
+    }
+
 }
