@@ -48,7 +48,7 @@ export default {
       like: 0,
       author: null,
       name: null,
-      src: this.$route.query.mode,
+      src: 'http://47.115.52.184:8900/' + this.$route.query.mode,
       fit: 'contain',
       galleryid: this.$route.params.galleryid,
       logoid: this.$route.params.logoid,
