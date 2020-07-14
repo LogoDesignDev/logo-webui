@@ -450,14 +450,21 @@ public class LogoTemplate {
             return 0;
         }
 
+        ObjectId userId = redisTokenManager.getUserId(token);
         String id = (String) map.get("galleryid");
         String logoId = (String) map.get("logoid");
         Query query = Query.query(Criteria.where("galleryId").is(id));
+        Query query1 = Query.query(Criteria.where("userId").is(userId));
+        Query query2 = Query.query(Criteria.where("logoId").is(logoId));
         Gallery gallery = mongoTemplate.findOne(query,Gallery.class);
+        User user = mongoTemplate.findOne(query1,User.class);
+        Logo logo = mongoTemplate.findOne(query2,Logo.class);
         assert gallery != null;
 
+        user.delLogo(logo);
         gallery.delLogo(new ObjectId(logoId));
         mongoTemplate.save(gallery);
+        mongoTemplate.save(user,"user");
 
         return 1;
     }

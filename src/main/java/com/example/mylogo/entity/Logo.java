@@ -6,9 +6,28 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Document(collection = "logo")
 public class Logo {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Logo logo = (Logo) o;
+        return like == logo.like &&
+                collect == logo.collect &&
+                Objects.equals(logoId, logo.logoId) &&
+                Objects.equals(lId, logo.lId) &&
+                Objects.equals(title, logo.title) &&
+                Objects.equals(authorId, logo.authorId) &&
+                Objects.equals(introduce, logo.introduce) &&
+                Objects.equals(url, logo.url) &&
+                Objects.equals(name, logo.name) &&
+                Objects.equals(authorName, logo.authorName) &&
+                Objects.equals(authorUrl, logo.authorUrl) &&
+                Objects.equals(publishedTime, logo.publishedTime);
+    }
 
     @Id
     private ObjectId logoId;
