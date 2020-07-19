@@ -117,7 +117,6 @@ export default {
     display: flex;
     flex: 1;
     margin: 30px 180px 100px 180px;
-    height: 500px;
   }
   .left {
     flex: 0.3;
